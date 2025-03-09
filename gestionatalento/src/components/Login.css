@@ -1,0 +1,86 @@
+/* Estilos generales del login */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  flex-direction: column;
+  background-color: #1e1e2e; /* Fondo oscuro */
+}
+
+.login-box {
+  background-color: #2a2a3b;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  color: white;
+  width: 350px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.title {
+  font-size: 30px;
+  font-weight: normal;
+  font-family: "Inter", sans-serif;
+  margin-bottom: 20px;
+}
+
+.title2 {
+  font-size: 50px;
+  font-weight: bold;
+  font-family: "Inter";
+  margin-top: -30px;
+}
+
+.subtitle {
+  color: #f9f9f9;
+  font-size: 20px;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  font-family: "Inter";
+}
+
+.input-group {
+  text-align: left;
+  margin-bottom: 30px;
+  font-family: "Inter";
+}
+
+.input-group label {
+  font-size: 18px;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input-group input {
+  width: 93%;
+  padding: 15px;
+  border: none;
+  background-color: #3b3b4f;
+  color: white;
+  outline: none;
+  font-size: 18px;
+}
+
+.input-group input::placeholder {
+  color: #b0b0b0;
+}
+
+.login-button {
+  width: 50%;
+  padding: 15px;
+  background-color: white;
+  color: black;
+  font-weight: bold;
+  border: none;
+  border-radius: 0px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-button:hover {
+  background-color: #d3d3d3;
+  border-radius: 0px;
+}
