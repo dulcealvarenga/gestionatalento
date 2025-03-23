@@ -1,0 +1,91 @@
+.main-grid {
+    display: grid;
+    grid-template-areas:
+    "top-left top-right"
+    "bottom-left bottom-right";
+    grid-template-columns: auto auto;
+    gap: 20px;
+    padding: 30px;
+    font-family: "Inter", sans-serif;
+    background-color: #2a2a3b;
+    color: white;
+    margin-left: 220px; /* Igual al ancho del sidebar */
+}
+
+.top-left {
+    grid-area: top-left;
+}
+
+.top-right {
+    grid-area: top-right;
+    background-color: #1a1a2e;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.bottom-left {
+    grid-area: bottom-left;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 480px;
+    width: 950px;
+}
+
+.bottom-right {
+    grid-area: bottom-right;
+    background-color: #1a1a2e;
+    padding: 15px;
+    border-radius: 8px;
+    height: 260px;
+}
+
+
+.data-row {
+    display: flex;
+    gap: 15px;
+}
+
+.data-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+input,
+textarea {
+    background-color: #4a4a5e;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+.data-group input {
+    height: 30px;       /* Alto del input */
+    font-size: 16px;    /* Tamaño del texto */
+    padding: 10px;      /* Espacio interno */
+}
+
+
+.button-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+button {
+    flex: 1;
+    background-color: #4a4a5e;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 15px;
+    cursor: pointer;
+}
+
+.section-title {
+    font-size: 27px;
+    margin: 10px 0;
+}

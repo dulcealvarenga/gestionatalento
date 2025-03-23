@@ -1,7 +1,16 @@
 import React from "react";
 import "./Login.css"; // Importamos los estilos
+import { useNavigate } from "react-router-dom"; // Importar para redirigir
 
 const Login = () => {
+
+    const navigate = useNavigate(); // Hook para navegación
+
+    const handleLogin = (event) => {
+        event.preventDefault(); // Evita que el formulario recargue la página
+        navigate("/menu"); // Redirige a la página de Menu
+    };
+
     return (
         <div className="login-container">
             <h2 className="title">Bienvenido a</h2>
@@ -9,7 +18,7 @@ const Login = () => {
             <div className="login-box">
                 <p className="subtitle">Ingrese sus datos</p>
 
-                <form>
+                <form onSubmit={handleLogin}>
                     <div className="input-group">
                         <label>USUARIO</label>
                         <input type="text" placeholder=""/>
