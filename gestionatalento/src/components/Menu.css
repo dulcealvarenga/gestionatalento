@@ -89,3 +89,27 @@ button {
     font-size: 27px;
     margin: 10px 0;
 }
+
+.dropdown-results {
+    position: absolute;
+    background-color: #f0f0f0;
+    color: #1a1a2e;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    z-index: 10;
+    width: 100%;
+    max-width: 400px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.dropdown-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #dcdcdc;
+}
+

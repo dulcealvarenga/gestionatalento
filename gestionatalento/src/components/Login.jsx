@@ -1,14 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Login.css"; // Importamos los estilos
 import { useNavigate } from "react-router-dom"; // Importar para redirigir
+import axios from "axios";
 
 const Login = () => {
 
     const navigate = useNavigate(); // Hook para navegación
 
-    const handleLogin = (event) => {
-        event.preventDefault(); // Evita que el formulario recargue la página
-        navigate("/menu"); // Redirige a la página de Menu
+    // Estados para usuario, contraseña y mensaje de error
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+
+    const handleLogin = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await axios.post("http://localhost:8080/auth/login", {
+                username,
+                password
+            });
+
+            // Guardar el token en localStorage
+            localStorage.setItem("token", response.data.token);
+
+            // Redirigir si fue exitoso
+            navigate("/menu");
+        } catch (err) {
+            if (err.response && err.response.data) {
+                setError(err.response.data);
+            } else {
+                setError("Error de conexión con el servidor.");
+            }
+        }
     };
 
     return (
@@ -21,14 +44,24 @@ const Login = () => {
                 <form onSubmit={handleLogin}>
                     <div className="input-group">
                         <label>USUARIO</label>
-                        <input type="text" placeholder=""/>
+                        <input
+                            type="text"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            placeholder=""
+                        />
                     </div>
 
                     <div className="input-group">
                         <label>CONTRASEÑA</label>
-                        <input type="password" placeholder=""/>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder=""
+                        />
                     </div>
-
+                    {error && <p className="error-message">{error}</p>}
                     <button type="submit" className="login-button">
                         INGRESAR
                     </button>
