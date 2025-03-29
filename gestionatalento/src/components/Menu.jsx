@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Menu.css";
 import axios from "axios";
 
@@ -11,6 +12,8 @@ const Menu = () => {
     const [mensaje, setMensaje] = useState("");
     const dropdownRef = useRef(null);
     const [resultados, setResultados] = useState([]);
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         if (mensaje) {
@@ -45,6 +48,10 @@ const Menu = () => {
                 setCoincidencias(resultados);
                 setPersonaSeleccionada(null);
             }
+
+            localStorage.setItem("personaBuscada", personaSeleccionada.nroDocumento);
+            //navigate("/empleados");
+
         } catch (error) {
             console.error("Error al buscar persona:", error);
             setMensaje("Error en la búsqueda");
