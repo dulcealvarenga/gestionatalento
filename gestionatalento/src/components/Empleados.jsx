@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./Empleados.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Empleados = () => {
 
     const [listaEmpleados, setListaEmpleados] = useState([]);
-
+    const navigate = useNavigate();
     useEffect(() => {
         const docBuscado = localStorage.getItem("personaBuscada");
 
@@ -59,7 +60,7 @@ const Empleados = () => {
             <p className="acciones-title" style={{ fontSize: "22px"}}>Acciones</p>
 
             <div className="acciones-buttons">
-                <button className="boton-accion">AGREGAR EMPLEADO</button>
+                <button className="boton-accion" onClick={() => navigate("/abmEmpleados")}>AGREGAR EMPLEADO</button>
                 <button className="boton-accion">PASANTES</button>
                 <button className="boton-accion">BAJA DE EMPLEADOS</button>
                 <button className="boton-accion">INFORMES</button>

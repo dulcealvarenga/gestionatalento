@@ -4,7 +4,7 @@ import Login from "./components/Login";
 import Menu from "./components/Menu";
 import Sidebar from "./components/Sidebar";
 import Empleados from "./components/Empleados"; // la nueva pantalla
-
+import AbmEmpleados from "./components/AbmEmpleados";
 function App() {
     return (
         <Router>
@@ -22,6 +22,10 @@ function App() {
                 <Route path="/empleados" element={<div className="app-container">
                     <Sidebar/>
                     <Empleados/>
+                </div>}/>
+                <Route path="/abmEmpleados" element={<div className="app-container">
+                    <Sidebar/>
+                    <AbmEmpleados/>
                 </div>}/>
             </Routes>
         </Router>
