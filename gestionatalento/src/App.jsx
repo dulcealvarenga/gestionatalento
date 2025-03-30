@@ -5,6 +5,8 @@ import Menu from "./components/Menu";
 import Sidebar from "./components/Sidebar";
 import Empleados from "./components/Empleados"; // la nueva pantalla
 import AbmEmpleados from "./components/AbmEmpleados";
+import Dashboard from "./components/DashboardEmp";  // Asegúrate de que la ruta sea correcta
+
 function App() {
     return (
         <Router>
@@ -19,14 +21,22 @@ function App() {
                         </div>
                     }
                 />
+
                 <Route path="/empleados" element={<div className="app-container">
                     <Sidebar/>
                     <Empleados/>
                 </div>}/>
+
+                <Route path="/dashboard" element={<div className="app-container">
+                    <Sidebar/>
+                    <Dashboard /> {/* Aquí añades tu componente Dashboard */}
+                </div>}/>
+
                 <Route path="/abmEmpleados" element={<div className="app-container">
                     <Sidebar/>
                     <AbmEmpleados/>
                 </div>}/>
+
             </Routes>
         </Router>
     );

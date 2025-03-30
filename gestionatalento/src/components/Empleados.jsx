@@ -3,18 +3,51 @@ import "./Empleados.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+import { PDFDownloadLink, Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+
+const styles = StyleSheet.create({
+    page: {
+        flexDirection: "column",
+        backgroundColor: "#E4E4E4",
+        padding: 20,
+    },
+    title: {
+        fontSize: 18,
+        marginBottom: 20,
+    },
+    section: {
+        marginBottom: 10,
+    },
+    table: {
+        width: "100%",
+        borderCollapse: "collapse",
+    },
+    tableHeader: {
+        fontWeight: "bold",
+        borderBottom: "1px solid #000",
+        padding: "5px",
+    },
+    tableCell: {
+        borderBottom: "1px solid #ccc",
+        padding: "5px",
+    },
+});
+
 const Empleados = () => {
 
     const [listaEmpleados, setListaEmpleados] = useState([]);
     const navigate = useNavigate();
     useEffect(() => {
         const docBuscado = localStorage.getItem("personaBuscada");
+        console.log(docBuscado);
 
         if (docBuscado) {
             axios.get("http://localhost:8080/api/v1/Persona/consultaPersona")
                 .then(res => {
                     const personas = res.data;
-                    const filtradas = personas.filter(p => p.nroDocumento === docBuscado);
+                    const filtradas = personas.filter(p => Number(p.nroDocumento) === Number(docBuscado));
+                    console.log(docBuscado, typeof docBuscado);
+                    console.log(personas.nroDocumento, typeof personas.nroDocumento);
                     setListaEmpleados(filtradas);
                     localStorage.removeItem("personaBuscada"); // Limpieza
                 });
@@ -33,6 +66,9 @@ const Empleados = () => {
     const empleadosFiltrados = soloComisionados
         ? listaEmpleados.filter((e) => e.comisionado)
         : listaEmpleados;
+    const [fechaInicio, setFechaInicio] = useState("");
+    const [fechaFin, setFechaFin] = useState("");
+    const [mostrarMenuInformes, setMostrarMenuInformes] = useState(false);
 
     const handleEditar = (empleado) => {
         setEmpleadoEditando(empleado);
@@ -54,6 +90,68 @@ const Empleados = () => {
         setMostrarModal(false);
     };
 
+    /*const generarAltasBajasPDF = async () => {
+        try {
+            const response = await axios.get("http://localhost:8080/api/v1/Persona/altasBajasPDF", {
+                params: { fechaInicio, fechaFin },
+                responseType: "blob"
+            });
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", "Altas_Bajas.pdf");
+            document.body.appendChild(link);
+            link.click();
+        } catch (error) {
+            console.error("Error al generar el informe de Altas y Bajas", error);
+        }
+        setMostrarModal(false);
+    }; */
+
+    const generarPDFAltasBajas = async () => {
+        try {
+            const response = await fetch("/datos.json");
+            const data = await response.json();
+
+            const datos = [
+                ...(data.altas || []),
+                ...(data.bajas || []),
+                ...(data.modificaciones || [])
+            ];
+
+            return (
+                <Document>
+                    <Page style={styles.page}>
+                        <Text style={styles.title}>Informe de Altas, Bajas y Modificaciones</Text>
+                        <View style={styles.section}>
+                            <Text>Fecha de Inicio: {fechaInicio}</Text>
+                            <Text>Fecha de Fin: {fechaFin}</Text>
+                        </View>
+                        <View style={styles.section}>
+                            <Text style={styles.tableHeader}>Nro. Documento | Nombre | Tipo | Fecha</Text>
+                            {datos.map((item, index) => (
+                                <Text key={index} style={styles.tableCell}>
+                                    {item.nroDocumento} | {item.nombre} | {item.tipo} | {item.fecha}
+                                </Text>
+                            ))}
+                        </View>
+                    </Page>
+                </Document>
+            );
+        } catch (error) {
+            console.error("Error al generar PDF:", error);
+            return (
+                <Document>
+                    <Page style={styles.page}>
+                        <Text>Error al generar PDF</Text>
+                    </Page>
+                </Document>
+            );
+        }
+    };
+
+
+
     return (
         <div className="empleados-container">
             <h1>Empleados</h1>
@@ -63,8 +161,54 @@ const Empleados = () => {
                 <button className="boton-accion" onClick={() => navigate("/abmEmpleados")}>AGREGAR EMPLEADO</button>
                 <button className="boton-accion">PASANTES</button>
                 <button className="boton-accion">BAJA DE EMPLEADOS</button>
-                <button className="boton-accion">INFORMES</button>
+                <div className="dropdown">
+                    <button className="boton-accion"
+                            onClick={() => setMostrarMenuInformes(!mostrarMenuInformes)}>INFORMES
+                    </button>
+                    {mostrarMenuInformes && (
+                        <div className="dropdown-menu">
+                            <button onClick={() => setMostrarModal(true)}>Altas y Bajas</button>
+                            <button onClick={() => navigate("/dashboard")}>Dashboard</button>
+                        </div>
+                    )}
+                </div>
             </div>
+
+            {mostrarModal && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <h2>Generar Informe de Altas y Bajas</h2>
+                        <label>Fecha Inicio:</label>
+                        <input
+                            type="date"
+                            value={fechaInicio}
+                            onChange={(e) => setFechaInicio(e.target.value)}
+                        />
+                        <label>Fecha Fin:</label>
+                        <input
+                            type="date"
+                            value={fechaFin}
+                            onChange={(e) => setFechaFin(e.target.value)}
+                        />
+                        <div className="modal-buttons">
+                            <PDFDownloadLink
+                                document={generarPDFAltasBajas()} // Se pasa la función que genera el PDF
+                                fileName="Altas_Bajas.pdf"
+
+                            >
+                                {({ loading }) =>
+                                    loading ? (
+                                        <button className="modal-buttons">Generando PDF...</button> // Estilo mientras carga
+                                    ) : (
+                                        <button className="modal-buttons">Generar PDF</button> // Estilo del botón cuando está listo
+                                    )
+                                }
+                            </PDFDownloadLink>
+                            <button onClick={() => setMostrarModal(false)}>Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <div className="filtro-comisionado">
                 <input
@@ -73,13 +217,13 @@ const Empleados = () => {
                     checked={soloComisionados}
                     onChange={() => setSoloComisionados(!soloComisionados)}
                 />
-                <label htmlFor="comisionado" style={{ fontSize: "22px"}}>Mostrar solo Comisionados</label>
+                <label htmlFor="comisionado" style={{fontSize: "22px"}}>Mostrar solo Comisionados</label>
             </div>
 
             <table className="tabla-empleados">
                 <thead>
                 <tr>
-                    <th style={{ fontSize: "20px"}}>Legajos</th>
+                <th style={{ fontSize: "20px"}}>Legajos</th>
                     <th style={{ fontSize: "20px"}}>Foto</th>
                     <th style={{ fontSize: "20px"}}>Nro. de Documento</th>
                     <th style={{ fontSize: "20px"}}>Nombre Completo</th>
@@ -96,10 +240,10 @@ const Empleados = () => {
                             <button className="ver-btn">ver</button>
                         </td>
                         <td>
-                            <img src={emp.rutaFoto} alt="Foto" className="foto-empleado" />
+                            <img src="/avatar.png" alt="Foto" className="foto-empleado" />
                         </td>
                         <td style={{ fontSize: "20px"}}>{emp.nroDocumento}</td>
-                        <td style={{ fontSize: "20px"}}>{emp.nombre || emp.apellido}</td>
+                        <td style={{ fontSize: "20px"}}>{emp.nombre} {emp.apellido}</td>
                         <td style={{ fontSize: "20px"}}>{emp.fecNacimiento}</td>
                         <td style={{ fontSize: "20px"}}>{emp.ingreso}</td>
                         <td style={{ fontSize: "20px"}}>{emp.egreso}</td>

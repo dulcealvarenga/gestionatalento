@@ -14,6 +14,9 @@ const Menu = () => {
     const [resultados, setResultados] = useState([]);
     const navigate = useNavigate();
 
+    const [datosLaborales, setDatosLaborales] = useState(null);
+
+
 
     useEffect(() => {
         if (mensaje) {
@@ -44,17 +47,15 @@ const Menu = () => {
             } else if (resultados.length === 1) {
                 setPersonaSeleccionada(resultados[0]);
                 setCoincidencias([]);
+                localStorage.setItem("personaBuscada", resultados[0].nroDocumento);
             } else {
                 setCoincidencias(resultados);
                 setPersonaSeleccionada(null);
             }
 
-            localStorage.setItem("personaBuscada", personaSeleccionada.nroDocumento);
-            //navigate("/empleados");
-
         } catch (error) {
-            console.error("Error al buscar persona:", error);
             setMensaje("Error en la búsqueda");
+            console.error("Error al buscar persona:", error);
         }
     };
 
@@ -80,6 +81,22 @@ const Menu = () => {
         setResultados([]);
         setPersonaSeleccionada(null);
     }, [searchType]);
+
+    useEffect(() => {
+        const fetchDatosEmpleado = async () => {
+            if (!personaSeleccionada?.codPersona) return;
+
+            try {
+                const response = await axios.get(`http://localhost:8080/empleados/buscar/Empleado/${personaSeleccionada.codPersona}`);
+                setDatosLaborales(response.data);
+            } catch (error) {
+                console.error("Error al obtener datos del empleado:", error);
+                setDatosLaborales(null);
+            }
+        };
+
+        fetchDatosEmpleado();
+    }, [personaSeleccionada]);
 
     return (
         <div className="main-grid">
@@ -173,27 +190,42 @@ const Menu = () => {
                     </div>
                     <div className="data-group">
                         <label style={{ fontSize: "23px" }}>Fecha de Ingreso</label>
-                        <input style={{ borderRadius: "20px" }} type="text" disabled value="" />
+                        <input style={{ borderRadius: "20px" }}
+                               type="text"
+                               disabled
+                               value={datosLaborales?.fecInicio || ""} />
                     </div>
                 </div>
                 <div className="data-row">
                     <div className="data-group">
                         <label style={{ fontSize: "23px", marginTop: "20px" }}>Área de Desempeño</label>
-                        <input style={{ borderRadius: "20px" }} type="text" disabled value={personaSeleccionada?.lugarNacimiento || ""} />
+                        <input style={{ borderRadius: "20px" }}
+                               type="text"
+                               disabled
+                               value={personaSeleccionada?.lugarNacimiento || ""} />
                     </div>
                     <div className="data-group">
                         <label style={{ fontSize: "23px", marginTop: "20px" }}>Fecha de Egreso</label>
-                        <input style={{ borderRadius: "20px" }} type="text" disabled value="" />
+                        <input style={{ borderRadius: "20px" }}
+                               type="text"
+                               disabled
+                               value={datosLaborales?.fecEgreso || ""} />
                     </div>
                 </div>
                 <div className="data-row">
                     <div className="data-group">
                         <label style={{ fontSize: "23px", marginTop: "20px" }}>Cargo</label>
-                        <input style={{ borderRadius: "20px" }} type="text" disabled value="" />
+                        <input style={{ borderRadius: "20px" }}
+                               type="text"
+                               disabled
+                               value={datosLaborales?.cargo || ""} />
                     </div>
                     <div className="data-group">
                         <label style={{ fontSize: "23px", marginTop: "20px" }}>Antigüedad</label>
-                        <input style={{ borderRadius: "20px" }} type="text" disabled value="" />
+                        <input style={{ borderRadius: "20px" }}
+                               type="text"
+                               disabled
+                               value={datosLaborales?.fecEgreso || ""} />
                     </div>
                 </div>
             </div>
