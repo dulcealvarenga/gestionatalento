@@ -38,57 +38,91 @@ const Empleados = () => {
     const [listaEmpleados, setListaEmpleados] = useState([]);
     const navigate = useNavigate();
     useEffect(() => {
-        const docBuscado = localStorage.getItem("personaBuscada");
-        console.log(docBuscado);
+        const codPersona = localStorage.getItem("personaBuscada");
 
-        if (docBuscado) {
-            axios.get("http://localhost:8080/api/v1/Persona/consultaPersona")
+        if (codPersona) {
+            axios.get(`http://localhost:8080/empleados/buscar/Empleado/${codPersona}`)
                 .then(res => {
-                    const personas = res.data;
-                    const filtradas = personas.filter(p => Number(p.nroDocumento) === Number(docBuscado));
-                    console.log(docBuscado, typeof docBuscado);
-                    console.log(personas.nroDocumento, typeof personas.nroDocumento);
-                    setListaEmpleados(filtradas);
+                    setListaEmpleados([res.data]); // Lo envolvés en array porque tu tabla espera una lista
                     localStorage.removeItem("personaBuscada"); // Limpieza
                 });
         } else {
             // Trae toda la lista si no vino filtrado
-            axios.get("http://localhost:8080/api/v1/Persona/consultaPersona")
+            axios.get("http://localhost:8080/empleados/obtenerEmpleados")
                 .then(res => setListaEmpleados(res.data));
         }
     }, []);
 
-    // para que traiga solo comisionados
+    // para que traiga solo comisionados y pasantes
     const [soloComisionados, setSoloComisionados] = useState(false);
+    const [soloPasantes, setSoloPasantes] = useState(false);
+
     // para mostrar formulario de edicion
-    const [mostrarModal, setMostrarModal] = useState(false);
+    const [mostrarModalEdicion, setMostrarModalEdicion] = useState(false);
+    const [mostrarModalInforme, setMostrarModalInforme] = useState(false);
     const [empleadoEditando, setEmpleadoEditando] = useState(null);
-    const empleadosFiltrados = soloComisionados
-        ? listaEmpleados.filter((e) => e.comisionado)
-        : listaEmpleados;
+    let empleadosFiltrados = listaEmpleados;
+
+    if (soloComisionados) {
+        empleadosFiltrados = empleadosFiltrados.filter(
+            (e) => e.situacionLaboral?.descripcion?.toUpperCase() === "COMISIONADO"
+        );
+    }
+
+    if (soloPasantes) {
+        empleadosFiltrados = empleadosFiltrados.filter(
+            (e) => {
+                const cod = e.situacionLaboral?.codSituacionLaboral;
+                return cod === 4 || cod === 5;
+            }
+        );
+    }
     const [fechaInicio, setFechaInicio] = useState("");
     const [fechaFin, setFechaFin] = useState("");
     const [mostrarMenuInformes, setMostrarMenuInformes] = useState(false);
 
     const handleEditar = (empleado) => {
         setEmpleadoEditando(empleado);
-        setMostrarModal(true);
+        setMostrarModalEdicion(true);
+        setMostrarModalInforme(false); // por si acaso
     };
 
-    const actualizarCampo = (campo, valor) => {
-        setEmpleadoEditando(prev => ({
-            ...prev,
-            [campo]: valor
-        }));
-    };
-
-    const handleGuardarCambios = (e) => {
+    const handleGuardarCambios = async (e) => {
         e.preventDefault();
-        console.log("Empleado actualizado:", empleadoEditando);
 
-        // Aquí hacés el PUT o POST al backend si ya tenés definido.
-        setMostrarModal(false);
+        try {
+            const personaActualizada = {
+                codPersona: empleadoEditando.persona.codPersona,
+                nroDocumento: empleadoEditando.persona.nroDocumento,
+                nroRuc: empleadoEditando.persona.nroRuc || "",
+                nombres: empleadoEditando.persona.nombres,
+                apellidos: empleadoEditando.persona.apellidos,
+                codNivelEstudio: empleadoEditando.persona.codNivelEstudio || "S",
+                codPaisNacimiento: empleadoEditando.persona.codPaisNacimiento || 1,
+                fecNacimiento: empleadoEditando.persona.fecNacimiento,
+                lugarNacimiento: empleadoEditando.persona.lugarNacimiento || "Asunción",
+                poseeDiscapacidad: empleadoEditando.persona.poseeDiscapacidad || "N",
+                descripcionDiscapacidad: empleadoEditando.persona.descripcionDiscapacidad || "",
+                rutaFoto: empleadoEditando.persona.rutaFoto || "",
+                estadoCivil: {
+                    codEstadoCivil: empleadoEditando.persona.estadoCivil?.codEstadoCivil || 1
+                }
+            };
+
+            await axios.put("http://localhost:8080/api/v1/Persona/actualizar", personaActualizada);
+            console.log("Persona actualizada correctamente");
+
+            setMostrarModalEdicion(false);
+
+            // Si querés refrescar la lista:
+            const res = await axios.get("http://localhost:8080/empleados/obtenerEmpleados");
+            setListaEmpleados(res.data);
+
+        } catch (error) {
+            console.error("Error al actualizar la persona:", error);
+        }
     };
+
 
     /*const generarAltasBajasPDF = async () => {
         try {
@@ -150,7 +184,15 @@ const Empleados = () => {
         }
     };
 
-
+    const actualizarPersona = (campo, valor) => {
+        setEmpleadoEditando((prev) => ({
+            ...prev,
+            persona: {
+                ...prev.persona,
+                [campo]: valor,
+            },
+        }));
+    };
 
     return (
         <div className="empleados-container">
@@ -159,22 +201,21 @@ const Empleados = () => {
 
             <div className="acciones-buttons">
                 <button className="boton-accion" onClick={() => navigate("/abmEmpleados")}>AGREGAR EMPLEADO</button>
-                <button className="boton-accion">PASANTES</button>
-                <button className="boton-accion">BAJA DE EMPLEADOS</button>
+                <button className="boton-accion" onClick={() => navigate("/bajaEmpleados")}>BAJA DE EMPLEADOS</button>
                 <div className="dropdown">
                     <button className="boton-accion"
                             onClick={() => setMostrarMenuInformes(!mostrarMenuInformes)}>INFORMES
                     </button>
                     {mostrarMenuInformes && (
                         <div className="dropdown-menu">
-                            <button onClick={() => setMostrarModal(true)}>Altas y Bajas</button>
+                            <button onClick={() => setMostrarModalInforme(true)}>Altas y Bajas</button>
                             <button onClick={() => navigate("/dashboard")}>Dashboard</button>
                         </div>
                     )}
                 </div>
             </div>
 
-            {mostrarModal && (
+            {mostrarModalInforme && (
                 <div className="modal-overlay">
                     <div className="modal-content">
                         <h2>Generar Informe de Altas y Bajas</h2>
@@ -204,7 +245,7 @@ const Empleados = () => {
                                     )
                                 }
                             </PDFDownloadLink>
-                            <button onClick={() => setMostrarModal(false)}>Cancelar</button>
+                            <button onClick={() => setMostrarModalInforme(false)}>Cancelar</button>
                         </div>
                     </div>
                 </div>
@@ -218,19 +259,29 @@ const Empleados = () => {
                     onChange={() => setSoloComisionados(!soloComisionados)}
                 />
                 <label htmlFor="comisionado" style={{fontSize: "22px"}}>Mostrar solo Comisionados</label>
+                <input
+                    type="checkbox"
+                    id="pasante"
+                    checked={soloPasantes}
+                    onChange={() => setSoloPasantes(!soloPasantes)}
+                    style={{marginLeft: "30px"}}
+                />
+                <label htmlFor="pasante" style={{fontSize: "22px"}}>
+                    Mostrar solo Pasantes
+                </label>
             </div>
 
             <table className="tabla-empleados">
                 <thead>
                 <tr>
-                <th style={{ fontSize: "20px"}}>Legajos</th>
-                    <th style={{ fontSize: "20px"}}>Foto</th>
-                    <th style={{ fontSize: "20px"}}>Nro. de Documento</th>
+                    <th style={{fontSize: "20px"}}>Legajos</th>
+                    <th style={{fontSize: "20px"}}>Foto</th>
+                    <th style={{fontSize: "20px"}}>Nro. de Documento</th>
                     <th style={{ fontSize: "20px"}}>Nombre Completo</th>
                     <th style={{ fontSize: "20px"}}>Fecha de Nacimiento</th>
                     <th style={{ fontSize: "20px"}}>Fecha de Ingreso</th>
                     <th style={{ fontSize: "20px"}}>Fecha de Egreso</th>
-                    <th style={{ fontSize: "20px"}}>Dirección</th>
+                    <th style={{ fontSize: "20px"}}>Editar</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -242,13 +293,12 @@ const Empleados = () => {
                         <td>
                             <img src="/avatar.png" alt="Foto" className="foto-empleado" />
                         </td>
-                        <td style={{ fontSize: "20px"}}>{emp.nroDocumento}</td>
-                        <td style={{ fontSize: "20px"}}>{emp.nombre} {emp.apellido}</td>
-                        <td style={{ fontSize: "20px"}}>{emp.fecNacimiento}</td>
-                        <td style={{ fontSize: "20px"}}>{emp.ingreso}</td>
-                        <td style={{ fontSize: "20px"}}>{emp.egreso}</td>
+                        <td style={{ fontSize: "20px"}}>{emp.persona.nroDocumento}</td>
+                        <td style={{ fontSize: "20px"}}>{emp.persona.nombres} {emp.persona.apellidos}</td>
+                        <td style={{ fontSize: "20px"}}>{emp.persona.fecNacimiento}</td>
+                        <td style={{ fontSize: "20px"}}>{emp.fecIngreso}</td>
+                        <td style={{ fontSize: "20px"}}>{emp.fecEgreso}</td>
                         <td className="direccion-cell" style={{ fontSize: "20px"}}>
-                            {emp.direccion}
                             <span
                                 className="editar-icon"
                                 onClick={() => handleEditar(emp)}
@@ -259,10 +309,10 @@ const Empleados = () => {
                 ))}
                 </tbody>
             </table>
-            {mostrarModal && empleadoEditando && (
+            {mostrarModalEdicion && empleadoEditando && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                        <h2>Editar Empleado</h2>
+                        <h2>Editar Datos</h2>
 
                         <form onSubmit={handleGuardarCambios}>
                             <div className="form-columns">
@@ -271,8 +321,8 @@ const Empleados = () => {
                                         Nro. de Documento:
                                         <input
                                             type="text"
-                                            value={empleadoEditando.nroDocumento}
-                                            onChange={(e) => actualizarCampo("nroDocumento", e.target.value)}
+                                            value={empleadoEditando.persona.nroDocumento}
+                                            onChange={(e) => actualizarPersona("nroDocumento", e.target.value)}
                                         />
                                     </label>
 
@@ -280,8 +330,8 @@ const Empleados = () => {
                                         Nombre:
                                         <input
                                             type="text"
-                                            value={empleadoEditando.nombre}
-                                            onChange={(e) => actualizarCampo("nombre", e.target.value)}
+                                            value={empleadoEditando.persona.nombres}
+                                            onChange={(e) => actualizarPersona("nombres", e.target.value)}
                                         />
                                     </label>
 
@@ -289,8 +339,8 @@ const Empleados = () => {
                                         Apellido:
                                         <input
                                             type="text"
-                                            value={empleadoEditando.apellido}
-                                            onChange={(e) => actualizarCampo("apellido", e.target.value)}
+                                            value={empleadoEditando.persona.apellidos}
+                                            onChange={(e) => actualizarPersona("apellidos", e.target.value)}
                                         />
                                     </label>
                                 </div>
@@ -300,34 +350,34 @@ const Empleados = () => {
                                         Fecha de Nacimiento:
                                         <input
                                             type="date"
-                                            value={empleadoEditando.fecNacimiento}
-                                            onChange={(e) => actualizarCampo("fecNacimiento", e.target.value)}
+                                            value={empleadoEditando.persona.fecNacimiento}
+                                            onChange={(e) => actualizarPersona("fecNacimiento", e.target.value)}
                                         />
                                     </label>
 
-                                    <label>
+                                    {/*<label>
                                         Fecha de Ingreso:
                                         <input
                                             type="date"
                                             value={empleadoEditando.fecIngreso}
                                             onChange={(e) => actualizarCampo("fecIngreso", e.target.value)}
                                         />
-                                    </label>
+                                    </label>*/}
 
-                                    <label>
+                                    {/*<label>
                                         Dirección:
                                         <input
                                             type="text"
                                             value={empleadoEditando.direccion}
                                             onChange={(e) => actualizarCampo("direccion", e.target.value)}
                                         />
-                                    </label>
+                                    </label> */}
                                 </div>
                             </div>
 
                             <div className="botones-modal">
                                 <button type="submit">Guardar</button>
-                                <button type="button" onClick={() => setMostrarModal(false)}>Cancelar</button>
+                                <button type="button" onClick={() => setMostrarModalEdicion(false)}>Cancelar</button>
                             </div>
                         </form>
                     </div>

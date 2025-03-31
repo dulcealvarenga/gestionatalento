@@ -6,6 +6,8 @@ import Sidebar from "./components/Sidebar";
 import Empleados from "./components/Empleados"; // la nueva pantalla
 import AbmEmpleados from "./components/AbmEmpleados";
 import Dashboard from "./components/DashboardEmp";  // Asegúrate de que la ruta sea correcta
+import BajaEmpleados from "./components/BajaEmpleados";
+
 
 function App() {
     return (
@@ -26,6 +28,16 @@ function App() {
                     <Sidebar/>
                     <Empleados/>
                 </div>}/>
+
+                <Route
+                    path="/bajaEmpleados"
+                    element={
+                        <div className="app-container">
+                            <Sidebar />
+                            <BajaEmpleados />
+                        </div>
+                    }
+                />
 
                 <Route path="/dashboard" element={<div className="app-container">
                     <Sidebar/>

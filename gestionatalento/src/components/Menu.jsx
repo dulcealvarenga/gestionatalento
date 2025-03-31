@@ -1,22 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import "./Menu.css";
 import axios from "axios";
 
 const Menu = () => {
     const [searchType, setSearchType] = useState("ci");
     const [searchValue, setSearchValue] = useState("");
-    const [personas, setPersonas] = useState([]);
     const [personaSeleccionada, setPersonaSeleccionada] = useState(null);
     const [coincidencias, setCoincidencias] = useState([]);
     const [mensaje, setMensaje] = useState("");
     const dropdownRef = useRef(null);
     const [resultados, setResultados] = useState([]);
-    const navigate = useNavigate();
 
     const [datosLaborales, setDatosLaborales] = useState(null);
-
-
 
     useEffect(() => {
         if (mensaje) {
@@ -36,7 +31,7 @@ const Menu = () => {
                 resultados = personas.filter(p => p.nroDocumento === searchValue);
             } else {
                 resultados = personas.filter(p =>
-                    `${p.nombre} ${p.apellido}`.toLowerCase().includes(searchValue.toLowerCase())
+                    `${p.nombres} ${p.apellidos}`.toLowerCase().includes(searchValue.toLowerCase())
                 );
             }
 
@@ -47,7 +42,8 @@ const Menu = () => {
             } else if (resultados.length === 1) {
                 setPersonaSeleccionada(resultados[0]);
                 setCoincidencias([]);
-                localStorage.setItem("personaBuscada", resultados[0].nroDocumento);
+                localStorage.setItem("personaBuscada", resultados[0].codPersona);
+                console.log("Persona ", resultados[0].codPersona);
             } else {
                 setCoincidencias(resultados);
                 setPersonaSeleccionada(null);
@@ -76,10 +72,12 @@ const Menu = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    // Resetear resultados si cambia tipo de búsqueda
     useEffect(() => {
-        setResultados([]);
+        setSearchValue("");
         setPersonaSeleccionada(null);
+        setCoincidencias([]);
+        setResultados([]);
+        setDatosLaborales(null);
     }, [searchType]);
 
     useEffect(() => {
@@ -97,6 +95,35 @@ const Menu = () => {
 
         fetchDatosEmpleado();
     }, [personaSeleccionada]);
+
+    const calcularAntiguedad = (fechaIngreso) => {
+        if (!fechaIngreso) return "";
+
+        const inicio = new Date(fechaIngreso);
+        const hoy = new Date();
+
+        let años = hoy.getFullYear() - inicio.getFullYear();
+        let meses = hoy.getMonth() - inicio.getMonth();
+        let días = hoy.getDate() - inicio.getDate();
+
+        if (días < 0) {
+            meses--;
+            const ultimoDiaMesAnterior = new Date(hoy.getFullYear(), hoy.getMonth(), 0).getDate();
+            días += ultimoDiaMesAnterior;
+        }
+
+        if (meses < 0) {
+            años--;
+            meses += 12;
+        }
+
+        const partes = [];
+        if (años > 0) partes.push(`${años} año${años > 1 ? 's' : ''}`);
+        if (meses > 0) partes.push(`${meses} mes${meses > 1 ? 'es' : ''}`);
+        if (días > 0 || partes.length === 0) partes.push(`${días} día${días > 1 ? 's' : ''}`);
+
+        return partes.join(", ");
+    };
 
     return (
         <div className="main-grid">
@@ -148,7 +175,7 @@ const Menu = () => {
                                     className="dropdown-item"
                                     onClick={() => handleSelect(persona)}
                                 >
-                                    {persona.nombre} {persona.apellido}
+                                    {persona.nombres} {persona.apellidos}
                                 </li>
                             ))}
                         </div>
@@ -185,7 +212,7 @@ const Menu = () => {
                             style={{ borderRadius: "20px" }}
                             type="text"
                             disabled
-                            value={personaSeleccionada ? `${personaSeleccionada.nombre} ${personaSeleccionada.apellido}` : ""}
+                            value={personaSeleccionada ? `${personaSeleccionada.nombres} ${personaSeleccionada.apellidos}` : ""}
                         />
                     </div>
                     <div className="data-group">
@@ -193,7 +220,7 @@ const Menu = () => {
                         <input style={{ borderRadius: "20px" }}
                                type="text"
                                disabled
-                               value={datosLaborales?.fecInicio || ""} />
+                               value={datosLaborales?.fecIngreso || ""} />
                     </div>
                 </div>
                 <div className="data-row">
@@ -202,7 +229,8 @@ const Menu = () => {
                         <input style={{ borderRadius: "20px" }}
                                type="text"
                                disabled
-                               value={personaSeleccionada?.lugarNacimiento || ""} />
+                               value={datosLaborales?.cargo?.departamento?.descripcion || ""}
+                        />
                     </div>
                     <div className="data-group">
                         <label style={{ fontSize: "23px", marginTop: "20px" }}>Fecha de Egreso</label>
@@ -218,14 +246,16 @@ const Menu = () => {
                         <input style={{ borderRadius: "20px" }}
                                type="text"
                                disabled
-                               value={datosLaborales?.cargo || ""} />
+                               value={datosLaborales?.cargo?.descripcion || ""}
+                        />
                     </div>
                     <div className="data-group">
                         <label style={{ fontSize: "23px", marginTop: "20px" }}>Antigüedad</label>
                         <input style={{ borderRadius: "20px" }}
                                type="text"
                                disabled
-                               value={datosLaborales?.fecEgreso || ""} />
+                               value={calcularAntiguedad(datosLaborales?.fecIngreso)}
+                        />
                     </div>
                 </div>
             </div>
@@ -236,7 +266,10 @@ const Menu = () => {
                     <textarea
                         style={{ width: "96%", height: "200px", resize: "none" }}
                         disabled
-                        value={personaSeleccionada?.discapacidad ? `Discapacidad: ${personaSeleccionada.obsDiscapacidad || "No especificado"}` : "Sin discapacidad"}
+                        value={personaSeleccionada?.poseeDiscapacidad === 'S'
+                            ? `Discapacidad: ${personaSeleccionada.descripcionDiscapacidad || "No especificado"}`
+                            : "Sin discapacidad"}
+
                     />
                 </div>
             </div>

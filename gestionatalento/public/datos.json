@@ -1,16 +1,22 @@
 {
   "altas": [
     {
-      "nroDocumento": "5198963",
+      "nroDocumento": "5198965",
       "nombre": "Dulce Alvarenga",
       "tipo": "Alta",
-      "fecha": "15/01/2025"
+      "fecha": "15/03/2025"
+    },
+    {
+      "nroDocumento": "5198964",
+      "nombre": "Juanita Jara",
+      "tipo": "Alta",
+      "fecha": "15/03/2025"
     }
   ],
   "bajas": [
     {
       "nroDocumento": "5198965",
-      "nombre": "Dulce Jara",
+      "nombre": "Carla Jara",
       "tipo": "Baja",
       "fecha": "05/03/2025"
     }
@@ -18,7 +24,7 @@
   "modificaciones": [
     {
       "nroDocumento": "1234567",
-      "nombre": "Manu Baez",
+      "nombre": "Manuel Baez",
       "tipo": "Modificación",
       "fecha": "03/03/2025"
     }
