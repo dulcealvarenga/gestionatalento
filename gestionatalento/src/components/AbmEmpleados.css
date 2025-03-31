@@ -1,0 +1,125 @@
+.abm-empleados-container {
+    padding: 20px;
+    background-color: #1e1f2f;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin-left: 220px;
+    overflow-y: auto;
+    max-height: 100vh;
+}
+
+.abm-empleados-container h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.volver {
+    cursor: pointer;
+    color: white;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.formulario {
+    margin-top: 20px;
+    background-color: #63697e;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+}
+
+.formulario {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 70px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+}
+
+.campo label {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.campo input {
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 20px;
+    background-color: #909ca4;
+    color: white;
+    width: 90%;
+    box-sizing: border-box;
+}
+
+select {
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 20px;
+    background-color: #909ca4;
+    color: white;
+    width: 90%;
+    box-sizing: border-box;
+}
+
+.campo input:focus {
+    outline: none;
+    border-color: #f9c74f;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    grid-column: span 1;
+}
+
+.checkbox-group label {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.checkbox-group input {
+    transform: scale(1.2);
+}
+
+.descripcion-disco {
+    display: flex;
+    flex-direction: column;
+    grid-column: span 2;
+}
+
+.boton-container {
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: flex-end; /* Alinea el botón a la derecha */
+    margin-top: 20px;
+    width: 100%; /* Hace que el contenedor ocupe todo el ancho disponible */
+}
+
+.guardar {
+    margin-left: 10px;
+    background-color: #63697e;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 30%; /* El botón ocupa el 30% del ancho del contenedor */
+    max-width: 200px; /* Limita el tamaño máximo del botón para no hacerla demasiado grande */
+    box-sizing: border-box; /* Asegura que el padding no se sume al ancho */
+}
+
+.guardar:hover {
+    background-color: #f9c74f;
+}
