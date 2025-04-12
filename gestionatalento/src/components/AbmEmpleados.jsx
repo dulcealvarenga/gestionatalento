@@ -15,17 +15,18 @@ const AbmEmpleados = () => {
         codNivelEstudio: 1,
         direccionParticular: "",
         codEstadoCivil: 1,
+        lugarNacimiento: "",
         telefono: "",
         correo: "",
         poseeDiscapacidad: false,
         descripcionDiscapacidad: "",
         rutaFoto: "",
-        codCargo: "",
+        codCargo: 1,
         fecIngreso: "",
         fecActoAdministrativo: "",
         asignacion: "",
-        codSede: "",
-        codSituacionLaboral: "",
+        codSede: 1,
+        codSituacionLaboral: 1,
         nroResolucion: "",
         horaEntrada: "",
         horaSalida: "",
@@ -38,17 +39,17 @@ const AbmEmpleados = () => {
         localStorage.removeItem("codPersona");
     }
     useEffect(() => {
-        const docBuscado = localStorage.getItem("personaBuscada");
-        if (docBuscado) {
-            axios.get("http://localhost:8080/api/v1/Persona/consultaPersona")
+        const docBuscado = localStorage.getItem("empleadoBuscado");
+        /*if (docBuscado) {
+            axios.get("http://localhost:8080/empleados/obtener/id/" + docBuscado)
                 .then(res => {
                     const persona = res.data.find(p => p.nroDocumento === docBuscado);
                     if (persona) {
                         setFormData(persona);
                     }
-                    localStorage.removeItem("personaBuscada");
+                    localStorage.removeItem("empleadoBuscado");
                 });
-        }
+        }*/
     }, []);
 
     const handleChange = (e) => {
@@ -78,7 +79,7 @@ const AbmEmpleados = () => {
         if (step === 2){
             const codPersonaLocal = localStorage.getItem("codPersona");
             console.log(localStorage.getItem("codPersona"));
-            if (!codPersonaLocal) {
+            if (codPersonaLocal == null) {
                 const persona = new Object;
                 const estadoCivil = new Object;
 
@@ -89,35 +90,33 @@ const AbmEmpleados = () => {
                 persona.apellidos = formData.apellidos;
                 persona.nroRuc = formData.nroRuc;
                 persona.lugarNacimiento = formData.lugarNacimiento;
-                persona.codPaisNacimiento = formData.codPaisNacimiento;
+                persona.codPaisNacimiento = 1;//formData.codPaisNacimiento;
                 persona.fecNacimiento = formData.fecNacimiento;
                 persona.codNivelEstudio = formData.codNivelEstudio;
-                persona.poseeDispacidad = formData.poseeDispacidad;
                 if (formData.poseeDiscapacidad){
-                    persona.descripcionDiscapacidad = "S";
+                    persona.poseeDiscapacidad = "S";
                 } else{
-                    persona.descripcionDiscapacidad = "N";
+                    persona.poseeDiscapacidad = "N";
                 }
+                persona.descripcionDiscapacidad = formData.descripcionDiscapacidad;
                 persona.estadoCivil = estadoCivil;
+                persona.lugarNacimiento = formData.lugarNacimiento;
                 persona.rutaFoto = formData.rutaFoto;
                 console.log("Datos enviados:", persona);
 
                 
                 // Aquí puedes enviar los datos al backend con un POST o PUT
-                axios.post("http://localhost:8080/api/v1/Persona/crearPersona", persona)
+                axios.post("http://localhost:8080/personas/crear", persona)
                     .then((response) => {
-                        console.log("Datos guardados correctamente", response);
-                        // Agregar la alerta personalizada aquí
+                        response.data.objeto
                         alert("Persona creada correctamente");
-                        localStorage.setItem('codPersona', response.data.codPersona);
+                        localStorage.setItem('codPersona', response.data.objeto.codPersona);
                         console.log("persona", localStorage.getItem('codPersona'));
-                        // Aquí puedes redirigir al usuario a otra página después del envío
-                        //navigate("/empleados"); // Reemplaza "/otra-pagina" con la URL que desees
                     })
                     .catch((error) => {
                         console.error("Error al guardar los datos:", error);
                     });
-            }else{
+            }else if(formData.asignacion > 0){
                 const empleado = new Object;
                 const persona = new Object;
                 const cargo = new Object;
@@ -142,16 +141,19 @@ const AbmEmpleados = () => {
                 empleado.nroResolucion = formData.nroResolucion;
                 empleado.observacion = formData.observacion;
                 console.log("Empleado enviado", empleado);
-                axios.post("http://localhost:8080/empleados/crearEmpleados", empleado)
+                axios.post("http://localhost:8080/empleados/crear", empleado)
                     .then((response) => {
                         console.log("Datos guardados correctamente", response);
+                        if (response.data.objeto.codigoMensaje == "200") {
+                            alert("Empleado creado correctamente");
+                        }else{
+                            console.log("intenta cargar empleado");
+                            alert(response.data.objeto.mensaje);
+                        }
 
-                        // Agregar la alerta personalizada aquí
-                        alert("Empleado creado correctamente");
-                        localStorage.setItem('codPersona', response.codPersona);
+                        localStorage.setItem('codPersona', response.data.objeto.persona.codPersona);
 
-                        // Aquí puedes redirigir al usuario a otra página después del envío
-                        //navigate("/empleados"); // Reemplaza "/otra-pagina" con la URL que desees
+                        navigate("/empleados"); // Reemplaza "/otra-pagina" con la URL que desees
                     })
                     .catch((error) => {
                         console.error("Error al guardar los datos:", error);
@@ -245,6 +247,10 @@ const AbmEmpleados = () => {
                             </select> 
                         </div>
                         <div className="campo">
+                            <label>Lugar de Nacimiento</label>
+                            <input type="text" name="lugarNacimiento" value={formData.lugarNacimiento} onChange={handleChange} required/>
+                        </div>
+                        <div className="campo">
                             <label>Número de Teléfono</label>
                             <input type="text" name="telefono" value={formData.telefono} onChange={handleChange} required/>
                         </div>
@@ -303,7 +309,7 @@ const AbmEmpleados = () => {
                             <input type="number"
                             name="asignacion"
                             value={formData.asignacion}
-                            onChange={handleChange}  />
+                            onChange={handleChange} />
                         </div>
                         <div className="campo">
                             <label>Sede</label>

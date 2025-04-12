@@ -37,21 +37,24 @@ const Empleados = () => {
 
     const [listaEmpleados, setListaEmpleados] = useState([]);
     const navigate = useNavigate();
-    useEffect(() => {
-        const codPersona = localStorage.getItem("personaBuscada");
 
-        if (codPersona) {
-            axios.get(`http://localhost:8080/empleados/buscar/Empleado/${codPersona}`)
+    useEffect(() => {
+        const codEmpleado = localStorage.getItem("empleadoBuscado");
+        console.log("empleado buscado:", codEmpleado);
+        if (codEmpleado) {
+            axios.get(`http://localhost:8080/empleados/obtener/id/${codEmpleado}`)
                 .then(res => {
-                    setListaEmpleados([res.data]); // Lo envolvés en array porque tu tabla espera una lista
-                    localStorage.removeItem("personaBuscada"); // Limpieza
+                    setListaEmpleados([res.data.objeto]); // Lo envolvés en array porque tu tabla espera una lista
+                    localStorage.removeItem("empleadoBuscado"); // Limpieza
                 });
         } else {
             // Trae toda la lista si no vino filtrado
-            axios.get("http://localhost:8080/empleados/obtenerEmpleados")
-                .then(res => setListaEmpleados(res.data));
+            axios.get("http://localhost:8080/empleados/obtenerLista")
+                .then(response => {
+                    setListaEmpleados(response.data.objeto);
+                });
         }
-    }, []);
+    }, []); // El array vacío asegura que solo se ejecute cuando el componente se monta
 
     // para que traiga solo comisionados y pasantes
     const [soloComisionados, setSoloComisionados] = useState(false);
@@ -65,18 +68,19 @@ const Empleados = () => {
 
     if (soloComisionados) {
         empleadosFiltrados = empleadosFiltrados.filter(
-            (e) => e.situacionLaboral?.descripcion?.toUpperCase() === "COMISIONADO"
+            (e) => e.empleado.situacionLaboral?.descripcion?.toUpperCase() === "COMISIONADO"
         );
     }
 
     if (soloPasantes) {
         empleadosFiltrados = empleadosFiltrados.filter(
             (e) => {
-                const cod = e.situacionLaboral?.codSituacionLaboral;
+                const cod = e.empleado.situacionLaboral?.codSituacionLaboral;
                 return cod === 4 || cod === 5;
             }
         );
     }
+
     const [fechaInicio, setFechaInicio] = useState("");
     const [fechaFin, setFechaFin] = useState("");
     const [mostrarMenuInformes, setMostrarMenuInformes] = useState(false);
@@ -92,55 +96,36 @@ const Empleados = () => {
 
         try {
             const personaActualizada = {
-                codPersona: empleadoEditando.persona.codPersona,
-                nroDocumento: empleadoEditando.persona.nroDocumento,
-                nroRuc: empleadoEditando.persona.nroRuc || "",
-                nombres: empleadoEditando.persona.nombres,
-                apellidos: empleadoEditando.persona.apellidos,
-                codNivelEstudio: empleadoEditando.persona.codNivelEstudio || "S",
-                codPaisNacimiento: empleadoEditando.persona.codPaisNacimiento || 1,
-                fecNacimiento: empleadoEditando.persona.fecNacimiento,
-                lugarNacimiento: empleadoEditando.persona.lugarNacimiento || "Asunción",
-                poseeDiscapacidad: empleadoEditando.persona.poseeDiscapacidad || "N",
-                descripcionDiscapacidad: empleadoEditando.persona.descripcionDiscapacidad || "",
-                rutaFoto: empleadoEditando.persona.rutaFoto || "",
+                codEmpleado: empleadoEditando.codEmpleado,
+                codPersona: empleadoEditando.empleado.persona.codPersona,
+                nroDocumento: empleadoEditando.empleado.persona.nroDocumento,
+                nroRuc: empleadoEditando.empleado.persona.nroRuc,
+                nombres: empleadoEditando.empleado.persona.nombres,
+                apellidos: empleadoEditando.empleado.persona.apellidos,
+                codNivelEstudio: empleadoEditando.empleado.persona.codNivelEstudio,
+                codPaisNacimiento: empleadoEditando.empleado.persona.codPaisNacimiento,
+                fecNacimiento: empleadoEditando.empleado.persona.fecNacimiento,
+                lugarNacimiento: empleadoEditando.empleado.persona.lugarNacimiento,
+                poseeDiscapacidad: empleadoEditando.empleado.persona.poseeDiscapacidad,
+                descripcionDiscapacidad: empleadoEditando.empleado.persona.descripcionDiscapacidad,
+                rutaFoto: empleadoEditando.empleado.persona.rutaFoto,
                 estadoCivil: {
-                    codEstadoCivil: empleadoEditando.persona.estadoCivil?.codEstadoCivil || 1
+                    codEstadoCivil: empleadoEditando.empleado.persona.estadoCivil?.codEstadoCivil
                 }
             };
-
-            await axios.put("http://localhost:8080/api/v1/Persona/actualizar", personaActualizada);
+            await axios.put("http://localhost:8080/personas/actualizar", personaActualizada);
             console.log("Persona actualizada correctamente");
 
             setMostrarModalEdicion(false);
 
             // Si querés refrescar la lista:
-            const res = await axios.get("http://localhost:8080/empleados/obtenerEmpleados");
-            setListaEmpleados(res.data);
+            const res = await axios.get("http://localhost:8080/empleados/obtenerLista");
+            setListaEmpleados(res.data.objeto);
 
         } catch (error) {
             console.error("Error al actualizar la persona:", error);
         }
     };
-
-
-    /*const generarAltasBajasPDF = async () => {
-        try {
-            const response = await axios.get("http://localhost:8080/api/v1/Persona/altasBajasPDF", {
-                params: { fechaInicio, fechaFin },
-                responseType: "blob"
-            });
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", "Altas_Bajas.pdf");
-            document.body.appendChild(link);
-            link.click();
-        } catch (error) {
-            console.error("Error al generar el informe de Altas y Bajas", error);
-        }
-        setMostrarModal(false);
-    }; */
 
     const generarPDFAltasBajas = async () => {
         try {
@@ -165,7 +150,7 @@ const Empleados = () => {
                             <Text style={styles.tableHeader}>Nro. Documento | Nombre | Tipo | Fecha</Text>
                             {datos.map((item, index) => (
                                 <Text key={index} style={styles.tableCell}>
-                                    {item.nroDocumento} | {item.nombre} | {item.tipo} | {item.fecha}
+                                    {item.nroDocumento} | {item.nombres} | {item.tipo} | {item.fecha}
                                 </Text>
                             ))}
                         </View>
@@ -187,9 +172,12 @@ const Empleados = () => {
     const actualizarPersona = (campo, valor) => {
         setEmpleadoEditando((prev) => ({
             ...prev,
-            persona: {
-                ...prev.persona,
-                [campo]: valor,
+            empleado: {
+                ...prev.empleado,
+                persona: {
+                    ...prev.empleado.persona,
+                    [campo]: valor,
+                },
             },
         }));
     };
@@ -235,7 +223,6 @@ const Empleados = () => {
                             <PDFDownloadLink
                                 document={generarPDFAltasBajas()} // Se pasa la función que genera el PDF
                                 fileName="Altas_Bajas.pdf"
-
                             >
                                 {({ loading }) =>
                                     loading ? (
@@ -286,18 +273,18 @@ const Empleados = () => {
                 </thead>
                 <tbody>
                 {empleadosFiltrados.map((emp) => (
-                    <tr key={emp.id}>
+                    <tr key={emp.codEmpleado}>
                         <td>
                             <button className="ver-btn">ver</button>
                         </td>
                         <td>
                             <img src="/avatar.png" alt="Foto" className="foto-empleado" />
                         </td>
-                        <td style={{ fontSize: "20px"}}>{emp.persona.nroDocumento}</td>
-                        <td style={{ fontSize: "20px"}}>{emp.persona.nombres} {emp.persona.apellidos}</td>
-                        <td style={{ fontSize: "20px"}}>{emp.persona.fecNacimiento}</td>
-                        <td style={{ fontSize: "20px"}}>{emp.fecIngreso}</td>
-                        <td style={{ fontSize: "20px"}}>{emp.fecEgreso}</td>
+                        <td style={{ fontSize: "20px"}}>{emp.empleado.persona.nroDocumento}</td>
+                        <td style={{ fontSize: "20px"}}>{emp.empleado.persona.nombres} {emp.empleado.persona.apellidos}</td>
+                        <td style={{ fontSize: "20px"}}>{emp.empleado.persona.fecNacimiento}</td>
+                        <td style={{ fontSize: "20px"}}>{emp.empleado.fecIngreso}</td>
+                        <td style={{ fontSize: "20px"}}>{emp.empleado.fecEgreso}</td>
                         <td className="direccion-cell" style={{ fontSize: "20px"}}>
                             <span
                                 className="editar-icon"
@@ -321,7 +308,7 @@ const Empleados = () => {
                                         Nro. de Documento:
                                         <input
                                             type="text"
-                                            value={empleadoEditando.persona.nroDocumento}
+                                            value={empleadoEditando.empleado.persona.nroDocumento}
                                             onChange={(e) => actualizarPersona("nroDocumento", e.target.value)}
                                         />
                                     </label>
@@ -330,7 +317,7 @@ const Empleados = () => {
                                         Nombre:
                                         <input
                                             type="text"
-                                            value={empleadoEditando.persona.nombres}
+                                            value={empleadoEditando.empleado.persona.nombres}
                                             onChange={(e) => actualizarPersona("nombres", e.target.value)}
                                         />
                                     </label>
@@ -339,7 +326,7 @@ const Empleados = () => {
                                         Apellido:
                                         <input
                                             type="text"
-                                            value={empleadoEditando.persona.apellidos}
+                                            value={empleadoEditando.empleado.persona.apellidos}
                                             onChange={(e) => actualizarPersona("apellidos", e.target.value)}
                                         />
                                     </label>
@@ -350,7 +337,7 @@ const Empleados = () => {
                                         Fecha de Nacimiento:
                                         <input
                                             type="date"
-                                            value={empleadoEditando.persona.fecNacimiento}
+                                            value={empleadoEditando.empleado.persona.fecNacimiento}
                                             onChange={(e) => actualizarPersona("fecNacimiento", e.target.value)}
                                         />
                                     </label>

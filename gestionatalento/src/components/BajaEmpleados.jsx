@@ -4,6 +4,7 @@ import "./BajaEmpleados.css";
 
 const BajaEmpleados = () => {
     const [form, setForm] = useState({
+        codEmpleado: "",
         nroDocumento: "",
         codPersona: "",
         nombres: "",
@@ -24,27 +25,27 @@ const BajaEmpleados = () => {
     const buscarEmpleadoPorDocumento = async (documento) => {
         try {
             // Paso 1: buscar todas las personas
-            const personasRes = await axios.get("http://localhost:8080/api/v1/Persona/consultaPersona");
-            const persona = personasRes.data.find(p => p.nroDocumento === documento);
+            const empleadoResponse = await axios.get("http://localhost:8080/empleados/obtener/documento/" + documento);
+            if (empleadoResponse.data.codigoEstado == "200"){
+                // Paso 2: buscar empleado por codPersona
+                const empleadoRes = await axios.get("http://localhost:8080/empleados/obtener/documento/" + documento);
+                const empleado = empleadoRes.data.objeto;
 
-            if (!persona) {
+                // Paso 3: cargar datos en el form
+                setForm((prev) => ({
+                    ...prev,
+                    codEmpleado: empleado.codEmpleado,
+                    codPersona: persona.codPersona,
+                    nombres: persona.nombres,
+                    apellidos: persona.apellidos,
+                    cargo: empleado.cargo.descripcion,
+                    situacionLaboral: empleado.situacionLaboral.descripcion,
+                    fecActoAdministrativo : empleado.fecActoAdministrativo
+                }));
+            }else{
                 alert("No se encontró ninguna persona con ese documento.");
                 return;
-            }
-
-            // Paso 2: buscar empleado por codPersona
-            const empleadoRes = await axios.get(`http://localhost:8080/empleados/buscar/Empleado/${persona.codPersona}`);
-            const empleado = empleadoRes.data;
-
-            // Paso 3: cargar datos en el form
-            setForm((prev) => ({
-                ...prev,
-                codPersona: persona.codPersona,
-                nombres: persona.nombres,
-                apellidos: persona.apellidos,
-                cargo: empleado.cargo?.descripcion || "",
-                situacionLaboral: empleado.situacionLaboral?.descripcion || ""
-            }));
+            }        
         } catch (error) {
             console.error("Error al buscar empleado por documento:", error);
             alert("Ocurrió un error al buscar el funcionario.");
@@ -54,9 +55,16 @@ const BajaEmpleados = () => {
 
     const handleDarDeBaja = async () => {
         try {
-            await axios.delete(`http://localhost:8080/empleados/${form.codPersona}/eliminarEmpleado`);
+            
+            const empleadoBaja = new Object;
+            empleadoBaja.codEmpleado = form.codEmpleado;
+            empleadoBaja.fecEgreso = form.fecEgreso;
+            console.log(empleadoBaja);
+            await axios.put('http://localhost:8080/empleados/bajar', empleadoBaja);
+
             alert("Funcionario dado de baja con éxito ✅");
             setForm({
+                codEmpleado: "",
                 nroDocumento: "",
                 codPersona: "",
                 nombres: "",
@@ -95,8 +103,9 @@ const BajaEmpleados = () => {
                 <input name="apellidos" placeholder="Apellidos" value={form.apellidos} disabled/>
                 <input name="cargo" placeholder="Cargo" value={form.cargo} disabled/>
                 <input name="fecActoAdministrativo" type="date" value={form.fecActoAdministrativo}
-                       onChange={handleChange}/>
+                       onChange={handleChange} disabled/>
                 <input name="situacionLaboral" placeholder="Situación Laboral" value={form.situacionLaboral} disabled/>
+                Fecha de Egreso:
                 <input name="fecEgreso" type="date" value={form.fecEgreso} onChange={handleChange}/>
                 <input name="observacion" placeholder="Comentario" value={form.observacion} onChange={handleChange}/>
 

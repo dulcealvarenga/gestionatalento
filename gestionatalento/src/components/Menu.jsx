@@ -5,7 +5,7 @@ import axios from "axios";
 const Menu = () => {
     const [searchType, setSearchType] = useState("ci");
     const [searchValue, setSearchValue] = useState("");
-    const [personaSeleccionada, setPersonaSeleccionada] = useState(null);
+    const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState(null);
     const [coincidencias, setCoincidencias] = useState([]);
     const [mensaje, setMensaje] = useState("");
     const dropdownRef = useRef(null);
@@ -22,43 +22,58 @@ const Menu = () => {
 
     const handleSearch = async () => {
         try {
-            const response = await axios.get("http://localhost:8080/api/v1/Persona/consultaPersona");
-            const personas = response.data;
-
-            let resultados = [];
-
             if (searchType === "documento") {
-                resultados = personas.filter(p => p.nroDocumento === searchValue);
+                const response = await axios.get("http://localhost:8080/empleados/obtener/documento/" + searchValue);
+                const genericResponse = response.data;
+                console.log(response.data.codigoMensaje);
+                if (response.data.codigoMensaje == "200"){
+                    const empleado = genericResponse.objeto;
+                    console.log("El empleado es: ", empleado);
+                    setEmpleadoSeleccionado(empleado);
+                    setCoincidencias([]);
+                    localStorage.setItem("empleadoBuscado", empleado.codEmpleado);
+                }else if (response.data.codigoMensaje == "404"){
+                    setEmpleadoSeleccionado(null);
+                    setCoincidencias([]);
+                    setMensaje("No se encontraron coincidencias");
+                }else{
+                    setMensaje("Ha ocurrido un error interno en el servidor");
+                }
             } else {
-                resultados = personas.filter(p =>
-                    `${p.nombres} ${p.apellidos}`.toLowerCase().includes(searchValue.toLowerCase())
-                );
+                const response = await axios.get("http://localhost:8080/empleados/obtenerLista");
+                const genericResponse = response.data;
+                const empleados = genericResponse.objeto;
+                let resultados = [];
+                resultados = empleados.filter(e =>
+                    `${e.empleado.persona.nombres} ${e.empleado.persona.apellidos}`.toLowerCase().includes(searchValue.toLowerCase())
+                    );
+                if (resultados.length === 0) {
+                    setEmpleadoSeleccionado(null);
+                    setCoincidencias([]);
+                    setMensaje("No se encontraron coincidencias");
+                } else if (resultados.length === 1) {
+                    const empleado = resultados[0].empleado;
+                    console.log("empleado desde lista: ",empleado);
+                    setEmpleadoSeleccionado(empleado);
+                    setCoincidencias([]);
+                    localStorage.setItem("empleadoBuscado", empleado.codEmpleado);
+                } else {
+                    setCoincidencias(resultados);
+                    console.log("coincidencias: ", resultados)
+                    setEmpleadoSeleccionado(null);
+                }
+                
             }
-
-            if (resultados.length === 0) {
-                setPersonaSeleccionada(null);
-                setCoincidencias([]);
-                setMensaje("No se encontraron coincidencias");
-            } else if (resultados.length === 1) {
-                setPersonaSeleccionada(resultados[0]);
-                setCoincidencias([]);
-                localStorage.setItem("personaBuscada", resultados[0].codPersona);
-                console.log("Persona ", resultados[0].codPersona);
-            } else {
-                setCoincidencias(resultados);
-                setPersonaSeleccionada(null);
-            }
-
         } catch (error) {
             setMensaje("Error en la búsqueda");
             console.error("Error al buscar persona:", error);
         }
     };
 
-    const handleSelect = (persona) => {
-        setPersonaSeleccionada(persona);
+    const handleSelect = (empleadoBusqueda) => {
+        setEmpleadoSeleccionado(empleadoBusqueda);
         setCoincidencias([]);
-        setSearchValue(`${persona.nombre} ${persona.apellido}`);
+        setSearchValue(`${empleadoBusqueda.persona.nombres} ${empleadoBusqueda.persona.apellidos}`);
     };
 
     // Cerrar dropdown si se hace clic fuera
@@ -74,18 +89,19 @@ const Menu = () => {
 
     useEffect(() => {
         setSearchValue("");
-        setPersonaSeleccionada(null);
+        setEmpleadoSeleccionado(null);
         setCoincidencias([]);
         setResultados([]);
         setDatosLaborales(null);
     }, [searchType]);
-
+/*
     useEffect(() => {
         const fetchDatosEmpleado = async () => {
-            if (!personaSeleccionada?.codPersona) return;
+            if (!empleadoSeleccionado?.codEmpleado) return;
 
             try {
-                const response = await axios.get(`http://localhost:8080/empleados/buscar/Empleado/${personaSeleccionada.codPersona}`);
+                const response = await axios.get(`http://localhost:8080/empleados/obtener/id/${empleadoSeleccionado.codEmpleado}`);
+                console.log("empleado obtenido por id: ",response);
                 setDatosLaborales(response.data);
             } catch (error) {
                 console.error("Error al obtener datos del empleado:", error);
@@ -94,7 +110,7 @@ const Menu = () => {
         };
 
         fetchDatosEmpleado();
-    }, [personaSeleccionada]);
+    }, [empleadoSeleccionado]);*/
 
     const calcularAntiguedad = (fechaIngreso) => {
         if (!fechaIngreso) return "";
@@ -169,13 +185,13 @@ const Menu = () => {
 
                     {coincidencias.length > 1 && (
                         <div className="dropdown-results">
-                            {coincidencias.map((persona, index) => (
+                            {coincidencias.map((empleadoBusqueda, index) => (
                                 <li
                                     key={index}
                                     className="dropdown-item"
-                                    onClick={() => handleSelect(persona)}
+                                    onClick={() => handleSelect(empleadoBusqueda.empleado)}
                                 >
-                                    {persona.nombres} {persona.apellidos}
+                                    {empleadoBusqueda.empleado.persona.nombres} {empleadoBusqueda.empleado.persona.apellidos}. (Ingreso: {empleadoBusqueda.empleado.fecIngreso})
                                 </li>
                             ))}
                         </div>
@@ -212,7 +228,7 @@ const Menu = () => {
                             style={{ borderRadius: "20px" }}
                             type="text"
                             disabled
-                            value={personaSeleccionada ? `${personaSeleccionada.nombres} ${personaSeleccionada.apellidos}` : ""}
+                            value={empleadoSeleccionado ? `${empleadoSeleccionado.persona.nombres} ${empleadoSeleccionado.persona.apellidos}` : ""}
                         />
                     </div>
                     <div className="data-group">
@@ -220,7 +236,13 @@ const Menu = () => {
                         <input style={{ borderRadius: "20px" }}
                                type="text"
                                disabled
-                               value={datosLaborales?.fecIngreso || ""} />
+                               value={
+                                empleadoSeleccionado?.fecIngreso
+                                  ? (new Date(empleadoSeleccionado.fecIngreso).getDate()).toString().padStart(2, '0') + "/"
+                                    + (new Date(empleadoSeleccionado.fecIngreso).getMonth() + 1).toString().padStart(2, '0') + "/"
+                                    + new Date(empleadoSeleccionado.fecIngreso).getFullYear()
+                                  : ""
+                                } />
                     </div>
                 </div>
                 <div className="data-row">
@@ -229,7 +251,7 @@ const Menu = () => {
                         <input style={{ borderRadius: "20px" }}
                                type="text"
                                disabled
-                               value={datosLaborales?.cargo?.departamento?.descripcion || ""}
+                               value={empleadoSeleccionado?.cargo?.departamento?.descripcion || ""}
                         />
                     </div>
                     <div className="data-group">
@@ -237,7 +259,13 @@ const Menu = () => {
                         <input style={{ borderRadius: "20px" }}
                                type="text"
                                disabled
-                               value={datosLaborales?.fecEgreso || ""} />
+                               value={
+                                empleadoSeleccionado?.fecEgreso
+                                  ? (new Date(empleadoSeleccionado.fecEgreso).getDate()).toString().padStart(2, '0') + "/"
+                                    + (new Date(empleadoSeleccionado.fecEgreso).getMonth() + 1).toString().padStart(2, '0') + "/"
+                                    + new Date(empleadoSeleccionado.fecEgreso).getFullYear()
+                                  : ""
+                                } />
                     </div>
                 </div>
                 <div className="data-row">
@@ -246,7 +274,7 @@ const Menu = () => {
                         <input style={{ borderRadius: "20px" }}
                                type="text"
                                disabled
-                               value={datosLaborales?.cargo?.descripcion || ""}
+                               value={empleadoSeleccionado?.cargo?.descripcion || ""}
                         />
                     </div>
                     <div className="data-group">
@@ -254,7 +282,7 @@ const Menu = () => {
                         <input style={{ borderRadius: "20px" }}
                                type="text"
                                disabled
-                               value={calcularAntiguedad(datosLaborales?.fecIngreso)}
+                               value={calcularAntiguedad(empleadoSeleccionado?.fecIngreso)}
                         />
                     </div>
                 </div>
@@ -266,8 +294,8 @@ const Menu = () => {
                     <textarea
                         style={{ width: "96%", height: "200px", resize: "none" }}
                         disabled
-                        value={personaSeleccionada?.poseeDiscapacidad === 'S'
-                            ? `Discapacidad: ${personaSeleccionada.descripcionDiscapacidad || "No especificado"}`
+                        value={empleadoSeleccionado?.poseeDiscapacidad === 'S'
+                            ? `Discapacidad: ${empleadoSeleccionado.descripcionDiscapacidad || "No especificado"}`
                             : "Sin discapacidad"}
 
                     />
