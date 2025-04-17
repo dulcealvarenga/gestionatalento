@@ -7,7 +7,11 @@ import Empleados from "./components/Empleados"; // la nueva pantalla
 import AbmEmpleados from "./components/AbmEmpleados";
 import Dashboard from "./components/DashboardEmp";  // Asegúrate de que la ruta sea correcta
 import BajaEmpleados from "./components/BajaEmpleados";
-
+import Marcaciones from "./components/Marcaciones";
+import MarcacionesImportadas from "./components/MarcacionesImportadas";
+import AbmMarcacionesImportadas from "./components/AbmMarcacionesImportadas";
+import AbmMarcacionesPen from "./components/AbmMarcacionesPen";
+import HorasExtras from "./components/HorasExtras";
 
 function App() {
     return (
@@ -47,6 +51,31 @@ function App() {
                 <Route path="/abmEmpleados" element={<div className="app-container">
                     <Sidebar/>
                     <AbmEmpleados/>
+                </div>}/>
+
+                <Route path="/marcaciones" element={<div className="app-container">
+                    <Sidebar/>
+                    <Marcaciones/>
+                </div>}/>
+
+                <Route path="/marcacionesImportadas" element={<div className="app-container">
+                    <Sidebar/>
+                    <MarcacionesImportadas/>
+                </div>}/>
+
+                <Route path="/abmImport" element={<div className="app-container">
+                    <Sidebar/>
+                    <AbmMarcacionesImportadas/>
+                </div>}/>
+
+                <Route path="/abmImportPen" element={<div className="app-container">
+                    <Sidebar/>
+                    <AbmMarcacionesPen/>
+                </div>}/>
+
+                <Route path="/horasExtras" element={<div className="app-container">
+                    <Sidebar/>
+                    <HorasExtras/>
                 </div>}/>
 
             </Routes>

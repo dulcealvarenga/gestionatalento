@@ -1,0 +1,82 @@
+.abm-importadas-pen-container {
+    padding: 40px;
+    color: white;
+    font-family: "Inter", sans-serif;
+    min-height: 100vh;
+    margin-left: 220px;
+}
+
+.volver {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 30px;
+    cursor: pointer;
+}
+
+.file-section {
+    background-color: #64687e;
+    border-radius: 12px;
+    padding: 30px 40px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    flex-wrap: wrap;
+}
+
+.file-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    width: 45%;
+}
+
+.file-upload label {
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+.file-upload input[type="file"] {
+    display: none;
+}
+
+.file-upload .file-button {
+    display: flex;
+    align-items: center;
+    background-color: #8a94a7;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+}
+
+.file-upload .file-button span {
+    background-color: #2b2f44;
+    padding: 6px 12px;
+    border-radius: 10px;
+    margin-right: 10px;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.importar-btn {
+    background-color: #64687e;
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 16px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    float: right;
+    margin-top: 10px;
+}
+
+.importar-btn:hover {
+    background-color: #7a7f99;
+}

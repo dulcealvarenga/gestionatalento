@@ -1,0 +1,124 @@
+.horas-extras-container {
+    padding: 30px;
+    background-color: #1e1f2f;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    margin-left: 220px;
+}
+
+.horas-extras-container h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.horas-extras-container .acciones-label {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.filtros-horas-extras {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.filtros-horas-extras input[type="date"],
+.filtros-horas-extras select {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background-color: #35364b;
+    color: white;
+    font-size: 15px;
+    min-width: 150px;
+}
+
+.filtros-horas-extras button {
+    background-color: #75769a;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.tabla-horas-extras {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+.tabla-horas-extras th {
+    background-color: #2c2d3e;
+    color: white;
+    padding: 12px;
+    font-size: 14px;
+    border-bottom: 2px solid #444;
+    text-align: center;
+}
+
+.tabla-horas-extras td {
+    background-color: #3b3c4f;
+    padding: 14px;
+    text-align: center;
+    font-size: 14px;
+    color: white;
+}
+
+.tabla-horas-extras img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.botones-acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.btn-agregar {
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: #75769a;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+    margin-right: 15px;
+    cursor: pointer;
+    width: 150px;
+}
+
+.btn-exportar {
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: #75769a;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 150px;
+}
+
+.btn-volver {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 400;
+    cursor: pointer;
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100px;
+}
+

@@ -25,7 +25,7 @@ const Sidebar = () => {
                 {showMore && (
                     <div className="more-options">
                         <li>Documentos</li>
-                        <li>Reportes</li>
+                        <li onClick={() => navigate("/marcaciones")}>Marcaciones</li>
                         <li>Configuraciones</li>
                     </div>
                 )}
