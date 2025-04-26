@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./Empleados.css"; // usa el mismo estilo visual dark
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
+//Esto es lo nuevo
 const Contratos = () => {
   const [listaContratos, setListaContratos] = useState([]);
 
+  const navigate = useNavigate();
   useEffect(() => {
     // Simulación o llamada real
     axios
@@ -19,11 +21,10 @@ const Contratos = () => {
       <p className="acciones-title">Acciones</p>
       <button
         className="boton-accion"
-        onClick={() => navigate("/abmEmpleados")}
+        onClick={() => navigate("/abmContratos")}
       >
-        AGREGAR CONTRATOS
+        AGREGAR
       </button>
-      <button className="boton-accion">AGREGAR</button>
 
       <table className="tabla-empleados">
         <thead>

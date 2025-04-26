@@ -1,0 +1,92 @@
+/* Vacaciones.css */
+.vacaciones-container {
+  padding: 30px 40px;
+  color: white;
+  font-family: "Segoe UI", sans-serif;
+  width: calc(100% - 220px);
+  margin-left: 220px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.cabecera-vacaciones h1 {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.acciones-title {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.acciones-barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.boton-accion,
+.boton-buscar {
+  background-color: var(--accent, #8f9eff);
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.select-mes,
+.select-anio {
+  background-color: var(--bg-soft, #2b2e4a);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 15px;
+  padding: 8px 12px;
+  width: 120px;
+  text-align: center;
+}
+
+.select-mes:focus,
+.select-anio:focus {
+  outline: none;
+  border: 2px solid var(--accent, #8f9eff);
+}
+
+.tabla-vacaciones {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 12px;
+  overflow-x: auto;
+}
+
+.tabla-vacaciones th {
+  background-color: var(--header-bg, #1f2235);
+  color: white;
+  padding: 14px;
+  font-size: 16px;
+  text-align: left;
+  font-weight: 600;
+  border-radius: 10px 10px 0 0;
+  white-space: nowrap;
+}
+
+.tabla-vacaciones td {
+  background-color: var(--bg-soft, #2b2e4a);
+  padding: 14px;
+  color: white;
+  font-size: 16px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+.tabla-vacaciones tbody tr {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}

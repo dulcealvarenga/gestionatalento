@@ -1,0 +1,103 @@
+.abm-container {
+  padding: 30px;
+  margin-left: 220px;
+  font-family: "Segoe UI", sans-serif;
+  color: white;
+}
+
+.abm-container h1 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.volver-btn {
+  background: none;
+  border: none;
+  color: var(--accent, #8f9eff);
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  display: inline-block;
+}
+
+.formulario {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  background-color: #2b2e4a;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 100%;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.col label {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.col input {
+  background-color: #3c3f5e;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: white;
+  font-size: 14px;
+}
+
+.columna-descuentos .desc-anteriores {
+  background-color: #3c3f5e;
+  padding: 10px;
+  border-radius: 8px;
+  color: white;
+  font-size: 13px;
+}
+
+.columna-imagen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.foto-placeholder {
+  width: 50px;
+  height: 50px;
+  background-color: lightgray;
+  border-radius: 8px;
+  margin-bottom: 5px;
+}
+
+.acciones-formulario {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.btn {
+  background-color: var(--accent, #8f9eff);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  min-width: fit-content;
+}
+
+.btn.izquierda {
+  align-self: flex-start;
+}
+
+.btn.derecha {
+  align-self: flex-end;
+}

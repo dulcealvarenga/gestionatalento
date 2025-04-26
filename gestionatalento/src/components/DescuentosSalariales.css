@@ -1,0 +1,66 @@
+.descuentos-container {
+  padding: 30px;
+  color: white;
+  font-family: "Segoe UI", sans-serif;
+  margin-left: 220px;
+}
+
+.descuentos-container h1 {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.acciones-title {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.barra-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.btn {
+  background-color: #5a5d85; /* color más neutro como el ejemplo deseado */
+  color: rgb(0, 0, 0);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: background-color 0.3s;
+  width: fit-content;
+}
+
+.btn:hover {
+  background-color: #7a7db0;
+}
+
+.select-mes {
+  background-color: #2b2e4a;
+  color: white;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+}
+
+.tabla-descuentos {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 12px;
+}
+
+.tabla-descuentos th,
+.tabla-descuentos td {
+  background-color: #2b2e4a;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: left;
+  white-space: nowrap;
+}

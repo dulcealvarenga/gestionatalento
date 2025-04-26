@@ -1,0 +1,90 @@
+.direcciones-container {
+  padding: 30px;
+  margin-left: 220px;
+  font-family: "Segoe UI", sans-serif;
+  color: white;
+}
+
+.direcciones-container h1 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.acciones-title {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.barra-acciones {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.btn {
+  flex: 1;
+  background-color: #8f9eff;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #7b8ff0;
+}
+
+.tabla-direcciones {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 12px;
+}
+
+.tabla-direcciones th,
+.tabla-direcciones td {
+  background-color: #2b2e4a;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: left;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.tabla-direcciones th {
+  font-weight: bold;
+}
+
+.icono-editar {
+  cursor: pointer;
+  color: #8f9eff;
+  transition: transform 0.2s ease;
+}
+
+.icono-editar:hover {
+  transform: scale(1.1);
+  color: #b4bfff;
+}
+.filtro-container {
+  position: relative;
+}
+
+.select-filtro {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: #8f9eff;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  width: 180px;
+}

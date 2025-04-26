@@ -1,83 +1,83 @@
 .dashboard-container {
-    padding: 30px;
-    background: #1f2235;
-    color: white;
-    font-family: "Inter", sans-serif;
-    margin-left: 220px;
-    min-height: 100vh;
+  padding: 30px;
+  background: #1f2235;
+  color: white;
+  font-family: "Inter", sans-serif;
+  margin-left: 220px;
+  min-height: 100vh;
 }
 
 .dashboard-container h2 {
-    font-size: 28px;
-    margin-bottom: 25px;
+  font-size: 28px;
+  margin-bottom: 25px;
 }
 
 .stats-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    max-width: 1000px;
-    margin: 0 auto; /* centrar */
-    flex-wrap: wrap; /* opcional para responsive */
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto; /* centrar */
+  flex-wrap: wrap; /* opcional para responsive */
 }
 
-
 .card {
-    background: #2a2d43;
-    padding: 20px;
-    flex: 1;
-    text-align: center;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  background: #2a2d43;
+  padding: 20px;
+  flex: 1;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .card-number {
-    font-size: 28px;
-    margin: 10px 0;
+  font-size: 28px;
+  margin: 10px 0;
 }
 
 .card-label {
-    font-size: 16px;
-    line-height: 1.3;
-    opacity: 0.8;
+  font-size: 16px;
+  line-height: 1.3;
+  opacity: 0.8;
 }
 
 .bottom-section {
-    display: flex;
-    margin-top: 30px;
-    gap: 20px;
+  display: flex;
+  margin-top: 30px;
+  gap: 20px;
 }
 
 .chart-box {
-    flex: 2;
-    background: #2a2d43;
-    padding: 20px;
-    border-radius: 12px;
-    width: 30%;
-    min-width: 200px;
-    max-width: 700px;
+  flex: 2;
+  background: #2a2d43;
+  padding: 20px;
+  border-radius: 12px;
+  width: 30%;
+  min-width: 200px;
+  max-width: 700px;
 }
 
 .movimientos-box {
-    flex: 1;
-    background: #2a2d43;
-    padding: 20px;
-    border-radius: 12px;
+  flex: 1;
+  background: #2a2d43;
+  padding: 20px;
+  border-radius: 12px;
 }
 
 .tabla-movimientos {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
-.mov-header, .mov-item {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-    padding: 6px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+.mov-header,
+.mov-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .mov-header {
-    font-weight: bold;
-    opacity: 0.9;
+  font-weight: bold;
+  opacity: 0.9;
 }

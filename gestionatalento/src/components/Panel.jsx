@@ -7,6 +7,7 @@ import {
   FaFileAlt,
   FaUmbrellaBeach,
   FaMoneyBillWave,
+  FaBuilding,
 } from "react-icons/fa";
 
 const Panel = () => {
@@ -16,7 +17,9 @@ const Panel = () => {
     <div className="panel-container">
       <h1>Panel Principal</h1>
       <div className="panel-buttons">
-        <button onClick={() => navigate("/Menu  ")}>
+        <button onClick={() => navigate("/Menu")}>
+          {" "}
+          {/* Corregido el path */}
           <FaUserTie className="icono-boton" />
           Busqueda de Funcionarios
         </button>
@@ -39,6 +42,10 @@ const Panel = () => {
         <button onClick={() => navigate("/descuentoSalariales")}>
           <FaMoneyBillWave className="icono-boton" />
           Desc. Salariales
+        </button>
+        <button onClick={() => navigate("/direcciones")}>
+          <FaMoneyBillWave className="icono-boton" />
+          Direcciones
         </button>
       </div>
     </div>

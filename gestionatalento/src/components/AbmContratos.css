@@ -1,0 +1,77 @@
+.abm-contratos-container {
+  padding: 40px 60px 40px 240px; /* espacio lateral por sidebar */
+  background-color: #1d1f2f;
+  min-height: 100vh;
+  color: #ffffff;
+}
+
+.abm-contratos-container h1 {
+  font-size: 2.2rem;
+  margin-bottom: 5px;
+}
+
+.volver-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 1rem;
+  margin-bottom: 25px;
+  cursor: pointer;
+}
+
+.form-contrato {
+  background-color: #464a63;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 900px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.form-group input,
+.form-group select {
+  padding: 12px;
+  border: none;
+  border-radius: 16px;
+  background-color: #8a94a8;
+  color: #ffffff; /* 👈 agregá esta línea o cambiá a blanco */
+  font-size: 15px;
+}
+
+.btn-guardar-container {
+  margin-top: 25px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.guardar-btn {
+  background-color: #8a94a8;
+  border: none;
+  padding: 10px 30px;
+  border-radius: 20px;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 14px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.guardar-btn:hover {
+  background-color: #a0a9bb;
+}

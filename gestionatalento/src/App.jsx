@@ -14,6 +14,16 @@ import AbmMarcacionesPen from "./components/AbmMarcacionesPen";
 import HorasExtras from "./components/HorasExtras";
 import Contratos from "./components/Contratos";
 import MenuPrincipal from "./components/Panel";
+import AbmContratos from "./components/AbmContratos";
+import Justificativos from "./components/Justificativos";
+import AbmJustificativos from "./components/AbmJustificativos"; // ajustá el path si está en otra carpeta
+import Vacaciones from "./components/Vacaciones";
+import AbmVacaciones from "./components/AbmVacaciones";
+import DescuentosSalariales from "./components/DescuentosSalariales";
+import AbmDescuentoSalarial from "./components/AbmDescuentoSalarial";
+import Direcciones from "./components/Direcciones";
+import AbmDirecciones from "./components/AbmDirecciones";
+import DetalleLogins from "./components/DetalleLogins";
 function App() {
   return (
     <Router>
@@ -144,6 +154,99 @@ function App() {
             <div className="app-container">
               <Sidebar />
               <Dashboard />
+            </div>
+          }
+        />
+
+        <Route
+          path="/abmContratos"
+          element={
+            <div className="app-container">
+              <Sidebar />
+              <AbmContratos />
+            </div>
+          }
+        />
+
+        <Route
+          path="/justificativos"
+          element={
+            <div className="app-container">
+              <Sidebar />
+              <Justificativos />
+            </div>
+          }
+        />
+        <Route
+          path="/abmJustificativos"
+          element={
+            <div className="app-container">
+              <Sidebar />
+              <AbmJustificativos />
+            </div>
+          }
+        />
+        <Route
+          path="/vacaciones"
+          element={
+            <div className="app-container">
+              <Sidebar />
+              <Vacaciones />
+            </div>
+          }
+        />
+
+        <Route
+          path="/abmVacaciones"
+          element={
+            <div className="app-container">
+              <Sidebar />
+              <AbmVacaciones />
+            </div>
+          }
+        />
+        <Route
+          path="/descuentoSalariales"
+          element={
+            <div className="app-container">
+              <Sidebar />
+              <DescuentosSalariales />
+            </div>
+          }
+        />
+        <Route
+          path="/abmDescuentoSalarial"
+          element={
+            <div className="app-container">
+              <Sidebar />
+              <AbmDescuentoSalarial />
+            </div>
+          }
+        />
+        <Route
+          path="/Direcciones"
+          element={
+            <div className="app-container">
+              <Sidebar />
+              <Direcciones />
+            </div>
+          }
+        />
+        <Route
+          path="/abmDirecciones"
+          element={
+            <div className="app-container">
+              <Sidebar />
+              <AbmDirecciones />
+            </div>
+          }
+        />
+        <Route
+          path="/detalleLogins"
+          element={
+            <div className="app-container">
+              <Sidebar />
+              <DetalleLogins />
             </div>
           }
         />
