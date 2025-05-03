@@ -15,6 +15,7 @@ import HorasExtras from "./components/HorasExtras";
 import DescSalariales from "./components/DescSalariales";
 import Vacaciones from "./components/Vacaciones";
 import Justifivativos from "./components/Justifivativos";
+import AbmDescuentos from "./components/AbmDescuentos";
 
 function App() {
     return (
@@ -81,7 +82,7 @@ function App() {
                     <HorasExtras/>
                 </div>}/>
 
-                <Route path="/descSalariales" element={<div className="app-container">
+                <Route path="/descuentos" element={<div className="app-container">
                     <Sidebar/>
                     <DescSalariales/>
                 </div>}/>
@@ -94,6 +95,11 @@ function App() {
                 <Route path="/justificativos" element={<div className="app-container">
                     <Sidebar/>
                     <Justifivativos/>
+                </div>}/>
+
+                <Route path="/descuentos/abm" element={<div className="app-container">
+                    <Sidebar/>
+                    <AbmDescuentos/>
                 </div>}/>
 
             </Routes>

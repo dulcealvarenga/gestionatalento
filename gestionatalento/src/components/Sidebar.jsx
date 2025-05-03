@@ -21,7 +21,7 @@ const Sidebar = () => {
                 <li onClick={() => navigate("/empleados")}>Empleados</li>
                 <li onClick={() => navigate("/justificativos")}>Justificativos</li>
                 <li onClick={() => navigate("/vacaciones")}>Vacaciones</li>
-                <li onClick={() => navigate("/descSalariales")}>Desc. Salariales</li>
+                <li onClick={() => navigate("/descuentos")}>Desc. Salariales</li>
                 <li onClick={() => setShowMore(!showMore)} className="more-btn">⋮</li>
 
                 {showMore && (

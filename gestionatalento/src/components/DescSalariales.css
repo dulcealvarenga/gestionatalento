@@ -64,30 +64,22 @@
     display: flex;
     gap: 10px;
     margin-bottom: 10px;
+    align-items: center;
+    flex-wrap: wrap; /* por si en pantallas chicas se desborda */
 }
 
-.btn-agregar {
-    padding: 10px 20px;
-    border: none;
-    background-color: #44465f;
-    color: white;
-    border-radius: 15px;
-    cursor: pointer;
-}
-
-.btn-buscar {
-    padding: 10px 20px;
-    border: none;
-    background-color: #44465f;
-    color: white;
-    border-radius: 15px;
-    cursor: pointer;
-}
-
+.btn-agregar,
+.btn-buscar,
 .select-mes {
-    padding: 10px;
+    padding: 10px 20px;
     border: none;
     background-color: #44465f;
     color: white;
     border-radius: 15px;
+    cursor: pointer;
+    flex: 0 0 auto;       /* ✨ evita que se estiren */
+    min-width: 100px;     /* ✨ fija un ancho mínimo */
+    max-width: 200px;     /* opcional: para evitar que crezcan demasiado */
+    text-align: center;
 }
+

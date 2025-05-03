@@ -1,7 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./DescSalariales.css";
 
 const DescuentosSalariales = () => {
+
+    const navigate = useNavigate();
+
     return (
         <div className="descuentos-container">
             <h1>Descuentos Salariales</h1>
@@ -9,7 +13,7 @@ const DescuentosSalariales = () => {
 
 
             <div className="acciones-top-row">
-                <button className="btn-agregar">AGREGAR</button>
+                <button className="btn-agregar" onClick={() => navigate("/descuentos/abm")}>AGREGAR</button>
                 <select className="select-mes">
                     <option>Enero</option>
                     <option>Febrero</option>
@@ -34,7 +38,7 @@ const DescuentosSalariales = () => {
                     <th>Sal. Anticip.</th>
                     <th>Ausencias</th>
                     <th>Dependencia</th>
-                    <th>✏️</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -48,7 +52,10 @@ const DescuentosSalariales = () => {
                     <td>0</td>
                     <td>Junta Municipal</td>
                     <td>
-                        <button className="edit-btn">✏️</button>
+                        <span
+                            className="editar-icon"
+                            title="Editar"
+                        >&#9998;</span>
                     </td>
                 </tr>
                 {/* Agregá más filas si querés */}

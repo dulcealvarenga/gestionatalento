@@ -1,0 +1,165 @@
+.descuento-form-container {
+    padding: 30px;
+    color: white;
+    min-height: 100vh;
+    margin-left: 220px;
+}
+
+.volver {
+    margin-top: -10px;
+    cursor: pointer;
+    font-size: 18px;
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #ccc;
+}
+
+.form-card {
+    background-color: #44465f;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: -10px;
+}
+
+
+.descuento-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.descuentos-anteriores {
+    background-color: #5c5e78;
+    padding: 10px;
+    border-radius: 10px;
+    width: 290px;
+    font-size: 14px;
+    margin-left: 20px;
+    height: 130px;     /* Aumentás el alto */
+}
+
+.descuentos-anteriores ul {
+    padding: 0;
+    list-style: none;
+}
+
+.tit-desc-ant {
+    font-size: 18px;
+    font-weight: bold;
+}
+.foto-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-left: 80px;
+    margin-right: 100px;
+}
+
+.foto-area img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.campo-triple {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+    padding-left: 20px;
+}
+
+.campo-triple div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.campo-triple input {
+    margin-top: 5px;
+    padding: 8px;
+    border-radius: 10px;
+    border: none;
+    background-color: #697099;
+    color: white;
+}
+
+.grid-form-columns {
+    display: flex;
+    gap: 20px;
+    margin-top: -20px;
+}
+
+.grid-form-columns .col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: -10px;
+    margin-left: 20px;
+}
+
+.grid-form-columns .campo {
+    display: flex;
+    flex-direction: column;
+}
+
+.grid-form-columns .campo input {
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #5a5e83;
+    border: none;
+    color: white;
+}
+
+.campo {
+    flex: 1;
+    min-width: 180px;
+    display: flex;
+    flex-direction: column;
+}
+
+.campo input {
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #5a5e83;
+    border: none;
+    color: white;
+}
+
+/* Campo extra ancho (como observación si lo querés destacar más) */
+.campo-largo {
+    flex: 2;
+}
+
+.acciones-form {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+    width: 50%;         /* Ocupa solo la mitad */
+    margin-left: auto;  /* Se alinea al final del contenedor */
+}
+
+.btn-calcular,
+.btn-guardar {
+    flex: 1;
+    padding: 8px 18px;
+    background-color: #697099;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+}
+
+.btn-calcular:hover, .btn-guardar:hover {
+    background-color: #7a80a0;
+}
