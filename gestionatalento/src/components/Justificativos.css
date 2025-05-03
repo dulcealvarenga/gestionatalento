@@ -1,0 +1,120 @@
+/* Contenedor principal */
+.justificativos-container {
+    padding: 30px 40px;
+    color: white;
+    width: calc(100% - 220px); /* evita solaparse con sidebar */
+    margin-left: 220px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+/* Cabecera principal */
+.cabecera-justificativos h1 {
+    font-size: 36px;
+    font-weight: 700;
+    margin: 0 0 8px;
+}
+
+.acciones-title {
+    font-size: 18px;
+    font-weight: 400;
+    margin: 0 0 10px;
+}
+
+/* Barra de acciones */
+.acciones-barra {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background-color: #1f2235;
+    padding: 20px;
+    border-radius: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 30px;
+}
+
+/* Botones */
+.boton-accion,
+.boton-buscar {
+    background-color: #8f9eff;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    min-width: 130px;
+    text-align: center;
+}
+
+/* Selects */
+.select-mes,
+.select-anio {
+    background-color: #2b2e4a;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    min-width: 100px;
+    text-align: center;
+}
+
+.select-mes:focus,
+.select-anio:focus {
+    outline: none;
+    border: 2px solid #8f9eff;
+}
+
+/* Tabla */
+.tabla-justificativos {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 12px;
+}
+
+.tabla-justificativos th {
+    background-color: #1f2235;
+    color: white;
+    padding: 14px;
+    font-size: 16px;
+    text-align: left;
+    font-weight: 600;
+    border-radius: 10px 10px 0 0;
+    white-space: nowrap;
+}
+
+.tabla-justificativos td {
+    background-color: #2b2e4a;
+    padding: 14px;
+    color: white;
+    font-size: 16px;
+    border-radius: 10px;
+    white-space: nowrap;
+}
+
+.tabla-justificativos tbody tr {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .justificativos-container {
+        padding: 20px;
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .acciones-barra {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .tabla-justificativos th,
+    .tabla-justificativos td {
+        font-size: 14px;
+        padding: 10px;
+    }
+}

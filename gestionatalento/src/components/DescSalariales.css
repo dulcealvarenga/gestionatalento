@@ -1,0 +1,93 @@
+.descuentos-container {
+    padding: 30px;
+    color: white;
+    min-height: 100vh;
+    margin-left: 220px;
+}
+
+.acciones-title {
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+.acciones-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.acciones-buttons button,
+.acciones-buttons select {
+    background-color: #484c64;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.acciones-buttons button:hover {
+    background-color: #5b5f78;
+}
+
+.tabla-descuentos {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #2f3248;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.tabla-descuentos th,
+.tabla-descuentos td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #44475a;
+}
+
+.tabla-descuentos th {
+    background-color: #3a3e57;
+}
+
+.edit-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.acciones-top-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.btn-agregar {
+    padding: 10px 20px;
+    border: none;
+    background-color: #44465f;
+    color: white;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.btn-buscar {
+    padding: 10px 20px;
+    border: none;
+    background-color: #44465f;
+    color: white;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.select-mes {
+    padding: 10px;
+    border: none;
+    background-color: #44465f;
+    color: white;
+    border-radius: 15px;
+}

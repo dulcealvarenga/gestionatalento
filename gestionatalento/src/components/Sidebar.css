@@ -55,6 +55,7 @@
 .more-options {
     margin-top: 10px;
     animation: fadeIn 0.3s ease-in-out;
+    width: 100%;
 }
 
 @keyframes fadeIn {
@@ -67,3 +68,25 @@
         transform: translateY(0);
     }
 }
+
+.submenu-config {
+    list-style: none;
+    padding-left: 15px; /* Un poco menos para que no se desborde */
+    margin-top: 5px;
+    width: 100%;
+}
+
+.submenu-config li {
+    font-size: 14px;
+    color: #cccccc;
+    cursor: pointer;
+    padding: 6px 10px; /* Más pequeño para que no se superpongan */
+    transition: 0.2s;
+}
+
+.submenu-config li:hover {
+    color: #ffffff;
+    background-color: #2a2a40; /* Un fondo leve al hacer hover */
+    border-radius: 8px;
+}
+

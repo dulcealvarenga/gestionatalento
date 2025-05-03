@@ -12,6 +12,9 @@ import MarcacionesImportadas from "./components/MarcacionesImportadas";
 import AbmMarcacionesImportadas from "./components/AbmMarcacionesImportadas";
 import AbmMarcacionesPen from "./components/AbmMarcacionesPen";
 import HorasExtras from "./components/HorasExtras";
+import DescSalariales from "./components/DescSalariales";
+import Vacaciones from "./components/Vacaciones";
+import Justifivativos from "./components/Justifivativos";
 
 function App() {
     return (
@@ -76,6 +79,21 @@ function App() {
                 <Route path="/horasExtras" element={<div className="app-container">
                     <Sidebar/>
                     <HorasExtras/>
+                </div>}/>
+
+                <Route path="/descSalariales" element={<div className="app-container">
+                    <Sidebar/>
+                    <DescSalariales/>
+                </div>}/>
+
+                <Route path="/vacaciones" element={<div className="app-container">
+                    <Sidebar/>
+                    <Vacaciones/>
+                </div>}/>
+
+                <Route path="/justificativos" element={<div className="app-container">
+                    <Sidebar/>
+                    <Justifivativos/>
                 </div>}/>
 
             </Routes>
