@@ -19,10 +19,11 @@
 
 .filtros-horas-extras {
     display: flex;
-    align-items: center;
+    flex-direction: column; /* fuerza los botones abajo */
+    align-items: flex-start;
     flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-bottom: 10px;
 }
 
 .filtros-horas-extras input[type="date"],
@@ -121,4 +122,27 @@
     gap: 8px;
     width: 100px;
 }
+
+.acciones-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.acciones-filtros {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.acciones-filtros input,
+.acciones-filtros select {
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #3e4058;
+    border: none;
+    color: white;
+}
+
 

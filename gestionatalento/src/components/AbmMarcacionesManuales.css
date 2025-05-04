@@ -1,0 +1,111 @@
+.marcaciones-container {
+    padding: 30px;
+    margin-left: 220px;
+    color: white;
+    font-family: "Inter", sans-serif;
+    min-height: 100vh;
+}
+
+.volver-btn {
+    cursor: pointer;
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #ccc;
+}
+
+.form-card-marc {
+    background-color: #44465f;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+}
+
+.fila-superior {
+    display: flex;
+    gap: 20px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.campo label {
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.campo input {
+    padding: 10px;
+    background-color: #5c5e78;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+.btn-listar {
+    padding: 10px;
+    background-color: #f4cd54;
+    color: black;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 90%;
+}
+
+.acciones-man {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+    width: 20%;         /* Ocupa solo la mitad */
+    margin-left: auto;  /* Se alinea al final del contenedor */
+}
+
+.btn-limpiar,
+.btn-agregar {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+    font-size: 15px;
+}
+
+.btn-limpiar {
+    background-color: #7278a5;
+}
+
+.btn-limpiar:hover {
+    background-color: #8388b5;
+}
+
+.btn-agregar {
+    background-color: #7278a5;
+}
+
+.btn-agregar:hover {
+    background-color: #8388b5;
+}
+
+.registro-scroll {
+    max-height: 150px;  /* Ajustá según necesidad */
+    overflow-y: auto;
+    margin-top: 15px;
+    background-color: #3d3f5a;
+    padding: 10px;
+    border-radius: 8px;
+}
+.registro-scroll ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+.registro-scroll li {
+    margin-bottom: 6px;
+}

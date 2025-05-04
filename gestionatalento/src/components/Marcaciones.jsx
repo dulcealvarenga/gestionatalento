@@ -49,9 +49,9 @@ const Marcaciones = () => {
             <p className="acciones-title" style={{ fontSize: "25px" }}>Acciones</p>
 
             <div className="tabs">
-                <button className="tab" onClick={() => navigate("/marcacionesImportadas")}>MARCACIONES BASE</button>
-                <button className="tab">MARCACIONES MANUAL</button>
-                <button className="tab" onClick={() => navigate("/horasExtras")}>HORAS EXTRAS</button>
+                <button className="tab" onClick={() => navigate("/marcaciones/importadas")}>MARCACIONES BASE</button>
+                <button className="tab" onClick={() => navigate("/marcaciones/manuales/abm")}>MARCACIONES MANUAL</button>
+                <button className="tab" onClick={() => navigate("/marcaciones/horasExtras")}>HORAS EXTRAS</button>
             </div>
 
             <div className="formulario">

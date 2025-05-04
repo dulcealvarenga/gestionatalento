@@ -16,6 +16,8 @@ import DescSalariales from "./components/DescSalariales";
 import Vacaciones from "./components/Vacaciones";
 import Justifivativos from "./components/Justifivativos";
 import AbmDescuentos from "./components/AbmDescuentos";
+import AbmMarcacionesManuales from "./components/AbmMarcacionesManuales";
+import AbmHorasExtras from "./components/AbmHorasExtras";
 
 function App() {
     return (
@@ -62,22 +64,22 @@ function App() {
                     <Marcaciones/>
                 </div>}/>
 
-                <Route path="/marcacionesImportadas" element={<div className="app-container">
+                <Route path="/marcaciones/importadas" element={<div className="app-container">
                     <Sidebar/>
                     <MarcacionesImportadas/>
                 </div>}/>
 
-                <Route path="/abmImport" element={<div className="app-container">
+                <Route path="/marcaciones/importadas/abm" element={<div className="app-container">
                     <Sidebar/>
                     <AbmMarcacionesImportadas/>
                 </div>}/>
 
-                <Route path="/abmImportPen" element={<div className="app-container">
+                <Route path="/marcaciones/pendrive/abm" element={<div className="app-container">
                     <Sidebar/>
                     <AbmMarcacionesPen/>
                 </div>}/>
 
-                <Route path="/horasExtras" element={<div className="app-container">
+                <Route path="/marcaciones/horasExtras" element={<div className="app-container">
                     <Sidebar/>
                     <HorasExtras/>
                 </div>}/>
@@ -100,6 +102,16 @@ function App() {
                 <Route path="/descuentos/abm" element={<div className="app-container">
                     <Sidebar/>
                     <AbmDescuentos/>
+                </div>}/>
+
+                <Route path="/marcaciones/manuales/abm" element={<div className="app-container">
+                    <Sidebar/>
+                    <AbmMarcacionesManuales/>
+                </div>}/>
+
+                <Route path="/marcaciones/horasExtras/abm" element={<div className="app-container">
+                    <Sidebar/>
+                    <AbmHorasExtras/>
                 </div>}/>
 
             </Routes>
