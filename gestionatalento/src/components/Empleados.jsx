@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Empleados.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import { ToastContainer, toast } from 'react-toastify';
 import { PDFDownloadLink, Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 
 const styles = StyleSheet.create({
@@ -40,7 +40,6 @@ const Empleados = () => {
 
     useEffect(() => {
         const codEmpleado = localStorage.getItem("empleadoBuscado");
-        console.log("empleado buscado:", codEmpleado);
         if (codEmpleado) {
             axios.get(`http://localhost:8080/empleados/obtener/id/${codEmpleado}`)
                 .then(res => {
@@ -54,9 +53,12 @@ const Empleados = () => {
             // Trae toda la lista si no vino filtrado
             axios.get("http://localhost:8080/empleados/obtenerLista")
                 .then(response => {
-                    console.log(response.data.objeto);
-                    setListaEmpleados(response.data.objeto);
+                    const genericResponse = response.data;
+                    if (genericResponse.codigoMensaje == "200") {
+                        setListaEmpleados(response.data.objeto);
+                    }
                 });
+                
         }
     }, []); // El array vacío asegura que solo se ejecute cuando el componente se monta
 
@@ -72,14 +74,14 @@ const Empleados = () => {
 
     if (soloComisionados) {
         empleadosFiltrados = empleadosFiltrados.filter(
-            (e) => e.empleado.situacionLaboral?.descripcion?.toUpperCase() === "COMISIONADO"
+            (e) => e.situacionLaboral?.descripcion?.toUpperCase() === "COMISIONADO"
         );
     }
 
     if (soloPasantes) {
         empleadosFiltrados = empleadosFiltrados.filter(
             (e) => {
-                const cod = e.empleado.situacionLaboral?.codSituacionLaboral;
+                const cod = e.situacionLaboral?.codSituacionLaboral;
                 return cod === 4 || cod === 5;
             }
         );
@@ -101,27 +103,35 @@ const Empleados = () => {
         try {
             const personaActualizada = {
                 codEmpleado: empleadoEditando.codEmpleado,
-                codPersona: empleadoEditando.empleado.persona.codPersona,
-                nroDocumento: empleadoEditando.empleado.persona.nroDocumento,
-                nroRuc: empleadoEditando.empleado.persona.nroRuc,
-                nombres: empleadoEditando.empleado.persona.nombres,
-                apellidos: empleadoEditando.empleado.persona.apellidos,
-                codNivelEstudio: empleadoEditando.empleado.persona.codNivelEstudio,
-                codPaisNacimiento: empleadoEditando.empleado.persona.codPaisNacimiento,
-                fecNacimiento: empleadoEditando.empleado.persona.fecNacimiento,
-                lugarNacimiento: empleadoEditando.empleado.persona.lugarNacimiento,
-                poseeDiscapacidad: empleadoEditando.empleado.persona.poseeDiscapacidad,
-                descripcionDiscapacidad: empleadoEditando.empleado.persona.descripcionDiscapacidad,
-                rutaFoto: empleadoEditando.empleado.persona.rutaFoto,
+                codPersona: empleadoEditando.persona.codPersona,
+                nroDocumento: empleadoEditando.persona.nroDocumento,
+                nroRuc: empleadoEditando.persona.nroRuc,
+                nombres: empleadoEditando.persona.nombres,
+                apellidos: empleadoEditando.persona.apellidos,
+                codNivelEstudio: empleadoEditando.persona.codNivelEstudio,
+                codPaisNacimiento: empleadoEditando.persona.codPaisNacimiento,
+                fecNacimiento: empleadoEditando.persona.fecNacimiento,
+                lugarNacimiento: empleadoEditando.persona.lugarNacimiento,
+                poseeDiscapacidad: empleadoEditando.persona.poseeDiscapacidad,
+                descripcionDiscapacidad: empleadoEditando.persona.descripcionDiscapacidad,
+                rutaFoto: empleadoEditando.persona.rutaFoto,
                 estadoCivil: {
-                    codEstadoCivil: empleadoEditando.empleado.persona.estadoCivil?.codEstadoCivil
+                    codEstadoCivil: empleadoEditando.persona.estadoCivil?.codEstadoCivil
                 }
             };
-            await axios.put("http://localhost:8080/personas/actualizar", personaActualizada);
-            console.log("Persona actualizada correctamente");
-
-            setMostrarModalEdicion(false);
-
+            const response = await axios.put("http://localhost:8080/personas/actualizar", personaActualizada);
+            if (response.data.codigoMensaje == "200") {
+                toast.success(response.data.mensaje, {
+                    position: "top-right",
+                    autoClose: 3000,
+                });
+                setMostrarModalEdicion(false);
+            }else {
+                toast.error(response.data.mensaje, {
+                    position: "top-right",
+                    autoClose: 3000,
+                });
+            }
             // Si querés refrescar la lista:
             const res = await axios.get("http://localhost:8080/empleados/obtenerLista");
             setListaEmpleados(res.data.objeto);
@@ -176,13 +186,11 @@ const Empleados = () => {
     const actualizarPersona = (campo, valor) => {
         setEmpleadoEditando((prev) => ({
             ...prev,
-            empleado: {
-                ...prev.empleado,
+                ...prev,
                 persona: {
-                    ...prev.empleado.persona,
+                    ...prev.persona,
                     [campo]: valor,
                 },
-            },
         }));
     };
 
@@ -284,11 +292,11 @@ const Empleados = () => {
                         <td>
                             <img src="/avatar.png" alt="Foto" className="foto-empleado" />
                         </td>
-                        <td style={{ fontSize: "20px"}}>{emp.empleado.persona.nroDocumento}</td>
-                        <td style={{ fontSize: "20px"}}>{emp.empleado.persona.nombres} {emp.empleado.persona.apellidos}</td>
-                        <td style={{ fontSize: "20px"}}>{emp.empleado.persona.fecNacimiento}</td>
-                        <td style={{ fontSize: "20px"}}>{emp.empleado.fecIngreso}</td>
-                        <td style={{ fontSize: "20px"}}>{emp.empleado.fecEgreso}</td>
+                        <td style={{ fontSize: "20px"}}>{emp.persona.nroDocumento}</td>
+                        <td style={{ fontSize: "20px"}}>{emp.persona.nombres} {emp.persona.apellidos}</td>
+                        <td style={{ fontSize: "20px"}}>{emp.persona.fecNacimiento}</td>
+                        <td style={{ fontSize: "20px"}}>{emp.fecIngreso}</td>
+                        <td style={{ fontSize: "20px"}}>{emp.fecEgreso}</td>
                         <td className="direccion-cell" style={{ fontSize: "20px"}}>
                             <span
                                 className="editar-icon"
@@ -312,7 +320,7 @@ const Empleados = () => {
                                         Nro. de Documento:
                                         <input
                                             type="text"
-                                            value={empleadoEditando.empleado.persona.nroDocumento}
+                                            value={empleadoEditando.persona.nroDocumento}
                                             onChange={(e) => actualizarPersona("nroDocumento", e.target.value)}
                                         />
                                     </label>
@@ -321,7 +329,7 @@ const Empleados = () => {
                                         Nombre:
                                         <input
                                             type="text"
-                                            value={empleadoEditando.empleado.persona.nombres}
+                                            value={empleadoEditando.persona.nombres}
                                             onChange={(e) => actualizarPersona("nombres", e.target.value)}
                                         />
                                     </label>
@@ -330,7 +338,7 @@ const Empleados = () => {
                                         Apellido:
                                         <input
                                             type="text"
-                                            value={empleadoEditando.empleado.persona.apellidos}
+                                            value={empleadoEditando.persona.apellidos}
                                             onChange={(e) => actualizarPersona("apellidos", e.target.value)}
                                         />
                                     </label>
@@ -341,7 +349,7 @@ const Empleados = () => {
                                         Fecha de Nacimiento:
                                         <input
                                             type="date"
-                                            value={empleadoEditando.empleado.persona.fecNacimiento}
+                                            value={empleadoEditando.persona.fecNacimiento}
                                             onChange={(e) => actualizarPersona("fecNacimiento", e.target.value)}
                                         />
                                     </label>
@@ -372,8 +380,10 @@ const Empleados = () => {
                             </div>
                         </form>
                     </div>
+                    
                 </div>
             )}
+            <ToastContainer />
         </div>
     );
 };

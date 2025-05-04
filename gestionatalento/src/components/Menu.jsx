@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Menu.css";
+import { ToastContainer, toast } from 'react-toastify';
 import axios from "axios";
 
 const Menu = () => {
@@ -25,42 +26,64 @@ const Menu = () => {
             if (searchType === "documento") {
                 const response = await axios.get("http://localhost:8080/empleados/obtener/documento/" + searchValue);
                 const genericResponse = response.data;
-                console.log(response.data.codigoMensaje);
-                if (response.data.codigoMensaje == "200"){
-                    const empleado = genericResponse.objeto;
-                    console.log("El empleado es: ", empleado);
-                    setEmpleadoSeleccionado(empleado);
-                    setCoincidencias([]);
-                    localStorage.setItem("empleadoBuscado", empleado.codEmpleado);
-                }else if (response.data.codigoMensaje == "404"){
-                    setEmpleadoSeleccionado(null);
-                    setCoincidencias([]);
-                    setMensaje("No se encontraron coincidencias");
-                }else{
-                    setMensaje("Ha ocurrido un error interno en el servidor");
+                if (genericResponse.codigoMensaje == "200") {
+                    const empleados = genericResponse.objeto;
+                    let resultados = [];
+                    resultados = empleados.filter(e =>
+                        `${e.persona.nroDocumento}`.toLowerCase().includes(searchValue.toLowerCase())
+                        );
+                        console.log(resultados);
+                    if (resultados.length === 0) {
+                        setEmpleadoSeleccionado(null);
+                        setCoincidencias([]);
+                        setMensaje("No se encontraron coincidencias");
+                    } else if (resultados.length === 1) {
+                        const empleado = resultados[0];
+                        console.log("empleado desde lista: ",empleado);
+                        setEmpleadoSeleccionado(empleado);
+                        setCoincidencias([]);
+                        localStorage.setItem("empleadoBuscado", empleado.codEmpleado);
+                    } else {
+                        setCoincidencias(resultados);
+                        console.log("coincidencias: ", resultados)
+                        setEmpleadoSeleccionado(null);
+                    }
+                } else {
+                    toast.error(genericResponse.mensaje, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
                 }
+                
             } else {
                 const response = await axios.get("http://localhost:8080/empleados/obtenerLista");
                 const genericResponse = response.data;
-                const empleados = genericResponse.objeto;
-                let resultados = [];
-                resultados = empleados.filter(e =>
-                    `${e.empleado.persona.nombres} ${e.empleado.persona.apellidos}`.toLowerCase().includes(searchValue.toLowerCase())
-                    );
-                if (resultados.length === 0) {
-                    setEmpleadoSeleccionado(null);
-                    setCoincidencias([]);
-                    setMensaje("No se encontraron coincidencias");
-                } else if (resultados.length === 1) {
-                    const empleado = resultados[0].empleado;
-                    console.log("empleado desde lista: ",empleado);
-                    setEmpleadoSeleccionado(empleado);
-                    setCoincidencias([]);
-                    localStorage.setItem("empleadoBuscado", empleado.codEmpleado);
+                if (genericResponse.codigoMensaje == "200") {
+                    const empleados = genericResponse.objeto;
+                    let resultados = [];
+                    resultados = empleados.filter(e =>
+                        `${e.persona.nombres} ${e.persona.apellidos}`.toLowerCase().includes(searchValue.toLowerCase())
+                        );
+                    if (resultados.length === 0) {
+                        setEmpleadoSeleccionado(null);
+                        setCoincidencias([]);
+                        setMensaje("No se encontraron coincidencias");
+                    } else if (resultados.length === 1) {
+                        const empleado = resultados[0];
+                        console.log("empleado desde lista: ",empleado);
+                        setEmpleadoSeleccionado(empleado);
+                        setCoincidencias([]);
+                        localStorage.setItem("empleadoBuscado", empleado.codEmpleado);
+                    } else {
+                        setCoincidencias(resultados);
+                        console.log("coincidencias: ", resultados)
+                        setEmpleadoSeleccionado(null);
+                    }
                 } else {
-                    setCoincidencias(resultados);
-                    console.log("coincidencias: ", resultados)
-                    setEmpleadoSeleccionado(null);
+                    toast.error(genericResponse.mensaje, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
                 }
                 
             }
@@ -190,9 +213,9 @@ const Menu = () => {
                                 <li
                                     key={index}
                                     className="dropdown-item"
-                                    onClick={() => handleSelect(empleadoBusqueda.empleado)}
+                                    onClick={() => handleSelect(empleadoBusqueda)}
                                 >
-                                    {empleadoBusqueda.empleado.persona.nombres} {empleadoBusqueda.empleado.persona.apellidos}. (Ingreso: {empleadoBusqueda.empleado.fecIngreso})
+                                    {empleadoBusqueda.persona.nombres} {empleadoBusqueda.persona.apellidos}. (Ingreso: {empleadoBusqueda.fecIngreso})
                                 </li>
                             ))}
                         </div>
@@ -302,6 +325,7 @@ const Menu = () => {
                     />
                 </div>
             </div>
+            <ToastContainer />
         </div>
     );
 };

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./AbmEmpleados.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
 import { loadFonts } from './Fonts';
 loadFonts();
 
@@ -68,7 +69,7 @@ const AbmEmpleados = () => {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (formData.poseeDiscapacidad && formData.descripcionDiscapacidad.trim() === "") {
@@ -77,46 +78,46 @@ const AbmEmpleados = () => {
         }
 
         if (step === 2){
-            const codPersonaLocal = localStorage.getItem("codPersona");
-            console.log(localStorage.getItem("codPersona"));
-            if (codPersonaLocal == null) {
-                const persona = new Object;
-                const estadoCivil = new Object;
+            const persona = new Object;
+            const estadoCivil = new Object;
 
-                estadoCivil.codEstadoCivil = formData.codEstadoCivil;
-                // Asignar valores a través de los setters
-                persona.nroDocumento = formData.nroDocumento;
-                persona.nombres = formData.nombres;
-                persona.apellidos = formData.apellidos;
-                persona.nroRuc = formData.nroRuc;
-                persona.lugarNacimiento = formData.lugarNacimiento;
-                persona.codPaisNacimiento = 1;//formData.codPaisNacimiento;
-                persona.fecNacimiento = formData.fecNacimiento;
-                persona.codNivelEstudio = formData.codNivelEstudio;
-                if (formData.poseeDiscapacidad){
-                    persona.poseeDiscapacidad = "S";
-                } else{
-                    persona.poseeDiscapacidad = "N";
+            // Asignar valores a través de los setters
+            persona.codPersona = localStorage.getItem("codPersona");
+            persona.nroDocumento = formData.nroDocumento;
+            persona.nombres = formData.nombres;
+            persona.apellidos = formData.apellidos;
+            persona.nroRuc = formData.nroRuc;
+            persona.lugarNacimiento = formData.lugarNacimiento;
+            persona.codPaisNacimiento = 1;//formData.codPaisNacimiento;
+            persona.fecNacimiento = formData.fecNacimiento;
+            persona.codNivelEstudio = formData.codNivelEstudio;
+            if (formData.poseeDiscapacidad){
+                persona.poseeDiscapacidad = "S";
+            } else{
+                persona.poseeDiscapacidad = "N";
+            }
+            persona.descripcionDiscapacidad = formData.descripcionDiscapacidad;
+
+            estadoCivil.codEstadoCivil = formData.codEstadoCivil;
+            persona.estadoCivil = estadoCivil;
+            persona.lugarNacimiento = formData.lugarNacimiento;
+            persona.rutaFoto = formData.rutaFoto;
+            console.log("Datos enviados:", persona);
+
+            
+            // Aquí puedes enviar los datos al backend con un POST o PUT
+            const response = await axios.post("http://localhost:8080/personas/crear", persona);
+            const genericResponse = response.data;
+            if (genericResponse.codigoMensaje === "409") {
+                const response = await axios.put("http://localhost:8080/personas/actualizar", persona);
+                const genericResponse = response.data;
+                if (genericResponse.codigoMensaje == "200") {
+                    toast.success("Persona Actualizada", { autoClose: 2000 });
                 }
-                persona.descripcionDiscapacidad = formData.descripcionDiscapacidad;
-                persona.estadoCivil = estadoCivil;
-                persona.lugarNacimiento = formData.lugarNacimiento;
-                persona.rutaFoto = formData.rutaFoto;
-                console.log("Datos enviados:", persona);
-
-                
-                // Aquí puedes enviar los datos al backend con un POST o PUT
-                axios.post("http://localhost:8080/personas/crear", persona)
-                    .then((response) => {
-                        response.data.objeto
-                        alert("Persona creada correctamente");
-                        localStorage.setItem('codPersona', response.data.objeto.codPersona);
-                        console.log("persona", localStorage.getItem('codPersona'));
-                    })
-                    .catch((error) => {
-                        console.error("Error al guardar los datos:", error);
-                    });
-            }else if(formData.asignacion > 0){
+            } else if (genericResponse.codigoMensaje === "200") {
+                localStorage.setItem('codPersona', genericResponse.objeto.codPersona);
+            }
+            if(formData.asignacion > 0){
                 const empleado = new Object;
                 const persona = new Object;
                 const cargo = new Object;
@@ -143,17 +144,14 @@ const AbmEmpleados = () => {
                 console.log("Empleado enviado", empleado);
                 axios.post("http://localhost:8080/empleados/crear", empleado)
                     .then((response) => {
-                        console.log("Datos guardados correctamente", response);
-                        if (response.data.objeto.codigoMensaje == "200") {
-                            alert("Empleado creado correctamente");
+                        if (response.data.codigoMensaje == "200") {
+                            toast.info(response.data.mensaje, { autoClose: 2000 });
+                            localStorage.removeItem("codPersona");
+                            navigate("/empleados");
                         }else{
-                            console.log("intenta cargar empleado");
-                            alert(response.data.objeto.mensaje);
+                            toast.error(response.data.mensaje, { autoClose: 2000 });
                         }
-
                         localStorage.setItem('codPersona', response.data.objeto.persona.codPersona);
-
-                        navigate("/empleados"); // Reemplaza "/otra-pagina" con la URL que desees
                     })
                     .catch((error) => {
                         console.error("Error al guardar los datos:", error);
@@ -174,7 +172,7 @@ const AbmEmpleados = () => {
     const emptyFields = Array.from(requiredInputs).filter(input => !input.value.trim());
 
     if (emptyFields.length > 0) {
-        alert("Por favor, completa todos los campos obligatorios antes de continuar.");
+        toast.info("Debe completar los datos obligatorios", { autoClose: 2000 });
         return;
     }
 
@@ -182,18 +180,65 @@ const AbmEmpleados = () => {
     setStep(2);
     };
 
+    const handleBuscarPorDocumento = async () => {
+        const nroDocumento = formData.nroDocumento;
+        if (!nroDocumento) return;
+        try {
+            const response = await axios.get('http://localhost:8080/personas/obtener/documento/' + nroDocumento);
+            if (response.data.codigoMensaje === "200") {
+                toast.success("Persona encontrada", { autoClose: 2000 });
+                const persona = response.data.objeto;
+                localStorage.setItem('codPersona', persona.codPersona);
+                setFormData(prev => ({
+                    ...prev,
+                    nombres: persona.nombres || '',
+                    apellidos: persona.apellidos || '',
+                    nroRuc: persona.nroRuc || '',
+                    fecNacimiento: persona.fecNacimiento || '',
+                    codNivelEstudio: persona.codNivelEstudio || '',
+                    poseeDiscapacidad: persona.poseeDiscapacidad === "S",
+                    descripcionDiscapacidad: persona.descripcionDiscapacidad || '',
+                    direccionParticular: persona.direccionParticular || '',
+                    codEstadoCivil: persona.estadoCivil?.codEstadoCivil || '',
+                    lugarNacimiento: persona.lugarNacimiento || '',
+                    telefono: persona.telefono || '',
+                    correo: persona.correo || ''
+                }));
+            } else {
+                toast.info("No se encontró la persona registrada, avanzar con el registro", { autoClose: 2000 });
+            }
+        } catch (error) {
+            console.error("Error al buscar persona:", error);
+            toast.error("Error al buscar persona", { autoClose: 2000 });
+        }
+    };
+
     return (
         <div className="abm-empleados-container">
             <h1>ABM Empleados</h1>
             <p className="volver" onClick={() => navigate(-1)}>← Volver</p>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} onKeyDown={(e) => {
+                if (e.key === 'Enter') e.preventDefault();
+            }}>
                 {step === 1 && (
                     <div className="formulario-empleado">
                         {/* Campos del Step 1 */}
                         <div className="campo-empleado">
                             <label>Nro. de Documento</label>
-                            <input type="text" name="nroDocumento" value={formData.nroDocumento} onChange={handleChange} required/>
+                            <input 
+                                type="text"
+                                name="nroDocumento"
+                                value={formData.nroDocumento}
+                                onChange={handleChange}
+                                onBlur={handleBuscarPorDocumento}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        handleBuscarPorDocumento();
+                                    }
+                                }}
+                                required
+                            />
                         </div>
                         <div className="campo-empleado">
                             <label>Nombres</label>
@@ -277,7 +322,7 @@ const AbmEmpleados = () => {
                 )}
 
                 {step === 2 && (
-                    <div className="formulario">
+                    <div className="formulario-empleado">
                         {/* Campos del Step 2 */}
                         <div className="campo-empleado">
                             <label>Dependencia</label>
@@ -357,6 +402,7 @@ const AbmEmpleados = () => {
                     </button>
                 </div>
             </form>
+            <ToastContainer />
         </div>
     );
 };
