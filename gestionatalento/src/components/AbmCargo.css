@@ -1,0 +1,58 @@
+.abm-cargo-container {
+    padding: 20px;
+    color: white;
+    min-height: 100vh;
+    margin-left: 220px;
+}
+
+.abm-cargo-card {
+    padding: 20px;
+    border-radius: 10px;
+}
+
+h2 {
+    margin-bottom: 25px;
+    font-size: 24px; /* ✅ más grande */
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px; /* ✅ tamaño de texto mayor */
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px 10px; /* ✅ más padding interno */
+    background-color: #2a2a40;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.agregar-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.agregar-actions button {
+    flex: 1;
+    padding: 12px;
+    background-color: #2a2a40;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.agregar-actions button:hover {
+    background-color: #3a3a50;
+}

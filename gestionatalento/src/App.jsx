@@ -20,6 +20,15 @@ import AbmMarcacionesManuales from "./components/AbmMarcacionesManuales";
 import AbmHorasExtras from "./components/AbmHorasExtras";
 import AbmVacaciones from "./components/AbmVacaciones";
 import AbmJustificativos from "./components/AbmJustificativos";
+import Configuraciones from "./components/Configuraciones";
+import Eventos from "./components/Eventos";
+import AbmEventos from "./components/AbmEventos";
+import Departamentos from "./components/Departamentos";
+import AbmDepartamento from "./components/AbmDepartamento";
+import Direcciones from "./components/Direcciones";
+import AbmDirecciones from "./components/AbmDirecciones";
+import Cargos from "./components/Cargos";
+import AbmCargo from "./components/AbmCargo";
 
 function App() {
     return (
@@ -125,7 +134,91 @@ function App() {
                     <Sidebar/>
                     <AbmJustificativos/>
                 </div>}/>
-
+                <Route path="/justificativos/abm" element={<div className="app-container">
+                    <Sidebar/>
+                    <AbmJustificativos/>
+                </div>}/>
+                <Route
+                    path="/configuraciones"
+                    element={
+                        <div className="app-container">
+                            <Sidebar />
+                            <Configuraciones />
+                        </div>
+                    }
+                />
+                <Route
+                    path="/configuraciones/direcciones"
+                    element={
+                        <div className="app-container">
+                            <Sidebar />
+                            <Direcciones />
+                        </div>
+                    }
+                />
+                <Route
+                    path="/configuraciones/direcciones/abm"
+                    element={
+                        <div className="app-container">
+                            <Sidebar />
+                            <AbmDirecciones />
+                        </div>
+                    }
+                />
+                <Route
+                    path="/configuraciones/eventos"
+                    element={
+                        <div className="app-container">
+                            <Sidebar />
+                            <Eventos />
+                        </div>
+                    }
+                />
+                <Route
+                    path="/configuraciones/eventos/abm"
+                    element={
+                        <div className="app-container">
+                            <Sidebar />
+                            <AbmEventos />
+                        </div>
+                    }
+                />
+                <Route
+                    path="/configuraciones/departamentos"
+                    element={
+                        <div className="app-container">
+                            <Sidebar/>
+                            <Departamentos/>
+                        </div>
+                    }
+                />
+                <Route
+                    path="/configuraciones/departamentos/abm"
+                    element={
+                        <div className="app-container">
+                            <Sidebar />
+                            <AbmDepartamento/>
+                        </div>
+                    }
+                />
+                <Route
+                    path="/configuraciones/cargos"
+                    element={
+                        <div className="app-container">
+                            <Sidebar/>
+                            <Cargos/>
+                        </div>
+                    }
+                />
+                <Route
+                    path="/configuraciones/cargos/abm"
+                    element={
+                        <div className="app-container">
+                            <Sidebar/>
+                            <AbmCargo/>
+                        </div>
+                    }
+                />
             </Routes>
         </Router>
     );

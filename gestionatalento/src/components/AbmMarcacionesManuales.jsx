@@ -245,7 +245,7 @@ const MarcacionesManuales = () => {
                                         if (indiceActual < fechasRango.length - 1) {
                                             setIndiceActual(indiceActual + 1);
                                         } else {
-                                            toast.error("¡Listo! Se completaron todas las fechas", {
+                                            toast.success("¡Listo! Se completaron todas las fechas", {
                                                 position: "top-right",
                                                 autoClose: 2500,
                                             });

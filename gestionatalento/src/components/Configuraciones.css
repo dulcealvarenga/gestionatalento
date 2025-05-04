@@ -1,0 +1,51 @@
+.config-container {
+    padding: 40px;
+    color: white;
+    font-family: "Poppins", sans-serif;
+    min-height: 100vh;
+    margin-left: 220px;
+}
+
+.config-grid {
+    display: flex;
+    gap: 30px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.config-card {
+    background-color: #44465f;
+    border-radius: 16px;
+    padding: 30px;
+    width: 200px;
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.config-card:hover {
+    transform: translateY(-5px);
+    background-color: #5a5c78;
+}
+
+.config-icon {
+    font-size: 40px;
+    margin-bottom: 15px;
+}
+
+.config-title {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.config-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 15px;
+}
+

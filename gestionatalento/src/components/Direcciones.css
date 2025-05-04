@@ -1,0 +1,135 @@
+.tabla-direcciones {
+    margin-top: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.tabla-header,
+.tabla-row {
+    display: grid;
+    grid-template-columns: 60px 1fr 120px 150px 150px 60px;
+    padding: 12px 16px;
+    align-items: center;
+    width: 100%;
+}
+
+.tabla-header {
+    background-color: #2b2b4b;
+    color: #bbb;
+    font-weight: bold;
+}
+
+.tabla-row {
+    background-color: #202036;
+    color: #ddd;
+    border-bottom: 1px solid #2e2e4e;
+    transition: background-color 0.2s ease;
+}
+
+.tabla-row:hover {
+    background-color: #2a2a48;
+}
+
+.estado-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.estado-activo {
+    background-color: #4caf50;
+    color: white;
+}
+
+.estado-inactivo {
+    background-color: #f44336;
+    color: white;
+}
+
+.edit-icon {
+    cursor: pointer;
+    color: #aaa;
+    transition: color 0.2s ease;
+    text-align: center;
+}
+
+.edit-icon:hover {
+    color: #fff;
+}
+
+.direcciones-container {
+    padding: 20px;
+    color: white;
+    min-height: 100vh;
+    margin-left: 220px;
+}
+
+.actions {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    width: 40%;
+}
+
+.actions button {
+    padding: 10px 20px;
+    border-radius: 20px;
+    background-color: #3b3b5e;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.actions button:hover {
+    background-color: #4a4a70;
+}
+.departamentos-panel {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #2a2a48;
+    padding: 25px;
+    border-radius: 10px;
+    color: white;
+    z-index: 1000;
+    width: 400px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+}
+
+.departamentos-panel h3 {
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.departamentos-panel ul {
+    list-style: none;
+    padding: 0;
+}
+
+.departamentos-panel li {
+    padding: 10px;
+    background-color: #3b3b5e;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.departamentos-panel li:hover {
+    background-color: #505080;
+}
+
+.filter-indicator {
+    margin-top: 10px;
+    background-color: #444466;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+}

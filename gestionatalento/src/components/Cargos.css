@@ -1,0 +1,50 @@
+.cargos-container {
+    padding: 30px;
+    background-color: #1e1f2f;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    margin-left: 220px;
+}
+
+.tabla-cargos {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #2f3248;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.tabla-header,
+.tabla-row {
+    display: grid;
+    grid-template-columns: 70px 3fr 150px 150px 150px 70px;
+    padding: 16px 12px;
+    align-items: center;
+    gap: 10px;
+}
+
+.tabla-header {
+    background-color: #2a2a40;
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.tabla-row:nth-child(even) {
+    background-color: #23233b;
+}
+
+.tabla-row:hover {
+    background-color: #33334d;
+}
+
+.edit-icon {
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.edit-icon:hover {
+    color: #bbbbbb;
+}

@@ -1,0 +1,51 @@
+.departamentos-container {
+    padding: 20px;
+    color: white;
+    min-height: 100vh;
+    margin-left: 220px;
+}
+
+.actions-dep {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    width: 40%;
+}
+
+.actions-dep button {
+    padding: 10px 20px;
+    border-radius: 20px;
+    background-color: #3b3b5e;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.actions-dep button:hover {
+    background-color: #3a3a50;
+}
+
+.tabla-departamento {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #2f3248;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.tabla-departamento th,
+.tabla-departamento td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #44475a;
+}
+
+.tabla-departamento th {
+    background-color: #3a3e57;
+}
+
+.edit-icon {
+    color: white;
+    cursor: pointer;
+}

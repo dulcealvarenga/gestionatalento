@@ -4,7 +4,6 @@ import "./Sidebar.css";
 
 const Sidebar = () => {
     const [showMore, setShowMore] = useState(false);
-    const [showConfig, setShowConfig] = useState(false); // <-- Estado para abrir configuraciones
     const navigate = useNavigate();
 
     return (
@@ -28,16 +27,7 @@ const Sidebar = () => {
                     <div className="more-options">
                         <li>Documentos</li>
                         <li onClick={() => navigate("/marcaciones")}>Marcaciones</li>
-                        <li onClick={() => setShowConfig(!showConfig)}>Configuraciones</li>
-
-                        {showConfig && (
-                            <ul className="submenu-config">
-                                <li onClick={() => navigate("/direcciones")}>Direcciones</li>
-                                <li onClick={() => navigate("/departamentos")}>Departamentos</li>
-                                <li onClick={() => navigate("/eventos")}>Eventos</li>
-                                <li onClick={() => navigate("/usuarios")}>Usuarios</li>
-                            </ul>
-                        )}
+                        <li onClick={() => navigate("/configuraciones")}>Configuraciones</li>
                     </div>
                 )}
             </ul>

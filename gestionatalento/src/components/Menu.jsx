@@ -152,9 +152,10 @@ const Menu = () => {
                         name="search"
                         checked={searchType === "documento"}
                         onChange={() => setSearchType("documento")}
+                        style={{ marginLeft: "-80px"}}
                     /> Nro. de Documento
                 </label>
-                <label style={{ fontSize: "22px", marginTop: "20px", margin: "35px" }}>
+                <label style={{ fontSize: "22px", marginTop: "20px" }}>
                     <input
                         type="radio"
                         name="search"

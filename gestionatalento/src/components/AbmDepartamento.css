@@ -1,0 +1,63 @@
+.abm-departamento-container {
+    padding: 20px;
+    color: white;
+    min-height: 100vh;
+    margin-left: 220px;
+}
+
+.abm-departamento-card {
+    padding: 20px;
+    border-radius: 10px;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    background-color: #44465f;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 8px;
+    background-color: #5a5e83;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.agregar-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    width: 15%;
+    margin-right: 50px;
+}
+
+.agregar-actions button {
+    background-color: #7278a5;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.agregar-actions button:hover {
+    background-color: #3a3a50;
+}
