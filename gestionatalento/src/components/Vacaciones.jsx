@@ -69,7 +69,7 @@ const Vacaciones = () => {
                 <div className="acciones-barra">
                     <button
                         className="boton-accion"
-                        onClick={() => navigate("/abmVacaciones")}
+                        onClick={() => navigate("/vacaciones/abm")}
                     >
                         AGREGAR
                     </button>

@@ -9,7 +9,7 @@ const Justificativos = () => {
     const [mes, setMes] = useState("Enero");
     const [anio, setAnio] = useState(new Date().getFullYear());
     const irAAbmJustificativos = () => {
-        navigate("/abmJustificativos");
+        navigate("/justificativos/abm");
     };
 
     const meses = [
