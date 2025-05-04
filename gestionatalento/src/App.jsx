@@ -29,6 +29,7 @@ import Direcciones from "./components/Direcciones";
 import AbmDirecciones from "./components/AbmDirecciones";
 import Cargos from "./components/Cargos";
 import AbmCargo from "./components/AbmCargo";
+import DashKPI from "./components/DashKPI";
 
 function App() {
     return (
@@ -216,6 +217,16 @@ function App() {
                         <div className="app-container">
                             <Sidebar/>
                             <AbmCargo/>
+                        </div>
+                    }
+                />
+
+                <Route
+                    path="/dashboard/kpi"
+                    element={
+                        <div className="app-container">
+                            <Sidebar/>
+                            <DashKPI/>
                         </div>
                     }
                 />

@@ -21,7 +21,6 @@
     flex-wrap: wrap; /* opcional para responsive */
 }
 
-
 .card {
     background: #2a2d43;
     padding: 20px;
@@ -58,26 +57,57 @@
     max-width: 700px;
 }
 
+.row-separado {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 20px;
+    background: #2a2d43;
+    flex: 2;
+    padding: 20px;
+    border-radius: 12px;
+    width: 30%;
+    min-width: 200px;
+    max-width: 700px;
+}
+
+.mitad {
+    width: 50%;
+
+}
+
 .movimientos-box {
-    flex: 1;
     background: #2a2d43;
     padding: 20px;
     border-radius: 12px;
+    color: white;
 }
 
 .tabla-movimientos {
-    margin-top: 10px;
+    margin-top: 15px;
+    background: #2a2d43;
 }
 
-.mov-header, .mov-item {
-    display: flex;
-    justify-content: space-between;
+.mov-header,
+.mov-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* 3 columnas iguales */
+    padding: 4px 0;
     font-size: 14px;
-    padding: 6px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
 .mov-header {
     font-weight: bold;
-    opacity: 0.9;
+    color: #ccc;
+    border-bottom: 1px solid #444;
+    margin-bottom: 8px;
+}
+
+/* Contenedor de cada sección */
+.movimientos-section {
+    flex: 1;
+}
+
+.mov-item:last-child {
+    border-bottom: none;
 }
