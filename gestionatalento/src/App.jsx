@@ -179,8 +179,17 @@ function App() {
                     path="/configuraciones/eventos/abm"
                     element={
                         <div className="app-container">
-                            <Sidebar />
-                            <AbmEventos />
+                        <Sidebar />
+                        <AbmEventos />
+                        </div>
+                    }
+                />
+                <Route
+                    path="/configuraciones/eventos/abm/:id"
+                    element={
+                        <div className="app-container">
+                        <Sidebar />
+                        <AbmEventos />
                         </div>
                     }
                 />

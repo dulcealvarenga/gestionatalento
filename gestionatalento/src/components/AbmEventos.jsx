@@ -1,66 +1,122 @@
 import React, { useState, useEffect } from "react";
 import "./AbmEventos.css";
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate, useParams } from "react-router-dom";
 
 const AbmEventos = () => {
     const navigate = useNavigate();
     const { id } = useParams();
+    const [tiposEvento, setTiposEvento] = useState([]);
 
-    const [evento, setEvento] = useState({
+    const [formData, setFormData] = useState({
+        nroEvento: "",
         descripcion: "",
-        estado: "Activo",
         fecha: "",
-        tipoExoneracion: "1", // Por defecto Total
+        horaInicial: "",
+        horaFinal: "",
+        vigente: "",
+        codTipEvento: ""
     });
 
     useEffect(() => {
-        if (id) {
-            axios.get(`http://localhost:8080/eventos/${id}`).then((res) => {
-                const eventoData = res.data;
+        const fetchTiposEvento = async () => {
+            try {
+                const response = await axios.get("http://localhost:8080/configuraciones/tipos-eventos/obtenerListaActiva");
+                setTiposEvento(response.data.objeto);
+            } catch (error) {
+                console.error("Error al cargar tipos de evento:", error);
+            }
+        };
 
-                setEvento({
-                    descripcion: eventoData.descripcion,
-                    estado: eventoData.estado,
-                    fecha: eventoData.fecha ? eventoData.fecha.substring(0, 10) : "",
-                    tipoExoneracion:
-                        eventoData.tipoEvento?.codTipEvento?.toString() || "1", // Cargamos el ID
-                });
-            });
-        }
+        fetchTiposEvento();
+    }, []);
+
+    useEffect(() => {
+        const fetchEvento = async () => {
+            if (id) {
+                try {
+                    const response = await axios.get('http://localhost:8080/configuraciones/eventos/obtener/id/' + id);
+                    const genericResponse = response.data;
+                    const eventoData = genericResponse.objeto;
+    
+                    if (genericResponse.codigoMensaje === "200") {
+                        setFormData({
+                            nroEvento: eventoData.nroEvento,
+                            descripcion: eventoData.descripcion,
+                            vigente: eventoData.estado,
+                            fecha: eventoData.fecha ? eventoData.fecha.substring(0, 10) : "",
+                            codTipEvento: eventoData.tipoEvento?.codTipEvento?.toString() || ""
+                        });
+                        toast.dismiss();
+                        toast.success(genericResponse.mensaje, { autoClose: 2000 });
+                    } else {
+                        toast.error(genericResponse.mensaje, { autoClose: 2000 });
+                    }
+                } catch (error) {
+                    console.error("Error al cargar el evento:", error);
+                    toast.error("Error al cargar el evento", { autoClose: 2000 });
+                }
+            }
+        };
+    
+        fetchEvento();
     }, [id]);
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
     const handleSave = async () => {
-        if (!evento.descripcion || !evento.fecha) {
-            alert("Todos los campos son obligatorios");
+        const requiredInputs = document.querySelectorAll("input[required], select[required]");
+
+        // Filtrar los que están vacíos
+        const emptyFields = Array.from(requiredInputs).filter(input => !input.value.trim());
+
+        if (emptyFields.length > 0) {
+            toast.info("Debe completar los datos obligatorios", { autoClose: 2000 });
             return;
         }
 
-        const eventoParaEnviar = {
-            descripcion: evento.descripcion,
-            estado: evento.estado,
-            fecha: evento.fecha,
+        const evento = {
+            nroEvento: formData.nroEvento,
+            descripcion: formData.descripcion,
+            vigente: formData.vigente,
+            fecha: formData.fecha,
             tipoEvento: {
-                codTipEvento: parseInt(evento.tipoExoneracion), // Mandamos como objeto con ID
+                codTipEvento: parseInt(formData.codTipEvento),
             },
         };
-
         try {
+           
             if (id) {
-                await axios.put(
-                    `http://localhost:8080/eventos/${id}`,
-                    eventoParaEnviar
-                );
-                alert("Evento actualizado con éxito");
+                const response = await axios.put('http://localhost:8080/configuraciones/eventos/actualizar', evento);
+                const genericResponse = response.data;
+                if (genericResponse.codigoMensaje == "200") {
+                    toast.success(genericResponse.mensaje, { autoClose: 2000 });
+                    setTimeout(() => {
+                        navigate("/configuraciones/eventos");
+                    }, 2000);
+                } else {
+                    toast.error(genericResponse.mensaje, { autoClose: 2000 });
+                }
             } else {
-                await axios.post(
-                    "http://localhost:8080/configuraciones/eventos/crear",
-                    eventoParaEnviar
-                );
-                alert("Evento creado con éxito");
+                const response = await axios.post("http://localhost:8080/configuraciones/eventos/crear", evento);
+                const genericResponse = response.data;
+                if (genericResponse.codigoMensaje == "200") {
+                    toast.success(genericResponse.mensaje, { autoClose: 2000 });
+                    setTimeout(() => {
+                        navigate("/configuraciones/eventos");
+                    }, 2000);
+                } else {
+                    toast.error(genericResponse.mensaje, { autoClose: 2000 });
+                }
             }
-
-            navigate("/configuraciones/eventos");
+            
         } catch (error) {
             console.error("Error al guardar evento:", error);
             alert("Error al guardar evento");
@@ -73,42 +129,50 @@ const AbmEventos = () => {
                 <h1>{id ? "Editar Evento" : "Agregar Evento"}</h1>
                 <div className="volver" onClick={() => navigate("/configuraciones/eventos")}>← Volver</div>
                 <div className="form-group">
-                    <label style={{fontSize: "22px", fontWeight: "bold", color: "#FFFFFF"}}>Descripción</label>
+                    <label style={{ fontSize: "22px", fontWeight: "bold", color: "#FFFFFF" }}>Descripción</label>
                     <input
                         type="text"
+                        name="descripcion"
                         placeholder="Ingrese la descripción"
-                        value={evento.descripcion}
-                        onChange={(e) =>
-                            setEvento({...evento, descripcion: e.target.value})
-                        }
-                        style={{backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '98%'}}
+                        value={formData.descripcion}
+                        onChange={handleChange}
+                        style={{ backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '98%' }}
+                        required
                     />
-                    <label style={{fontSize: "22px", fontWeight: "bold", color: "#FFFFFF"}}>Estado</label>
-                    <select
-                        value={evento.estado}
-                        onChange={(e) => setEvento({...evento, estado: e.target.value})}
-                        style={{backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '99%'}}
-                    >
-                        <option>Activo</option>
-                        <option>Inactivo</option>
-                    </select>
-                    <label style={{fontSize: "22px", fontWeight: "bold", color: "#FFFFFF"}}>Fecha</label>
+                    <label style={{ fontSize: "22px", fontWeight: "bold", color: "#FFFFFF" }}>Fecha</label>
                     <input
                         type="date"
-                        value={evento.fecha}
-                        onChange={(e) => setEvento({...evento, fecha: e.target.value})}
-                        style={{backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '98%'}}
+                        name="fecha"
+                        value={formData.fecha}
+                        onChange={handleChange}
+                        style={{ backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '98%' }}
+                        required
                     />
-                    <label style={{fontSize: "22px", fontWeight: "bold", color: "#FFFFFF"}}>Tipo de Exoneración</label>
+                    <label style={{ fontSize: "22px", fontWeight: "bold", color: "#FFFFFF" }}>Tipo de Evento</label>
                     <select
-                        value={evento.tipoExoneracion}
-                        onChange={(e) =>
-                            setEvento({...evento, tipoExoneracion: e.target.value})
-                        }
-                        style={{backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '99%'}}
+                        name="codTipEvento"
+                        value={formData.codTipEvento}
+                        onChange={handleChange}
+                        style={{ backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '99%' }}
+                        required
                     >
-                        <option value="1">Total</option>
-                        <option value="2">Parcial</option>
+                        <option value="">Seleccione una opción</option>
+                        {tiposEvento.map((evento) => (
+                            <option key={evento.codTipEvento} value={evento.codTipEvento}>
+                                {evento.descripcion}
+                            </option>
+                        ))}
+                    </select>
+                    <label style={{ fontSize: "22px", fontWeight: "bold", color: "#FFFFFF" }}>Vigente</label>
+                    <select
+                        name="vigente"
+                        value={formData.vigente}
+                        onChange={handleChange}
+                        style={{ backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '99%' }}
+                        required
+                    >
+                        <option value="S">SÍ</option>
+                        <option value="N">NO</option>
                     </select>
                 </div>
 
@@ -117,6 +181,7 @@ const AbmEventos = () => {
                     <button onClick={() => navigate("/configuraciones/eventos")}>Cancelar</button>
                 </div>
             </div>
+            <ToastContainer />
         </div>
     );
 };

@@ -52,9 +52,9 @@ const Eventos = () => {
                         <tr key={evento.nroEvento}>
                             <td>{evento.nroEvento}</td>
                             <td>{evento.descripcion}</td>
-                            <td>{evento.vigente === "S" ? "Activo" : "Inactivo"}</td>
+                            <td>{evento.vigente === "S" ? "SI" : "NO"}</td>
                             <td>{evento.fecha}</td>
-                            <td>{evento.tipoEvento || "-"}</td>
+                            <td>{evento.tipoEvento.descripcion || "-"}</td>
                             {/* ✅ Cambiado */}
                             <td>
                                 <button
