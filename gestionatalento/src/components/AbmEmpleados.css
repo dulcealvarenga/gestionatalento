@@ -23,34 +23,31 @@
     margin-bottom: 20px;
 }
 
-.formulario {
+.formulario-empleado {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px; /* podés bajar más si querés más cercanía aún */
+    padding: 40px; /* más espacio alrededor interno */
     margin-top: 20px;
-    background-color: #63697e;
-    padding: 10px;
+    background-color: #686c7c;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     max-height: calc(100vh - 100px);
     overflow-y: auto;
 }
 
-.formulario {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    padding: 70px;
-}
-
-.campo {
+.campo-empleado {
     display: flex;
     flex-direction: column;
+    padding: 4px 8px;
 }
 
-.campo label {
+.campo-empleado label {
     font-size: 20px;
     margin-bottom: 5px;
 }
 
-.campo input {
+.campo-empleado input {
     padding: 10px;
     font-size: 15px;
     border-radius: 20px;
@@ -70,7 +67,7 @@ select {
     box-sizing: border-box;
 }
 
-.campo input:focus {
+.campo-empleado input:focus {
     outline: none;
     border-color: #f9c74f;
 }

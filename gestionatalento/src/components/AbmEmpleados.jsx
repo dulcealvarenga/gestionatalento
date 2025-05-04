@@ -189,29 +189,29 @@ const AbmEmpleados = () => {
 
             <form onSubmit={handleSubmit}>
                 {step === 1 && (
-                    <div className="formulario">
+                    <div className="formulario-empleado">
                         {/* Campos del Step 1 */}
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>Nro. de Documento</label>
                             <input type="text" name="nroDocumento" value={formData.nroDocumento} onChange={handleChange} required/>
                         </div>
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>Nombres</label>
                             <input type="text" name="nombres" value={formData.nombres} onChange={handleChange} required/>
                         </div>
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>Apellidos</label>
                             <input type="text" name="apellidos" value={formData.apellidos} onChange={handleChange} required/>
                         </div>
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>R.U.C.</label>
                             <input type="text" name="nroRuc" value={formData.nroRuc} onChange={handleChange} />
                         </div>
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>Fecha de Nacimiento</label>
                             <input type="date" name="fecNacimiento" value={formData.fecNacimiento} onChange={handleChange} required/>
                         </div>
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>Último Título Obtenido</label>
                             <select name="codNivelEstudio" value={formData.codNivelEstudio} onChange={handleChange} >
                                 <option value="P">Primario</option>
@@ -225,7 +225,7 @@ const AbmEmpleados = () => {
                                 ¿Posee Discapacidad?
                             </label>
                         </div>
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>Discapacidad</label>
                             <input type="text"
                             name="descripcionDiscapacidad"
@@ -234,11 +234,11 @@ const AbmEmpleados = () => {
                             disabled={!formData.poseeDiscapacidad}
                             required={formData.poseeDiscapacidad} />
                         </div>
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>Dirección Particular</label>
                             <input type="text" name="direccionParticular" value={formData.direccionParticular} onChange={handleChange} required/>
                         </div>
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>Estado Civil</label>
                             <select name="codEstadoCivil" value={formData.codEstadoCivil} onChange={handleChange}>
                                 <option value="1">Soltero/a</option>
@@ -246,23 +246,23 @@ const AbmEmpleados = () => {
                                 <option value="3">Viudo/a</option>
                             </select> 
                         </div>
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>Lugar de Nacimiento</label>
                             <input type="text" name="lugarNacimiento" value={formData.lugarNacimiento} onChange={handleChange} required/>
                         </div>
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>Número de Teléfono</label>
                             <input type="text" name="telefono" value={formData.telefono} onChange={handleChange} required/>
                         </div>
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>Correo Electrónico</label>
                             <input type="email" name="correo" value={formData.correo} onChange={handleChange} required/>
                         </div>
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>Foto de la Persona</label>
                             <input type="file" name="rutaFoto" value={formData.rutaFoto} onChange={handleChange}/>
                         </div>
-                        <div className="campo">
+                        <div className="campo-empleado">
                             {formData.foto && (
                                 <div className="image-preview">
                                     <img 
@@ -279,7 +279,7 @@ const AbmEmpleados = () => {
                 {step === 2 && (
                     <div className="formulario">
                         {/* Campos del Step 2 */}
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>Dependencia</label>
                             <select name="codDireccion" value={formData.codDireccion} onChange={handleChange} required>
                                 <option value="1">DIRECCION DE GESTION Y DESARROLLO DE PERSONAS</option>
@@ -289,29 +289,29 @@ const AbmEmpleados = () => {
                                 <option value="5">DIRECCION DE ADMINISTRACION Y FINANZAS</option>
                             </select> 
                         </div>
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>Cargo</label>
                             <select name="codCargo" value={formData.codCargo} onChange={handleChange} required>
                                 <option value="1">AUXILIAR</option>
                                 <option value="2">AUXILIAR</option>
                             </select> 
                         </div>
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>Fecha de Inicio</label>
                             <input type="date" name="fecIngreso" value={formData.fecIngreso} onChange={handleChange} />
                         </div>
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>Fecha de Acto Administrativo</label>
                             <input type="date" name="fecActoAdministrativo" value={formData.fecActoAdministrativo} onChange={handleChange} />
                         </div>
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>Asignación</label>
                             <input type="number"
                             name="asignacion"
                             value={formData.asignacion}
                             onChange={handleChange} />
                         </div>
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>Sede</label>
                             <select name="codSede" value={formData.codSede} onChange={handleChange} >
                                 <option value="1">Sede Central</option>
@@ -320,7 +320,7 @@ const AbmEmpleados = () => {
                                 <option value="4">Juzgado de Faltas</option>
                             </select> 
                         </div>
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>Situación Laboral</label>
                             <select name="codSituacionLaboral" value={formData.codSituacionLaboral} onChange={handleChange} >
                                 <option value="1">Contratado</option>
@@ -330,15 +330,15 @@ const AbmEmpleados = () => {
                                 <option value="2">Permanente</option>
                             </select> 
                         </div>
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>Horario de Entrada</label>
                             <input type="time" name="horaEntrada" value={formData.horaEntrada} onChange={handleChange} />
                         </div>
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>Horario de Salida</label>
                             <input type="time" name="horaSalida" value={formData.horaSalida} onChange={handleChange} />
                         </div>
-                        <div className="campo">
+                        <div className="campo-empleado">
                             <label>Nro. de Resolución</label>
                             <input type="text" name="nroResolucion" value={formData.nroResolucion} onChange={handleChange} />
                         </div>

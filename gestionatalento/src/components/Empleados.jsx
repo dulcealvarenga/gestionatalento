@@ -44,13 +44,17 @@ const Empleados = () => {
         if (codEmpleado) {
             axios.get(`http://localhost:8080/empleados/obtener/id/${codEmpleado}`)
                 .then(res => {
-                    setListaEmpleados([res.data.objeto]); // Lo envolvés en array porque tu tabla espera una lista
+                    const objeto = {
+                        empleado: res.data.objeto
+                      };
+                    setListaEmpleados([objeto]); // Lo envolvés en array porque tu tabla espera una lista
                     localStorage.removeItem("empleadoBuscado"); // Limpieza
                 });
         } else {
             // Trae toda la lista si no vino filtrado
             axios.get("http://localhost:8080/empleados/obtenerLista")
                 .then(response => {
+                    console.log(response.data.objeto);
                     setListaEmpleados(response.data.objeto);
                 });
         }

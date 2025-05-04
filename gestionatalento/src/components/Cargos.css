@@ -18,7 +18,7 @@
 
 .tabla-header,
 .tabla-row {
-    display: grid;
+    ;
     grid-template-columns: 70px 3fr 150px 150px 150px 70px;
     padding: 16px 12px;
     align-items: center;
