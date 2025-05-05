@@ -1,16 +1,53 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./MarcacionesImportadas.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const MarcacionesImportadas = () => {
-    const datos = [
-        { id: 1, documento: "1.234.567", marcaciones: 50, primera: "01/01/2022", ultima: "30/11/2024" },
-        { id: 2, documento: "1.234.567", marcaciones: 50, primera: "01/01/2022", ultima: "30/11/2024" },
-        { id: 3, documento: "1.234.567", marcaciones: 50, primera: "01/01/2022", ultima: "30/11/2024" },
-        { id: 4, documento: "1.234.567", marcaciones: 50, primera: "01/01/2022", ultima: "30/11/2024" },
-    ];
+
+    const [marcaciones, setMarcaciones] = useState([]);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const obtenerMarcaciones = async () => {
+            try {
+                const response = await axios.post("http://localhost:8080/marcaciones/manuales/obtener", {
+                    nroDocumento: "12344",
+                    fecDesde: "2025-05-01",
+                    fecHasta: "2025-05-19"
+                });
+
+                if (response.data.codigoMensaje === "200") {
+                    const datos = response.data.objeto;
+
+                    // Agrupar por nroDocumento (aunque ahora es uno solo)
+                    const agrupado = datos.reduce((acc, curr) => {
+                        if (!acc[curr.nroDocumento]) acc[curr.nroDocumento] = [];
+                        acc[curr.nroDocumento].push(curr);
+                        return acc;
+                    }, {});
+
+                    const resultado = Object.entries(agrupado).map(([doc, registros], index) => {
+                        const fechas = registros.map(r => r.fecha).sort();
+                        return {
+                            id: index + 1,
+                            documento: doc,
+                            marcaciones: registros.length,
+                            primera: fechas[0],
+                            ultima: fechas[fechas.length - 1]
+                        };
+                    });
+
+                    setMarcaciones(resultado);
+                }
+            } catch (error) {
+                console.error("Error al obtener marcaciones:", error);
+            }
+        };
+
+        obtenerMarcaciones();
+    }, []);
 
     return (
         <div className="marcaciones-importadas">
@@ -19,8 +56,10 @@ const MarcacionesImportadas = () => {
                 <span className="importar-btn" onClick={() => navigate("/marcaciones")}>← Volver</span>
                 <span className="importar-btn"
                       onClick={() => navigate("/marcaciones/importadas/abm")}>＋ Importar Marcaciones</span>
+                {/* Este es un comentario dentro del JSX
                 <span className="importar-btn"
                       onClick={() => navigate("/marcaciones/pendrive/abm")}>＋ Importar Pendrive</span>
+                */}
             </div>
             <div className="tabla">
                 <div className="encabezado">
@@ -30,7 +69,7 @@ const MarcacionesImportadas = () => {
                     <span>Primera Fecha de Registro</span>
                     <span>Ultima Fecha de Registro</span>
                 </div>
-                {datos.map((d) => (
+                {marcaciones.map((d) => (
                     <div key={d.id} className="fila">
                         <span>{d.id}</span>
                         <span>{d.documento}</span>

@@ -27,6 +27,12 @@
     gap: 15px;
 }
 
+.fila-doble {
+    display: flex;
+    gap: 15px;
+    width: 66%;
+}
+
 .campo {
     flex: 1;
     display: flex;
@@ -52,8 +58,7 @@
     display: flex;
     justify-content: flex-end;
     margin-top: 10px;
-    width: 15%;
-    margin-right: 50px;
+    width: 30%;
 }
 
 .btn-guardar {

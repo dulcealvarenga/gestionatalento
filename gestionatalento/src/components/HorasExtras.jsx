@@ -1,53 +1,59 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import "./HorasExtras.css";
+import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 const HorasExtras = () => {
     const navigate = useNavigate();
+    const [listaHorasExtras, setListaHorasExtras] = useState([]);
 
-    // Simulación de datos
-    const registros = [
-        {
-            id: 1,
-            foto: "/avatar.png",
-            documento: "1.234.567",
-            nombre: "Juan Jose",
-            apellido: "Perez Villar",
-            horaSalida: "12:30",
-            exonera: "N",
-            horasExtras: 0,
-        },
-        {
-            id: 2,
-            foto: "/avatar.png",
-            documento: "1.234.567",
-            nombre: "Juan Jose",
-            apellido: "Perez Villar",
-            horaSalida: "12:30",
-            exonera: "N",
-            horasExtras: 0,
-        },
-        {
-            id: 3,
-            foto: "/avatar.png",
-            documento: "1.234.567",
-            nombre: "Juan Jose",
-            apellido: "Perez Villar",
-            horaSalida: "12:30",
-            exonera: "N",
-            horasExtras: 0,
-        },
-        {
-            id: 4,
-            foto: "/avatar.png",
-            documento: "1.234.567",
-            nombre: "Juan Jose",
-            apellido: "Perez Villar",
-            horaSalida: "12:30",
-            exonera: "N",
-            horasExtras: 0,
-        },
-    ];
+    useEffect(() => {
+        const obtenerLista = async () => {
+            try {
+                const response = await axios.get("http://localhost:8080/horas-extras/obtenerLista");
+                if (response.data.codigoMensaje === "200") {
+                    setListaHorasExtras(response.data.objeto);
+                } else {
+                    toast.error("Error al cargar lista");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                toast.error("Fallo en la carga de datos");
+            }
+        };
+
+        obtenerLista();
+    }, []);
+
+    const handleExportarExcel = () => {
+        const datosExportar = listaHorasExtras.map((item, index) => {
+            const persona = item.horaExtra.empleado.persona;
+            const empleado = item.horaExtra.empleado;
+            const horaExtra = item.horaExtra;
+
+            return {
+                ID: index + 1,
+                Documento: persona.nroDocumento,
+                Nombres: persona.nombres,
+                Apellidos: persona.apellidos,
+                HoraSalida: empleado.horaSalida,
+                Exonerado: horaExtra.exoneraEntrada,
+                HorasExtra: horaExtra.horaExtra,
+                Monto: horaExtra.monto
+            };
+        });
+
+        const ws = XLSX.utils.json_to_sheet(datosExportar);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Horas Extras");
+
+        const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+        const archivo = new Blob([excelBuffer], { type: "application/octet-stream" });
+        saveAs(archivo, "horas_extras.xlsx");
+    };
 
     return (
         <div className="horas-extras-container">
@@ -56,8 +62,6 @@ const HorasExtras = () => {
 
             <div className="filtros-horas-extras">
                 <div className="acciones-filtros">
-                    <input type="date"/>
-                    <input type="date"/>
                     <select>
                         <option value="">Mostrar Sello</option>
                         <option value="si">Sí</option>
@@ -67,40 +71,49 @@ const HorasExtras = () => {
                 <div className="botones-acciones">
                         <button className="btn-volver" onClick={() => navigate("/marcaciones")}>← Volver</button>
                         <button className="btn-agregar" onClick={() => navigate("/marcaciones/horasExtras/abm")}>AGREGAR</button>
-                        <button className="btn-exportar">EXPORTAR</button>
+                        <button className="btn-exportar" onClick={handleExportarExcel}>EXPORTAR</button>
                 </div>
             </div>
 
-                <table className="tabla-horas-extras">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Foto</th>
-                        <th>Nro. de Documento</th>
-                        <th>Nombres</th>
-                        <th>Apellidos</th>
-                        <th>Hora de Salida</th>
-                        <th>Exon.</th>
-                        <th>Horas Extras Planilla</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {registros.map((r) => (
-                        <tr key={r.id}>
-                            <td>{r.id}</td>
-                            <td><img src={r.foto} alt="Foto"/></td>
-                            <td>{r.documento}</td>
-                            <td>{r.nombre}</td>
-                            <td>{r.apellido}</td>
-                            <td>{r.horaSalida}</td>
-                            <td>{r.exonera}</td>
-                            <td>{r.horasExtras}</td>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
-            </div>
-            );
-            };
+            <table className="tabla-horas-extras">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Foto</th>
+                    <th>Nro. de Documento</th>
+                    <th>Nombres</th>
+                    <th>Apellidos</th>
+                    <th>Hora de Salida</th>
+                    <th>Exon.</th>
+                    <th>Horas Extras Planilla</th>
+                </tr>
+                </thead>
+                <tbody>
+                {listaHorasExtras.map((item, index) => {
+                    const persona = item.horaExtra.empleado.persona;
+                    const empleado = item.horaExtra.empleado;
+                    const horaExtra = item.horaExtra;
 
-            export default HorasExtras;
+                    return (
+                        <tr key={index}>
+                            <td>{index + 1}</td>
+                            <td><i className="icon-user-circle"/></td>
+                            {/* o usa una imagen si la tenés: persona.rutaFoto */}
+                            <td>{persona.nroDocumento}</td>
+                            <td>{persona.nombres}</td>
+                            <td>{persona.apellidos}</td>
+                            <td>{empleado.horaSalida}</td>
+                            <td>{horaExtra.exoneraEntrada}</td>
+                            <td>{horaExtra.horaExtra}</td>
+                        </tr>
+                    );
+                })}
+                </tbody>
+
+            </table>
+            <ToastContainer/>
+        </div>
+    );
+};
+
+export default HorasExtras;

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AbmMarcacionesImportadas.css";
+import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
 
 const AbmMarcacionesImportadas = () => {
     const navigate = useNavigate();
@@ -13,10 +15,49 @@ const AbmMarcacionesImportadas = () => {
         else if (tipo === "checkout") setCheckoutFile(file);
     };
 
-    const handleImportar = () => {
-        console.log("Archivo USERINFO:", userinfoFile);
-        console.log("Archivo CHECKOUT:", checkoutFile);
-        // Enviar con FormData si hace falta
+    const handleImportar = async () => {
+        try {
+            if (userinfoFile) {
+                const formData = new FormData();
+                formData.append("file", userinfoFile);
+
+                const response = await axios.post("http://localhost:8080/marcaciones/exportacion/cargar-usuario", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+
+                if (response.data.codigoMensaje === "200") {
+                    toast.success("Archivo USERINFO importado correctamente");
+                } else {
+                    toast.error("Error al importar USERINFO: " + response.data.mensaje);
+                }
+            }
+
+            if (checkoutFile) {
+                const formData = new FormData();
+                formData.append("file", checkoutFile);
+
+                const response = await axios.post("http://localhost:8080/marcaciones/exportacion/cargar-marcacion", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+
+                if (response.data.codigoMensaje === "200") {
+                    toast.success("Archivo CHECKOUT importado correctamente");
+                } else {
+                    toast.error("Error al importar CHECKOUT: " + response.data.mensaje);
+                }
+            }
+
+            if (!userinfoFile && !checkoutFile) {
+                toast.info("No hay archivos seleccionados");
+            }
+        } catch (error) {
+            console.error("Error al importar archivos:", error);
+            toast.error("Ocurrió un error al importar");
+        }
     };
 
     return (
@@ -43,6 +84,7 @@ const AbmMarcacionesImportadas = () => {
             </div>
 
             <button className="importar-btn" onClick={handleImportar}>IMPORTAR</button>
+            <ToastContainer/>
         </div>
     );
 };

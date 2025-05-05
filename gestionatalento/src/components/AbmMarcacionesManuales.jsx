@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import axios from "axios";
 
 const MarcacionesManuales = () => {
 
@@ -24,9 +25,52 @@ const MarcacionesManuales = () => {
     const [modoEdicion, setModoEdicion] = useState(false);
     const [indiceEditando, setIndiceEditando] = useState(null);
 
-    const [nroDocumento, setNroDocumento] = useState("");
-    const [nombres, setNombres] = useState("");
-    const [apellidos, setApellidos] = useState("");
+    const [formData, setFormData] = useState({
+        nroDocumento: "",
+        nombres: "",
+        apellidos: "",
+        fechaDesde: "",
+        fechaHasta: "",
+        entrada: "",
+        salida: "",
+    });
+
+    const handleBuscarPorDocumento = async () => {
+        const nroDocumento = formData.nroDocumento;
+        if (!nroDocumento) return;
+        try {
+            const response = await axios.get('http://localhost:8080/personas/obtener/documento/' + nroDocumento);
+            if (response.data.codigoMensaje === "200") {
+                toast.success("Persona encontrada", { autoClose: 2000 });
+                const persona = response.data.objeto;
+                localStorage.setItem('codPersona', persona.codPersona);
+                setFormData(prev => ({
+                    ...prev,
+                    nombres: persona.nombres || '',
+                    apellidos: persona.apellidos || '',
+                    nroRuc: persona.nroRuc || '',
+                    fecNacimiento: persona.fecNacimiento || '',
+                    codNivelEstudio: persona.codNivelEstudio || '',
+                    poseeDiscapacidad: persona.poseeDiscapacidad === "S",
+                    descripcionDiscapacidad: persona.descripcionDiscapacidad || '',
+                    direccionParticular: persona.direccionParticular || '',
+                    codEstadoCivil: persona.estadoCivil?.codEstadoCivil || '',
+                    lugarNacimiento: persona.lugarNacimiento || '',
+                    telefono: persona.telefono || '',
+                    correo: persona.correo || ''
+                }));
+            } else {
+                toast.info("No se encontró la persona registrada, avanzar con el registro", { autoClose: 2000 });
+            }
+        } catch (error) {
+            console.error("Error al buscar persona:", error);
+            toast.error("Error al buscar persona", { autoClose: 2000 });
+        }
+    };
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
     const generarRangoFechas = (desde, hasta) => {
         const resultado = [];
@@ -156,11 +200,19 @@ const MarcacionesManuales = () => {
     };
 
     const handleLimpiar = () => {
-        setNroDocumento("");
-        setNombres("");
-        setApellidos("");
-        setFechaDesde("");
-        setFechaHasta("");
+        setFormData({
+            nroDocumento: "",
+            nombres: "",
+            apellidos: "",
+            fechaDesde: "",
+            fechaHasta: "",
+            mostrarSello: "",
+            mostrarExtras: "",
+            limiteExtras: "",
+            exoneracionEntrada: "",
+            entrada: "",
+            salida: "",
+        });
         setFechasRango([]);
         setIndiceActual(0);
         setEntrada("");
@@ -176,6 +228,47 @@ const MarcacionesManuales = () => {
         });
     };
 
+    const handleEnviarAlBackend = async () => {
+        const codPersona = localStorage.getItem('codPersona');
+
+        if (!codPersona) {
+            toast.error("No se encontró codPersona en localStorage");
+            return;
+        }
+
+        if (registros.length === 0) {
+            toast.info("No hay registros para enviar");
+            return;
+        }
+
+        const body = {
+            nroMarcacion: null,
+            persona: {
+                codPersona: parseInt(codPersona)
+            },
+            marcacion: registros.map(r => {
+                return r.entrada && r.salida
+                    ? [
+                        `${r.fecha}T${r.entrada}`,
+                        `${r.fecha}T${r.salida}`
+                    ]
+                    : [];
+            }).flat()
+        };
+
+        try {
+            const response = await axios.post('http://localhost:8080/marcaciones/manuales/crear', body);
+            if (response.data.codigoMensaje === "200") {
+                toast.success("Marcaciones enviadas con éxito", { autoClose: 2000 });
+                handleLimpiar();
+            } else {
+                toast.error("Error al guardar marcaciones: " + response.data.mensaje);
+            }
+        } catch (error) {
+            console.error("Error al enviar marcaciones:", error);
+            toast.error("Error al enviar marcaciones");
+        }
+    };
 
     return (
         <div className="marcaciones-container">
@@ -186,16 +279,27 @@ const MarcacionesManuales = () => {
                 <div className="fila-superior">
                     <div className="campo">
                         <label>Nro. de Documento</label>
-                        <input type="text" value={nroDocumento} onChange={(e) => setNroDocumento(e.target.value)}/>
-                    </div>
+                        <input
+                            type="text"
+                            name="nroDocumento"
+                            value={formData.nroDocumento}
+                            onChange={handleChange}
+                            onBlur={handleBuscarPorDocumento}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    handleBuscarPorDocumento();
+                                }
+                            }}
+                            required
+                        /></div>
                     <div className="campo">
                     <label>Nombres</label>
-                        <input type="text" value={nombres} onChange={(e) => setNombres(e.target.value)}/>
+                        <input name="nombres" value={formData.nombres} onChange={handleChange}/>
                     </div>
                     <div className="campo">
                     <label>Apellidos</label>
-                        <input type="text" value={apellidos} onChange={(e) => setApellidos(e.target.value)}/>
-                    </div>
+                        <input name="apellidos" value={formData.apellidos}
+                               onChange={handleChange}/></div>
                 </div>
 
                 <div className="fila-superior">
@@ -281,7 +385,7 @@ const MarcacionesManuales = () => {
 
                 <div className="acciones-man">
                     <button className="btn-limpiar" onClick={handleLimpiar}>LIMPIAR</button>
-                    <button className="btn-agregar">AGREGAR</button>
+                    <button className="btn-agregar" onClick={handleEnviarAlBackend}>AGREGAR</button>
                 </div>
                 <ToastContainer/>
             </div>
