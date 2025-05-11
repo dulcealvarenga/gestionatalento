@@ -32,6 +32,7 @@ import AbmCargo from "./components/AbmCargo";
 import DashKPI from "./components/DashKPI";
 import Contratos from "./components/Contratos.jsx";
 import AbmContratos from "./components/AbmContratos.jsx";
+import Intranet from "./components/Intranet.jsx";
 
 function App() {
     return (
@@ -257,6 +258,14 @@ function App() {
                         <div className="app-container">
                             <Sidebar/>
                             <AbmContratos/>
+                        </div>
+                    }
+                />
+                <Route
+                    path="/intranet"
+                    element={
+                        <div className="app-container">
+                            <Intranet/>
                         </div>
                     }
                 />

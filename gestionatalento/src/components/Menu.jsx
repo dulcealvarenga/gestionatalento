@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Menu.css";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import axios from "axios";
 
@@ -13,6 +14,7 @@ const Menu = () => {
     const [resultados, setResultados] = useState([]);
 
     const [datosLaborales, setDatosLaborales] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (mensaje) {
@@ -232,7 +234,7 @@ const Menu = () => {
                     Información Adicional
                 </label>
                 <div className="button-row">
-                    <button style={{ fontSize: "20px" }}>Datos Personales</button>
+                    <button  onClick={() => navigate("/intranet")} style={{ fontSize: "20px" }}>Intranet</button>
                     <button style={{ fontSize: "20px" }}>Datos Laborales</button>
                 </div>
                 <label style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "50px" }}>
