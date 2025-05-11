@@ -1,19 +1,26 @@
-.abm-horas-extras-container {
-    padding: 30px;
-    color: white;
-    font-family: "Poppins", sans-serif;
+.abm-contratos-container {
+    padding: 40px 60px 40px 240px; /* espacio lateral por sidebar */
+    background-color: #1d1f2f;
     min-height: 100vh;
-    margin-left: 220px;
+    color: #ffffff;
+    font-family: "Poppins", sans-serif;
+}
+
+.abm-contratos-container h1 {
+    font-size: 2.2rem;
+    margin-bottom: 5px;
 }
 
 .volver-btn {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 1rem;
+    margin-bottom: 25px;
     cursor: pointer;
-    font-size: 18px;
-    margin-bottom: 15px;
-    color: #ccc;
 }
 
-.form-card-horas {
+.form-contrato {
     background-color: #44465f;
     border-radius: 10px;
     padding: 20px;
@@ -22,30 +29,30 @@
     gap: 20px;
 }
 
-.fila-triple {
+.form-grid {
     display: flex;
     gap: 15px;
 }
 
-.fila-doble {
+.form-grid-dos {
     display: flex;
     gap: 15px;
-    width: 66%;
+    margin-top: -50px;
 }
 
-.campo {
+.form-group {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
-.campo label {
+.form-group label {
     margin-bottom: 5px;
     font-weight: 500;
 }
 
-.campo input,
-.campo select {
+.form-group input,
+.form-group select {
     padding: 10px;
     border-radius: 10px;
     border: none;
@@ -54,14 +61,15 @@
     font-size: 14px;
 }
 
-.acciones-form {
+.btn-guardar-container {
     display: flex;
     justify-content: flex-end;
     margin-top: 10px;
-    width: 30%;
+    margin-left: auto;
+    width: 15%;
 }
 
-.btn-guardar {
+.guardar-btn {
     background-color: #7278a5;
     color: white;
     border: none;
@@ -70,9 +78,8 @@
     font-weight: bold;
     cursor: pointer;
     font-size: 14px;
-
 }
 
-.btn-guardar:hover {
+.guardar-btn:hover {
     background-color: #8388b5;
 }

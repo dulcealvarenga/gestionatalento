@@ -1,0 +1,113 @@
+/* === Variables === */
+:root {
+    --bg-dark: #1d1f2f;
+    --bg-soft: #2c2e3e;
+    --text-main: #ffffff;
+    --text-sub: #c7c9d3;
+    --accent: #565b76;
+    --accent-hover: #6e7392;
+    --border: #3d4057;
+    --highlight: #4caf50;
+    --header-bg: #3a3f58;
+}
+
+/* === Container de contratos === */
+.contratos-container {
+    padding: 40px 60px 40px 240px;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    min-height: 100vh;
+    font-family: "Poppins", sans-serif;
+}
+
+h1 {
+    margin-bottom: 10px;
+    font-size: 40px;
+}
+
+.acciones-title-con {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+}
+
+/* === Botones === */
+.boton-accion {
+    padding: 10px 30px;
+    background: #2a2b3d;
+    border: none;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-bottom: 10px;
+}
+
+.boton-accion:hover {
+    background: #3a3b4d;
+}
+
+/* === Tabla contratos === */
+.tabla-contratos {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    margin-top: 20px;
+}
+
+.tabla-contratos th {
+    background-color: #40425c;
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    border-radius: 10px 10px 0 0;
+}
+
+.tabla-contratos td {
+    background-color: var(--bg-soft);
+    color: white;
+    padding: 10px 14px;
+    border-radius: 10px;
+    vertical-align: middle;
+    font-size: 15px;
+}
+
+.tabla-contratos tbody tr:hover td {
+    background-color: var(--accent-hover);
+    transition: background-color 0.3s ease;
+}
+
+.ver-btn {
+    background-color: var(--header-bg);
+    border: none;
+    padding: 4px 12px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.ver-btn:hover {
+    background-color: var(--accent-hover);
+}
+
+/* === Input y select estilizados === */
+.form-group input,
+.form-group select {
+    padding: 12px;
+    border: none;
+    border-radius: 16px;
+    background-color: #8a94a8;
+    color: #ffffff;
+    font-size: 15px;
+    width: 100%;
+}
+
+.form-group input::placeholder {
+    color: #d6d6d6;
+}
+
+
+
+/* === Filtros, modal, dropdown etc pueden ser reutilizados si tenés estilos ya existentes === */

@@ -30,6 +30,8 @@ import AbmDirecciones from "./components/AbmDirecciones";
 import Cargos from "./components/Cargos";
 import AbmCargo from "./components/AbmCargo";
 import DashKPI from "./components/DashKPI";
+import Contratos from "./components/Contratos.jsx";
+import AbmContratos from "./components/AbmContratos.jsx";
 
 function App() {
     return (
@@ -236,6 +238,25 @@ function App() {
                         <div className="app-container">
                             <Sidebar/>
                             <DashKPI/>
+                        </div>
+                    }
+                />
+
+                <Route
+                    path="/contratos"
+                    element={
+                        <div className="app-container">
+                            <Sidebar/>
+                            <Contratos/>
+                        </div>
+                    }
+                />
+                <Route
+                    path="/contratos/abm"
+                    element={
+                        <div className="app-container">
+                            <Sidebar/>
+                            <AbmContratos/>
                         </div>
                     }
                 />
