@@ -16,9 +16,9 @@ const HorasExtras = () => {
                 const response = await axios.get("http://localhost:8080/horas-extras/obtenerLista");
                 if (response.data.codigoMensaje === "200") {
                     setListaHorasExtras(response.data.objeto);
-                } else {
+                } /*else {
                     toast.error("Error al cargar lista");
-                }
+                }*/
             } catch (error) {
                 console.error("Error:", error);
                 toast.error("Fallo en la carga de datos");

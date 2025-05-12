@@ -1,0 +1,79 @@
+.abm-container {
+    padding: 40px;
+    color: white;
+    font-family: "Segoe UI", sans-serif;
+    width: calc(100% - 220px);
+    margin-left: 220px;
+    box-sizing: border-box;
+}
+
+.abm-container h1 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.volver-btn {
+    background: none;
+    color: white;
+    border: none;
+    font-size: 16px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.abm-form {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+input,
+select {
+    flex: 1;
+    min-width: 180px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 14px;
+    color: white;
+}
+
+input::placeholder,
+select:invalid {
+    color: #ccc;
+}
+
+select {
+    appearance: none;
+}
+
+.guardar-btn-wrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.guardar-btn {
+    background-color: #8f9eff;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 12px 24px;
+    font-weight: bold;
+    cursor: pointer;
+    letter-spacing: 1px;
+    font-size: 14px;
+}
