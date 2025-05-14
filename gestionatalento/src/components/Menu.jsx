@@ -5,7 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import axios from "axios";
 
 const Menu = () => {
-    const [searchType, setSearchType] = useState("ci");
+    const [searchType, setSearchType] = useState("documento");
     const [searchValue, setSearchValue] = useState("");
     const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState(null);
     const [coincidencias, setCoincidencias] = useState([]);
@@ -320,10 +320,14 @@ const Menu = () => {
                     <textarea
                         style={{ width: "96%", height: "200px", resize: "none" }}
                         disabled
-                        value={empleadoSeleccionado?.poseeDiscapacidad === 'S'
-                            ? `Discapacidad: ${empleadoSeleccionado.descripcionDiscapacidad || "No especificado"}`
-                            : "Sin discapacidad"}
-
+                        value={
+                            empleadoSeleccionado
+                                ? (empleadoSeleccionado.poseeDiscapacidad === 'S'
+                                        ? `Discapacidad: ${empleadoSeleccionado.descripcionDiscapacidad || "No especificado"}`
+                                        : "Sin discapacidad"
+                                )
+                                : ""
+                        }
                     />
                 </div>
             </div>
