@@ -2,14 +2,18 @@
 import React from 'react';
 import './Salarios.css';
 import { FaEdit } from 'react-icons/fa';
+import {useNavigate} from "react-router-dom";
 
 const Salarios = () => {
+
+    const navigate = useNavigate();
+
     return (
         <div className="salaries-container">
             <h1>Salarios</h1>
 
             <div className="actions-section">
-                <button className="primary-btn">AGREGAR SALARIOS</button>
+                <button className="primary-btn" onClick={() => navigate("/salarios/abm")}>AGREGAR SALARIOS</button>
                 <button className="primary-btn">INCLUIR AGUINALDO</button>
 
                 <div className="search-group">

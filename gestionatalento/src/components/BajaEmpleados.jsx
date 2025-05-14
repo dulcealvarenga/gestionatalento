@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 import "./BajaEmpleados.css";
 
 const BajaEmpleados = () => {
@@ -21,6 +22,8 @@ const BajaEmpleados = () => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     };
+
+    const navigate = useNavigate();
 
     const buscarEmpleadoPorDocumento = async () => {
         const nroDocumento = form.nroDocumento;
@@ -103,46 +106,70 @@ const BajaEmpleados = () => {
     return (
         <div className="baja-container">
             <h2>Baja de Funcionarios</h2>
-            <button className="volver" onClick={() => window.history.back()}>← Volver</button>
+            <button className="volver-emp" onClick={() => navigate("/empleados")}>← Volver</button>
 
             <div className="baja-form">
-                <input
-                    name="nroDocumento"
-                    placeholder="Nro. de Documento"
-                    value={form.nroDocumento}
-                    onChange={handleChange}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                            e.preventDefault(); // Evita que el form se recargue
-                            buscarEmpleadoPorDocumento;
-                        }
-                    }}
-                    onBlur={buscarEmpleadoPorDocumento}
-                />
-                <input name="nombres" placeholder="Nombres" value={form.nombres} disabled/>
-
-                <input name="apellidos" placeholder="Apellidos" value={form.apellidos} disabled/>
-
-                <input name="cargo" placeholder="Cargo" value={form.cargo} disabled/>
-
-                <input
-                    name="fecActoAdministrativo"
-                    type="date"
-                    value={form.fecActoAdministrativo}
-                    onChange={handleChange} disabled
-                />
-
-                <input name="situacionLaboral" placeholder="Situación Laboral" value={form.situacionLaboral} disabled/>
-                
-                Fecha de Egreso:
-                <input name="fecEgreso" type="date" value={form.fecEgreso} onChange={handleChange} required/>
-                <input name="observacion" placeholder="Comentario" value={form.observacion} onChange={handleChange}/>
-
+                <div className="form-row">
+                    <div className="campo">
+                        <label>Nro. de Documento</label>
+                        <input
+                            name="nroDocumento"
+                            value={form.nroDocumento}
+                            onChange={handleChange}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    e.preventDefault(); // Evita que el form se recargue
+                                    buscarEmpleadoPorDocumento;
+                                }
+                            }}
+                            onBlur={buscarEmpleadoPorDocumento}
+                        />
+                    </div>
+                    <div className="campo">
+                        <label>Nombres</label>
+                        <input name="nombres" value={form.nombres} disabled/>
+                    </div>
+                    <div className="campo">
+                        <label>Apellidos</label>
+                        <input name="apellidos" value={form.apellidos} disabled/>
+                    </div>
+                </div>
+                <div className="form-row">
+                    <div className="campo">
+                        <label>Cargo</label>
+                        <input name="cargo" placeholder="Cargo" value={form.cargo} disabled/>
+                    </div>
+                    <div className="campo">
+                        <label>Fecha de Acto Administrativo</label>
+                        <input
+                            name="fecActoAdministrativo"
+                            type="date"
+                            value={form.fecActoAdministrativo}
+                            onChange={handleChange} disabled
+                        />
+                    </div>
+                    <div className="campo">
+                        <label>Situacion Laboral</label>
+                        <input name="situacionLaboral" placeholder="Situación Laboral" value={form.situacionLaboral}
+                               disabled/>
+                    </div>
+                </div>
+                <div className="form-row">
+                    <div className="campo">
+                        <label>Fecha de Egreso</label>
+                        <input name="fecEgreso" type="date" value={form.fecEgreso} onChange={handleChange} required/>
+                    </div>
+                    <div className="campo">
+                        <label>Comentario</label>
+                        <input name="observacion" placeholder="Comentario" value={form.observacion}
+                               onChange={handleChange}/>
+                    </div>
+                </div>
                 <button className="baja-btn" onClick={handleDarDeBaja}>DAR DE BAJA</button>
             </div>
-            <ToastContainer />
+            <ToastContainer/>
         </div>
     );
 };
 
-export default BajaEmpleados;
+            export default BajaEmpleados;

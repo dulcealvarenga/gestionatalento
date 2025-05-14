@@ -1,42 +1,42 @@
 .baja-container {
-    padding: 30px;
-    background: #1f2235;
+    padding: 20px;
+    background-color: #1e1f2f;
     color: white;
-    font-family: "Inter", sans-serif;
-    margin-left: 220px;
+    font-family: "Poppins", sans-serif;
     min-height: 100vh;
+    margin-left: 220px;
 }
 
-.volver {
+.baja-container h2 {
+    font-size: 50px;
+}
+
+.volver-emp {
     background: none;
     color: #ccc;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    margin-bottom: 1rem;
+    font-size: 20px;
 }
 
 .baja-form {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    background-color: #2d2e4f;
-    padding: 2rem;
-    border-radius: 10px;
-    margin-top: 1rem;
+    background-color: #44465f;
+    border-radius: 12px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .baja-form input {
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 20px;
     border: none;
-    background-color: #55576d;
+    background-color: #5a5d82;
     color: white;
     font-size: 16px;
 }
 
 .baja-form input:disabled {
-    background-color: #444558;
+    background-color: #5a5d82;
     color: #ccc;
 }
 
@@ -47,10 +47,11 @@
     border: none;
     padding: 12px 20px;
     font-size: 18px;
-    border-radius: 8px;
+    border-radius: 20px;
     cursor: pointer;
     margin-top: 10px;
     transition: 0.2s;
+    width: 20%;
 }
 
 .baja-btn:hover {

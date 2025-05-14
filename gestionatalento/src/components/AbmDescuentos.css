@@ -124,11 +124,12 @@
     min-width: 180px;
     display: flex;
     flex-direction: column;
+    border-radius: 20px;
 }
 
 .campo input {
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 20px;
     background-color: #5c5e78;
     border: none;
     color: white;
