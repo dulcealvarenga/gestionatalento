@@ -28,7 +28,6 @@ const DescuentosSalariales = () => {
             <h1>Descuentos Salariales</h1>
             <p className="acciones-title">Acciones</p>
 
-
             <div className="acciones-top-row">
                 <button className="btn-agregar" onClick={() => navigate("/descuentos/abm")}>AGREGAR</button>
                 <select className="select-mes">

@@ -77,9 +77,9 @@
     color: white;
     border-radius: 15px;
     cursor: pointer;
-    flex: 0 0 auto;       /* ✨ evita que se estiren */
-    min-width: 100px;     /* ✨ fija un ancho mínimo */
-    max-width: 200px;     /* opcional: para evitar que crezcan demasiado */
+    flex: 0 0 auto;
+    min-width: 100px;
+    max-width: 200px;
     text-align: center;
 }
 

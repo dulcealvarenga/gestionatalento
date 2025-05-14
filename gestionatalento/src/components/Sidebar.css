@@ -90,3 +90,28 @@
     border-radius: 8px;
 }
 
+.sidebar.collapsed {
+    width: 70px;
+}
+
+.sidebar.collapsed .sidebar-menu li {
+    text-align: center;
+    padding: 18px 0;
+}
+
+.sidebar.collapsed .sidebar-menu li::before {
+    content: "•";
+    font-size: 20px;
+    display: block;
+    color: #8f99ff;
+}
+
+.sidebar.collapsed .sidebar-menu li.more-btn::before {
+    content: "⋮";
+}
+
+.sidebar.collapsed .sidebar-menu li span {
+    display: none;
+}
+
+

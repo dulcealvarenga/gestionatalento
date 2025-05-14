@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Sidebar.css";
 
 const Sidebar = () => {
-    const [showMore, setShowMore] = useState(false);
     const navigate = useNavigate();
 
     return (
@@ -20,16 +19,11 @@ const Sidebar = () => {
                 <li onClick={() => navigate("/empleados")}>Empleados</li>
                 <li onClick={() => navigate("/justificativos")}>Justificativos</li>
                 <li onClick={() => navigate("/vacaciones")}>Vacaciones</li>
+                <li onClick={() => navigate("/salarios")}>Salarios</li>
                 <li onClick={() => navigate("/descuentos")}>Desc. Salariales</li>
-                <li onClick={() => setShowMore(!showMore)} className="more-btn">⋮</li>
-
-                {showMore && (
-                    <div className="more-options">
-                        <li onClick={() => navigate("/contratos")}>Contratos</li>
-                        <li onClick={() => navigate("/marcaciones")}>Marcaciones</li>
-                        <li onClick={() => navigate("/configuraciones")}>Configuraciones</li>
-                    </div>
-                )}
+                <li onClick={() => navigate("/contratos")}>Contratos</li>
+                <li onClick={() => navigate("/marcaciones")}>Marcaciones</li>
+                <li onClick={() => navigate("/configuraciones")}>Configuraciones</li>
             </ul>
         </div>
     );

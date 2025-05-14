@@ -33,6 +33,7 @@ import DashKPI from "./components/DashKPI";
 import Contratos from "./components/Contratos.jsx";
 import AbmContratos from "./components/AbmContratos.jsx";
 import Intranet from "./components/Intranet.jsx";
+import Salarios from "./components/Salarios.jsx";
 
 function App() {
     return (
@@ -266,6 +267,15 @@ function App() {
                     element={
                         <div className="app-container">
                             <Intranet/>
+                        </div>
+                    }
+                />
+                <Route
+                    path="/salarios"
+                    element={
+                        <div className="app-container">
+                            <Sidebar/>
+                            <Salarios/>
                         </div>
                     }
                 />
