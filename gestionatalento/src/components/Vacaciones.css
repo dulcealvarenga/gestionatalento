@@ -1,56 +1,64 @@
-/* Vacaciones.css */
-.vacaciones-container {
+/* Contenedor principal */
+.justificativos-container {
     padding: 30px 40px;
     color: white;
-    font-family: "Segoe UI", sans-serif;
-    width: calc(100% - 220px);
+    width: calc(100% - 220px); /* evita solaparse con sidebar */
     margin-left: 220px;
     box-sizing: border-box;
     overflow-x: hidden;
 }
 
-.cabecera-vacaciones h1 {
+/* Cabecera principal */
+.cabecera-justificativos h1 {
     font-size: 36px;
-    font-weight: bold;
-    margin-bottom: 10px;
+    font-weight: 700;
+    margin: 0 0 8px;
 }
 
 .acciones-title {
-    font-size: 20px;
-    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: 400;
+    margin: 0 0 10px;
 }
 
+/* Barra de acciones */
 .acciones-barra {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     gap: 14px;
-    margin-bottom: 20px;
+    background-color: #1f2235;
+    padding: 20px;
+    border-radius: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 30px;
 }
 
+/* Botones */
 .boton-accion,
 .boton-buscar {
     background-color: #8f9eff;
     color: white;
     border: none;
     padding: 10px 24px;
-    border-radius: 20px;
+    border-radius: 12px;
     font-weight: bold;
-    cursor: pointer;
     font-size: 14px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+    cursor: pointer;
+    min-width: 130px;
+    text-align: center;
 }
 
+/* Selects */
 .select-mes,
 .select-anio {
     background-color: #2b2e4a;
-    border: none;
-    border-radius: 8px;
     color: white;
-    font-size: 15px;
-    padding: 8px 12px;
-    width: 120px;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    min-width: 100px;
     text-align: center;
 }
 
@@ -60,14 +68,14 @@
     border: 2px solid #8f9eff;
 }
 
-.tabla-vacaciones {
+/* Tabla */
+.tabla-justificativos {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 12px;
-    overflow-x: auto;
 }
 
-.tabla-vacaciones th {
+.tabla-justificativos th {
     background-color: #1f2235;
     color: white;
     padding: 14px;
@@ -78,7 +86,7 @@
     white-space: nowrap;
 }
 
-.tabla-vacaciones td {
+.tabla-justificativos td {
     background-color: #2b2e4a;
     padding: 14px;
     color: white;
@@ -87,6 +95,26 @@
     white-space: nowrap;
 }
 
-.tabla-vacaciones tbody tr {
+.tabla-justificativos tbody tr {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .justificativos-container {
+        padding: 20px;
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .acciones-barra {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .tabla-justificativos th,
+    .tabla-justificativos td {
+        font-size: 14px;
+        padding: 10px;
+    }
 }

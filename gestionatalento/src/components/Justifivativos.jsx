@@ -51,8 +51,9 @@ const Justificativos = () => {
         const periodo = `${anio}${mesesNumericos[mes]}`;
         try {
             const response = await axios.get(
-                `http://localhost:8080/empleados/justificativos?periodo=${periodo}`
+                'http://localhost:8080/justificativos/obtenerListaJustificativos'
             );
+            console.log(response.data.objeto);
             setJustificativos(response.data.objeto || []);
         } catch (error) {
             console.error("Error al obtener justificativos:", error);
@@ -111,19 +112,17 @@ const Justificativos = () => {
                     <th>Nombre Completo</th>
                     <th>Tipo Justificativo</th>
                     <th>Descripcion</th>
-                    <th>Tipo de Exoneración</th>
                 </tr>
                 </thead>
                 <tbody>
                 {justificativos.map((j, index) => (
                     <tr key={index}>
-                        <td>{j.id}</td>
+                        <td>{j.nroJustificativo}</td>
                         <td>{j.fecha}</td>
-                        <td>{j.ci}</td>
-                        <td>{j.nombreCompleto}</td>
-                        <td>{j.tipo}</td>
+                        <td>{j.persona.nroDocumento}</td>
+                        <td>{(j.persona.nombres || "") + " " + (j.persona.apellidos || "")}</td>
+                        <td>{j.tipoJustificativo.descripcion}</td>
                         <td>{j.descripcion}</td>
-                        <td>{j.exoneracion}</td>
                     </tr>
                 ))}
                 </tbody>
