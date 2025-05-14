@@ -1,10 +1,10 @@
 .abm-container {
-    padding: 40px;
+    padding: 20px;
+    background-color: #1e1f2f;
     color: white;
-    font-family: "Segoe UI", sans-serif;
-    width: calc(100% - 220px);
+    font-family: "Poppins", sans-serif;
+    min-height: 100vh;
     margin-left: 220px;
-    box-sizing: border-box;
 }
 
 .abm-container h1 {
@@ -26,7 +26,7 @@
 }
 
 .abm-form {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: #44465f;
     border-radius: 12px;
     padding: 30px;
     display: flex;
@@ -64,16 +64,16 @@ select {
 .guardar-btn-wrapper {
     display: flex;
     justify-content: flex-end;
+    width: 20%;
 }
 
-.guardar-btn {
-    background-color: #8f9eff;
-    color: white;
+.guardar-btn-wrapper button {
+    padding: 10px 30px;
+    background: #697099;
     border: none;
     border-radius: 20px;
-    padding: 12px 24px;
+    color: white;
     font-weight: bold;
     cursor: pointer;
-    letter-spacing: 1px;
-    font-size: 14px;
+    transition: background 0.3s;
 }

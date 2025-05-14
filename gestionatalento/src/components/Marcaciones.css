@@ -21,7 +21,7 @@
 
 .tab {
     padding: 10px 30px;
-    background: #2a2b3d;
+    background: #44465f;
     border: none;
     border-radius: 20px;
     color: white;
@@ -31,14 +31,14 @@
 }
 
 .tab:hover {
-    background: #3a3b4d;
+    background: #707088;
 }
 
 .formulario {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    background-color: #2a2b3d;
+    background-color: #44465f;
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
@@ -71,7 +71,7 @@ select {
 
 .botones {
     display: flex;
-    justify-content: flex-end; /* Esto los empuja a la derecha */
+    justify-content: flex-end;
     gap: 20px;
     margin-top: 20px;
     width: 500px;
@@ -88,7 +88,7 @@ select {
 }
 
 .btn-generar {
-    background-color: #5c6df8;
+    background-color: #697099;
     color: white;
     padding: 15px 30px;
     border: none;

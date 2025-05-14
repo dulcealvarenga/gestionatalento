@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
-import { loadFonts } from './Fonts';
 import "./AbmJustificativos.css";
 
 const AbmJustificativos = () => {
@@ -143,50 +142,79 @@ const AbmJustificativos = () => {
 
             <div className="abm-form">
                 <div className="form-row">
-                    <input 
-                        type="text"
-                        name="nroDocumento"
-                        placeholder="Nro. de Documento"
-                        value={formData.nroDocumento}
-                        onChange={handleChange}
-                        onBlur={handleBuscarPorDocumento}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                                handleBuscarPorDocumento();
-                            }
-                        }}
-                    />
-                    <input type="text" name="nombres" value={formData.nombres} placeholder="Nombres" style={{ backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '99%' }} disabled/>
-                    <input type="text" name="apellidos" value={formData.apellidos} placeholder="Apellidos" style={{ backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '99%' }} disabled/>
-                </div>
-
+                    <div className="campo">
+                        <label>Nro. de Documento</label>
+                        <input
+                            type="text"
+                            name="nroDocumento"
+                            value={formData.nroDocumento}
+                            onChange={handleChange}
+                            onBlur={handleBuscarPorDocumento}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    handleBuscarPorDocumento();
+                                }
+                            }}
+                        />
+                    </div>
+                    <div className="campo">
+                        <label>Nombres</label>
+                        <input type="text" name="nombres" value={formData.nombres}
+                               style={{backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '96%'}}
+                               disabled/>
+                    </div>
+                    <div className="campo">
+                        <label>Apellidos</label>
+                        <input type="text" name="apellidos" value={formData.apellidos}
+                               style={{backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '99%'}}
+                               disabled/>
+                    </div>
+                    </div>
                 <div className="form-row">
-                    <input type="date" name="fecDesde" value={formData.fecDesde} placeholder="Fecha Desde" onChange={handleChange} style={{ backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '99%' }}/>
-                    <input type="date" name="fecHasta" value={formData.fecHasta} placeholder="Fecha Hasta" onChange={handleChange} style={{ backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '99%' }}/>
-                </div>
-
+                    <div className="campo">
+                        <label>Fecha Desde</label>
+                        <input type="date" name="fecDesde" value={formData.fecDesde}
+                               onChange={handleChange}
+                               style={{backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '96%'}}/>
+                    </div>
+                    <div className="campo">
+                        <label>Fecha Hasta</label>
+                        <input type="date" name="fecHasta" value={formData.fecHasta}
+                               onChange={handleChange}
+                               style={{backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '99%'}}/>
+                    </div>
+                    </div>
                 <div className="form-row">
-                    <select
-                        name="codTipJustificativo"
-                        value={formData.codTipJustificativo}
-                        onChange={handleChange}
-                        style={{ backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '99%' }}
-                        required
-                    >
-                        <option value="">Seleccione un tipo de Justificativo</option>
-                        {tiposJustificativos.map((tipoJustificativo) => (
-                            <option key={tipoJustificativo.codTipJustificativo} value={tipoJustificativo.codTipJustificativo}>
-                                {tipoJustificativo.descripcion}
-                            </option>
-                        ))}
-                    </select>
-                    <input type="text" name="descripcion" value={formData.descripcion} placeholder="Descripción" onChange={handleChange} style={{ backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '99%' }}/>
+                    <div className="campo">
+                        <label>Tipo de Justificativo</label>
+                        <select
+                            name="codTipJustificativo"
+                            value={formData.codTipJustificativo}
+                            onChange={handleChange}
+                            style={{backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '99%'}}
+                            required
+                        >
+                            <option value="">Seleccione un tipo de Justificativo</option>
+                            {tiposJustificativos.map((tipoJustificativo) => (
+                                <option key={tipoJustificativo.codTipJustificativo}
+                                        value={tipoJustificativo.codTipJustificativo}>
+                                    {tipoJustificativo.descripcion}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="campo">
+                        <label>Descripcion</label>
+                        <input type="text" name="descripcion" value={formData.descripcion}
+                               onChange={handleChange}
+                               style={{backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '99%'}}/>
+                    </div>
                 </div>
-                <div className="guardar-btn-wrapper">
-                    <button onClick={handleSave}>{"Guardar"}</button>
+                    <div className="guardar-btn-wrapper">
+                        <button onClick={handleSave}>{"Guardar"}</button>
+                    </div>
                 </div>
-            </div>
-            <ToastContainer />
+                <ToastContainer />
         </div>
     );
 };

@@ -374,14 +374,14 @@ const Empleados = () => {
             <table className="tabla-empleados">
                 <thead>
                 <tr>
-                    <th style={{fontSize: "20px"}}>Legajos</th>
-                    <th style={{fontSize: "20px"}}>Foto</th>
-                    <th style={{fontSize: "20px"}}>Nro. de Documento</th>
-                    <th style={{ fontSize: "20px"}}>Nombre Completo</th>
-                    <th style={{ fontSize: "20px"}}>Fecha de Nacimiento</th>
-                    <th style={{ fontSize: "20px"}}>Fecha de Ingreso</th>
-                    <th style={{ fontSize: "20px"}}>Fecha de Egreso</th>
-                    <th style={{ fontSize: "20px"}}>Editar</th>
+                    <th>Legajos</th>
+                    <th>Foto</th>
+                    <th>Nro. de Documento</th>
+                    <th>Nombre Completo</th>
+                    <th>Fecha de Nacimiento</th>
+                    <th>Fecha de Ingreso</th>
+                    <th>Fecha de Egreso</th>
+                    <th>Editar</th>
                 </tr>
                 </thead>
                 <tbody>

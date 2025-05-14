@@ -5,128 +5,141 @@ import axios from "axios";
 
 const Justificativos = () => {
     const navigate = useNavigate();
+    const [allJustificativos, setAllJustificativos] = useState([]);
     const [justificativos, setJustificativos] = useState([]);
-    const [mes, setMes] = useState("Enero");
-    const [anio, setAnio] = useState(new Date().getFullYear());
+    const [page, setPage] = useState(0);
+    const [fechaDesde, setFechaDesde] = useState("");
+    const [fechaHasta, setFechaHasta] = useState("");
+    const pageSize = 100;
+
     const irAAbmJustificativos = () => {
         navigate("/justificativos/abm");
     };
 
-    const meses = [
-        "Enero",
-        "Febrero",
-        "Marzo",
-        "Abril",
-        "Mayo",
-        "Junio",
-        "Julio",
-        "Agosto",
-        "Septiembre",
-        "Octubre",
-        "Noviembre",
-        "Diciembre",
-    ];
+    // 👉 Al cargar, trae todos
+    useEffect(() => {
+        fetchAllJustificativos();
+    }, []);
 
-    const mesesNumericos = {
-        Enero: "01",
-        Febrero: "02",
-        Marzo: "03",
-        Abril: "04",
-        Mayo: "05",
-        Junio: "06",
-        Julio: "07",
-        Agosto: "08",
-        Septiembre: "09",
-        Octubre: "10",
-        Noviembre: "11",
-        Diciembre: "12",
-    };
+    // 👉 Cada vez que cambia page, actualiza la porción visible
+    useEffect(() => {
+        setJustificativos(
+            allJustificativos.slice(page * pageSize, (page + 1) * pageSize)
+        );
+    }, [page, allJustificativos]);
 
-    const anios = Array.from(
-        { length: 30 },
-        (_, i) => new Date().getFullYear() + 2 - i
-    );
-
-    const fetchJustificativos = async () => {
-        const periodo = `${anio}${mesesNumericos[mes]}`;
+    const fetchAllJustificativos = async () => {
         try {
             const response = await axios.get(
                 'http://localhost:8080/justificativos/obtenerListaJustificativos'
             );
-            console.log(response.data.objeto);
-            setJustificativos(response.data.objeto || []);
+            const allData = response.data.objeto || [];
+            setAllJustificativos(allData);
+            setPage(0);
+            setJustificativos(allData.slice(0, pageSize));
         } catch (error) {
             console.error("Error al obtener justificativos:", error);
+            setAllJustificativos([]);
             setJustificativos([]);
         }
     };
 
-    useEffect(() => {
-        fetchJustificativos();
-    }, []);
+    const fetchFilteredJustificativos = async () => {
+        try {
+            const response = await axios.get(
+                'http://localhost:8080/justificativos/obtenerListaJustificativos'
+            );
+            let allData = response.data.objeto || [];
+
+            if (fechaDesde && fechaHasta) {
+                const desde = new Date(fechaDesde);
+                const hasta = new Date(fechaHasta);
+
+                allData = allData.filter(j => {
+                    const fecha = j.fecha ? new Date(j.fecha) : null;
+                    return fecha && fecha >= desde && fecha <= hasta;
+                });
+            }
+
+            setAllJustificativos(allData);
+            setPage(0);
+            setJustificativos(allData.slice(0, pageSize));
+        } catch (error) {
+            console.error("Error al obtener justificativos:", error);
+            setAllJustificativos([]);
+            setJustificativos([]);
+        }
+    };
+
+    const totalPages = Math.ceil(allJustificativos.length / pageSize);
 
     return (
         <div className="justificativos-container">
-            <div className="cabecera-justificativos">
-                <h1>Justificativos</h1>
-                <p className="acciones-title">Acciones</p>
+            <h2 style={{ fontSize: "50px" }}>Justificativos</h2>
+            <p className="acciones-title" style={{ fontSize: "25px" }}>Acciones</p>
 
-                <div className="acciones-barra">
-                    <button className="boton-accion" onClick={irAAbmJustificativos}>
-                        AGREGAR
-                    </button>
+            <div className="acciones-barra-jus">
+                <button className="boton-accion-jus" onClick={irAAbmJustificativos}>
+                    AGREGAR
+                </button>
 
-                    <select
-                        className="select-mes"
-                        value={mes}
-                        onChange={(e) => setMes(e.target.value)}
-                    >
-                        {meses.map((m) => (
-                            <option key={m} value={m}>
-                                {m}
-                            </option>
-                        ))}
-                    </select>
-
+                <label style={{ display: "flex", flexDirection: "column", color: "white" }}>
+                    Fecha Desde
                     <input
-                        type="number"
-                        className="select-anio"
-                        value={anio}
-                        onChange={(e) => setAnio(e.target.value)}
-                        min="2000"
-                        max={new Date().getFullYear() + 10}
+                        type="date"
+                        value={fechaDesde}
+                        onChange={(e) => setFechaDesde(e.target.value)}
+                        className="input-fecha"
                     />
+                </label>
 
-                    <button className="boton-buscar" onClick={fetchJustificativos}>
-                        BUSCAR
-                    </button>
-                </div>
+                <label style={{ display: "flex", flexDirection: "column", color: "white" }}>
+                    Fecha Hasta
+                    <input
+                        type="date"
+                        value={fechaHasta}
+                        onChange={(e) => setFechaHasta(e.target.value)}
+                        className="input-fecha"
+                    />
+                </label>
+
+                <button className="boton-buscar-jus" onClick={fetchFilteredJustificativos}>
+                    BUSCAR
+                </button>
             </div>
 
-            <table className="tabla-justificativos">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Fecha</th>
-                    <th>C.I Nro.</th>
-                    <th>Nombre Completo</th>
-                    <th>Tipo Justificativo</th>
-                    <th>Descripcion</th>
-                </tr>
-                </thead>
-                <tbody>
-                {justificativos.map((j, index) => (
-                    <tr key={index}>
-                        <td>{j.nroJustificativo}</td>
-                        <td>{j.fecha}</td>
-                        <td>{j.persona.nroDocumento}</td>
-                        <td>{(j.persona.nombres || "") + " " + (j.persona.apellidos || "")}</td>
-                        <td>{j.tipoJustificativo.descripcion}</td>
-                        <td>{j.descripcion}</td>
+            <div className="tabla-scroll">
+                <table className="tabla-justificativos">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>C.I Nro.</th>
+                        <th>Nombre Completo</th>
+                        <th>Tipo Justificativo</th>
+                        <th>Descripcion</th>
                     </tr>
-                ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {justificativos.map((j, index) => (
+                        <tr key={index}>
+                            <td>{j.nroJustificativo}</td>
+                            <td>{j.fecha}</td>
+                            <td>{j.persona?.nroDocumento}</td>
+                            <td>{`${j.persona?.nombres || ""} ${j.persona?.apellidos || ""}`}</td>
+                            <td>{j.tipoJustificativo?.descripcion}</td>
+                            <td>{j.descripcion}</td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            </div>
+
+            <div className="pagination">
+                <button disabled={page === 0} onClick={() => setPage(page - 1)}>Anterior</button>
+                <span>Página {page + 1} de {totalPages}</span>
+                <button disabled={page + 1 >= totalPages} onClick={() => setPage(page + 1)}>Siguiente</button>
+            </div>
         </div>
     );
 };
