@@ -58,11 +58,12 @@ body, html, #root {
 }
 
 .filtro-comisionado {
-    margin: 10px 0;
+    margin: 5px 5px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
     font-size: 14px;
+    width: 70%;
 }
 
 .tabla-empleados {
@@ -137,6 +138,7 @@ body, html, #root {
     border-radius: 10px;
     width: 500px;
     color: white;
+
 }
 
 .modal-content input {
@@ -168,7 +170,6 @@ body, html, #root {
 .columna label {
     font-size: 14px;
     margin-bottom: 10px;
-    font-size: 20px;
 }
 
 .columna input {
@@ -189,30 +190,33 @@ body, html, #root {
 
 .dropdown-menu {
     position: absolute;
-    top: 100%;
+    top: 50px; /* o ajustá a gusto */
     left: 0;
-    background: #2c2f3f;
-    border-radius: 5px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 8px 0;
+    background-color: #44465f;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    z-index: 10;
     display: flex;
     flex-direction: column;
-    width: 180px;
+    padding: 10px;
 }
 
 .dropdown-menu button {
-    background: none;
-    border: none;
+    background-color: #44465f;
     color: white;
-    text-align: left;
-    padding: 10px 15px;
-    width: 100%;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-size: 14px;
     cursor: pointer;
-    font-size: 16px;
+    margin-bottom: 5px;
+    text-align: left;
+    justify-content: flex-start;
+    display: flex;
 }
 
-.dropdown-menu button:hover {
-    background: #414558;
+.dropdown-content button:hover {
+    background-color: #707088;
 }
 
 

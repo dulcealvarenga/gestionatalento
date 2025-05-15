@@ -35,6 +35,7 @@ import AbmContratos from "./components/AbmContratos.jsx";
 import Intranet from "./components/Intranet.jsx";
 import Salarios from "./components/Salarios.jsx";
 import AbmSalarios from "./components/AbmSalarios.jsx";
+import AbmAguinaldo from "./components/AbmAguinaldo.jsx";
 
 function App() {
     return (
@@ -286,6 +287,15 @@ function App() {
                         <div className="app-container">
                             <Sidebar/>
                             <AbmSalarios/>
+                        </div>
+                    }
+                />
+                <Route
+                    path="/salarios/aguinaldo"
+                    element={
+                        <div className="app-container">
+                            <Sidebar/>
+                            <AbmAguinaldo/>
                         </div>
                     }
                 />

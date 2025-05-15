@@ -1,0 +1,78 @@
+.abm-aguinaldo-container {
+    padding: 30px;
+    color: white;
+    font-family: "Poppins", sans-serif;
+    min-height: 100vh;
+    margin-left: 220px;
+}
+
+.volver-btn {
+    cursor: pointer;
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #ccc;
+}
+
+.form-card-aguinaldo {
+    background-color: #44465f;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.fila-triple {
+    display: flex;
+    gap: 15px;
+}
+
+.fila-doble {
+    display: flex;
+    gap: 15px;
+    width: 66%;
+}
+
+.campo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.campo label {
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.campo input,
+.campo select {
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    background-color: #697099;
+    color: white;
+    font-size: 14px;
+}
+
+.acciones-form {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    width: 30%;
+}
+
+.btn-guardar {
+    background-color: #7278a5;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+
+}
+
+.btn-guardar:hover {
+    background-color: #8388b5;
+}

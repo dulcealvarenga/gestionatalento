@@ -175,6 +175,7 @@ const Empleados = () => {
         const url = URL.createObjectURL(blob);
         window.open(url, "_blank"); // abre en nueva pestaña
     };
+
     const generarPDFIndividual = async (tipo, periodo) => {
         const endpoint = {
             altas: `http://localhost:8080/empleados/altas?periodo=${periodo}`,

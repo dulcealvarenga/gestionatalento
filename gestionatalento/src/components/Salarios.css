@@ -3,7 +3,7 @@
     padding: 20px;
     background-color: #1e1f2f;
     color: white;
-    font-family: "Inter", sans-serif;
+    font-family: "Poppins", sans-serif;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -18,8 +18,7 @@
 }
 
 .actions-section,
-.export-section,
-.aditional-section {
+.export-section {
     border-radius: 20px;
     padding: 5px 10px;
     color: white;
@@ -61,9 +60,18 @@
 }
 
 .actions-section select {
-    padding: 4px 10px;
-    font-size: 14px;
-    border-radius: 10px;
+    padding: 12px 30px;
+    font-size: 16px;
+    border-radius: 20px;
+    border: none;
+    background-color: #484c64;
+    color: white;
+}
+
+.export-section select {
+    padding: 12px 30px;
+    font-size: 16px;
+    border-radius: 20px;
     border: none;
     background-color: #484c64;
     color: white;
@@ -117,3 +125,40 @@ select {
     cursor: pointer;
     color: #ffffff;
 }
+
+.dropdown-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    position: absolute;
+    top: 50px; /* o ajustá a gusto */
+    left: 0;
+    background-color: #44465f;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.dropdown-content button {
+    background-color: #44465f;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    text-align: left;
+    justify-content: flex-start;
+    display: flex;
+}
+
+.dropdown-content button:hover {
+    background-color: #707088;
+}
+
