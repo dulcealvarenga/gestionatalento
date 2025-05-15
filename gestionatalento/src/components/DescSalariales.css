@@ -3,6 +3,7 @@
     color: white;
     min-height: 100vh;
     margin-left: 220px;
+    font-family: "Poppins", sans-serif;
 }
 
 .acciones-title {
@@ -46,6 +47,7 @@
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #44475a;
+    font-size: 15px;
 }
 
 .tabla-descuentos th {
@@ -83,3 +85,107 @@
     text-align: center;
 }
 
+.icono-accion {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    filter: brightness(0) invert(1); /* 👉 opcional para dark mode */
+    transition: transform 0.2s ease;
+}
+
+.btn-accion:hover .icono-accion {
+    transform: scale(1.2);
+    filter: brightness(0) invert(0.7);
+}
+
+.modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.modal-content {
+    background: #2c2d3f;
+    padding: 25px 30px;
+    border-radius: 12px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 550px;
+}
+
+.modal-content h2 {
+    margin: 0;
+    font-size: 35px;
+
+}
+
+.modal-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modal-info div {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+}
+
+.modal-info span {
+    margin-top: 5px;
+    font-weight: bold;
+    background-color: #3a3b4d;
+    padding: 8px 12px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* 2 columnas para inputs */
+.modal-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+.modal-grid label {
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+}
+
+.modal-grid input {
+    margin-top: 5px;
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    background: #3a3b4d;
+    color: white;
+    width: 100%;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.modal-buttons button {
+    flex: 1;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #44465f;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.modal-buttons button:hover {
+    background-color: #7072a5;
+}
