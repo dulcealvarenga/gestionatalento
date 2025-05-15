@@ -114,7 +114,7 @@ const Vacaciones = () => {
                 </button>
             </div>
             <div className="tabla-scroll">
-                <table className="tabla-justificativos">
+                <table className="tabla-vacaciones">
                 <thead>
                     <tr>
                         <th>ID</th>
