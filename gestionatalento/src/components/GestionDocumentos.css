@@ -1,0 +1,157 @@
+/* Contenedor principal */
+.documentos-container {
+    padding: 20px;
+    background-color: #1e1f2f;
+    color: white;
+    font-family: "Poppins", sans-serif;
+    min-height: 100vh;
+    margin-left: 220px;
+}
+
+.h1 {
+    font-size: 50px;
+}
+
+.acciones-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+/* Barra de acciones */
+.acciones-barra-doc {
+    display: flex;
+    flex-wrap: wrap;        /* 👈 importante para que no se rompa en pantallas chicas */
+    gap: 10px;
+    margin-bottom: 30px;
+    min-height: 50px;
+    align-items: center;
+    width: 20%;
+}
+
+/* Botones */
+.boton-accion-jus,
+.boton-buscar-jus {
+    padding: 10px 30px;
+    background: #44465f;
+    border: none;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.boton-accion-jus,
+.boton-buscar-jus:hover {
+    background: #707088;
+}
+
+/* Selects */
+.select-mes,
+.select-anio {
+    background-color: #2b2e4a;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    min-width: 100px;
+    text-align: center;
+}
+
+.select-mes:focus,
+.select-anio:focus {
+    outline: none;
+    border: 2px solid #8f9eff;
+}
+
+/* Inputs fechas */
+.input-fecha {
+    background-color: #2b2e4a;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    min-width: 130px;
+    text-align: center;
+}
+
+.input-fecha:focus {
+    outline: none;
+    border: 2px solid #8f9eff;
+}
+
+/* Tabla */
+.tabla-documentos {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #2c2d3f;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.tabla-documentos th,
+.tabla-documentos td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #3b3c4f;
+    font-size: 20px;
+}
+
+.tabla-documentos th {
+    background-color: #3b3c4f;
+    color: white;
+    font-weight: bold;
+}
+
+.tabla-documentos tr:hover {
+    background-color: #3e3f50;
+}
+
+.tabla-scroll {
+    max-height: 470px;
+    overflow-y: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+/* Paginación */
+.pagination {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+    margin-top: 5px;
+    width: 40%;
+}
+
+.pagination button {
+    background-color: #8f9eff;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.pagination button:disabled {
+    background-color: #44465f;
+    cursor: not-allowed;
+}
+
+.filtro-select {
+    padding: 12px 30px;
+    font-size: 16px;
+    border-radius: 20px;
+    border: none;
+    background-color: #484c64;
+    color: white;
+
+}
+.filtro-select:focus {
+    outline: none;
+    border: 2px solid #8f9eff;
+}
+

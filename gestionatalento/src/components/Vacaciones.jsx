@@ -14,6 +14,9 @@ const Vacaciones = () => {
     const irAAbmVacaciones = () => {
         navigate("/vacaciones/abm");
     };
+    const gestionDoc = () => {
+        navigate("/documentos");
+    };
 
     // 👉 Al cargar, trae todos los justificativos sin filtrar
     useEffect(() => {
@@ -105,10 +108,14 @@ const Vacaciones = () => {
                 <button className="boton-buscar-vacas" onClick={fetchFilteredJustificativos}>
                     BUSCAR
                 </button>
+
+                <button className="boton-accion-vacas" onClick={gestionDoc}>
+                    GESTION
+                </button>
             </div>
             <div className="tabla-scroll">
                 <table className="tabla-justificativos">
-                    <thead>
+                <thead>
                     <tr>
                         <th>ID</th>
                         <th>Fecha</th>
