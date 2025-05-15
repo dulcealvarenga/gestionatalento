@@ -51,34 +51,37 @@ const Cargos = () => {
 
             </div>
 
-            <div className="tabla-cargos">
-                <div className="tabla-header">
-                    <span>ID</span>
-                    <span>Descripción</span>
-                    <span>Estado</span>
-                    <span>Usuario Inserción</span>
-                    <span>Fecha Inserción</span>
-                    <span></span>
-                </div>
-
+            <table className="tabla-cargos">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                    <th>Usuario Inserción</th>
+                    <th>Fecha Inserción</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
                 {cargos.map((cargo) => (
-                    <div key={cargo.id} className="tabla-row">
-                        <span>{cargo.id}</span>
-                        <span>{cargo.descripcion}</span>
-                        <span>{cargo.estado}</span>
-                        <span>{cargo.usuarioInsercion}</span>
-                        <span>{cargo.fechaInsercion}</span>
-                        <span className="edit-icon">
-              <FaEdit
-                  onClick={() =>
-                      navigate("/configuraciones/cargos/abm", { state: { cargo } })
-                  }
-                  style={{ cursor: "pointer" }}
-              />
-            </span>
-                    </div>
+                    <tr key={cargo.id}>
+                        <td>{cargo.id}</td>
+                        <td>{cargo.descripcion}</td>
+                        <td>{cargo.estado}</td>
+                        <td>{cargo.usuarioInsercion}</td>
+                        <td>{cargo.fechaInsercion}</td>
+                        <td className="edit-icon">
+                          <FaEdit
+                              onClick={() =>
+                                  navigate("/configuraciones/cargos/abm", {state: {cargo}})
+                              }
+                              style={{cursor: "pointer"}}
+                          />
+                        </td>
+                    </tr>
                 ))}
-            </div>
+                </tbody>
+            </table>
         </div>
     );
 };

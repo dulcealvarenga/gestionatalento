@@ -86,7 +86,11 @@ const AbmDepartamento = () => {
                         ? "Editar Departamento"
                         : "Agregar Departamento"}
                 </h1>
-                <div className="volver" onClick={() => navigate("/configuraciones/departamentos")}>← Volver</div>
+                <div className="acciones-eventos-abm">
+                    <button onClick={() => navigate("/configuraciones/departamentos")}>
+                        ← VOLVER
+                    </button>
+                </div>
                 <div className="form-group">
                     <label style={{fontSize: "22px", fontWeight: "bold", color: "#FFFFFF"}}>Descripción</label>
                     <input

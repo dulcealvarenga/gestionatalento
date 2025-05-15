@@ -81,8 +81,11 @@ const AbmDirecciones = () => {
                 <h1>
                     {direccion.codDireccion ? "Editar Dirección" : "Agregar Dirección"}
                 </h1>
-                <div className="volver" onClick={() => navigate("/configuraciones/direcciones")}>← Volver</div>
-
+                <div className="acciones-eventos-abm">
+                    <button onClick={() => navigate("/configuraciones/direcciones")}>
+                        ← VOLVER
+                    </button>
+                </div>
                 <div className="form-group">
                     <label style={{fontSize: "22px", fontWeight: "bold", color: "#FFFFFF"}}>Descripción</label>
                     <input

@@ -51,36 +51,39 @@ const Departamentos = () => {
                 <button onClick={() => navigate("/configuraciones/cargos")}>CARGOS</button>
             </div>
 
-            <div className="tabla-departamento">
-                <div className="tabla-header">
-                    <span>ID</span>
-                    <span>Descripción</span>
-                    <span>Estado</span>
-                    <span>Usuario Inserción</span>
-                    <span>Fecha Inserción</span>
-                    <span></span>
-                </div>
-
+            <table className="tabla-departamento">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                    <th>Usuario Inserción</th>
+                    <th>Fecha Inserción</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
                 {departamentos.map((dep) => (
-                    <div key={dep.id} className="tabla-row">
-                        <span>{dep.id}</span>
-                        <span>{dep.descripcion}</span>
-                        <span>{dep.estado}</span>
-                        <span>{dep.usuarioInsercion}</span>
-                        <span>{dep.fechaInsercion}</span>
-                        <span className="edit-icon">
-              <FaEdit
-                  onClick={() =>
-                      navigate("/configuraciones/departamentos/abm", {
-                          state: { departamento: dep },
-                      })
-                  }
-                  style={{ cursor: "pointer" }}
-              />
-            </span>
-                    </div>
+                    <tr key={dep.id} >
+                        <td>{dep.id}</td>
+                        <td>{dep.descripcion}</td>
+                        <td>{dep.estado}</td>
+                        <td>{dep.usuarioInsercion}</td>
+                        <td>{dep.fechaInsercion}</td>
+                        <td className="edit-icon">
+                          <FaEdit
+                              onClick={() =>
+                                  navigate("/configuraciones/departamentos/abm", {
+                                      state: {departamento: dep},
+                                  })
+                              }
+                              style={{cursor: "pointer"}}
+                          />
+                        </td>
+                    </tr>
                 ))}
-            </div>
+                </tbody>
+            </table>
         </div>
     );
 };

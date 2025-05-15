@@ -1,42 +1,32 @@
 .cargos-container {
-    padding: 30px;
-    background-color: #1e1f2f;
+    padding: 20px;
     color: white;
-    font-family: 'Inter', sans-serif;
     min-height: 100vh;
     margin-left: 220px;
+    font-family: Poppins, sans-serif;
 }
 
 .tabla-cargos {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    background-color: #2f3248;
+    background-color: #2c2d3f;
     border-radius: 10px;
     overflow: hidden;
+    font-size: 20px;
 }
 
-.tabla-header,
-.tabla-row {
-    ;
-    grid-template-columns: 70px 3fr 150px 150px 150px 70px;
-    padding: 16px 12px;
-    align-items: center;
-    gap: 10px;
+.tabla-cargos th,
+.tabla-cargos td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #3b3c4f;
 }
 
-.tabla-header {
-    background-color: #2a2a40;
+.tabla-cargos th {
+    background-color: #3b3c4f;
+    color: white;
     font-weight: bold;
-    font-size: 17px;
-}
-
-.tabla-row:nth-child(even) {
-    background-color: #23233b;
-}
-
-.tabla-row:hover {
-    background-color: #33334d;
 }
 
 .edit-icon {

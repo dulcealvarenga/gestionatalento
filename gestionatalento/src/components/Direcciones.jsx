@@ -82,36 +82,39 @@ const Direcciones = () => {
                 </div>
             )}
 
-            <div className="tabla-direcciones">
-                <div className="tabla-header">
-                    <span>ID</span>
-                    <span>Descripción</span>
-                    <span>Estado</span>
-                    <span>Usuario Inserción</span>
-                    <span>Fecha Inserción</span>
-                    <span></span>
-                </div>
-
+            <table className="tabla-direcciones">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                    <th>Usuario Inserción</th>
+                    <th>Fecha Inserción</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
                 {filteredDirecciones.map((dir) => (
-                    <div key={dir.id} className="tabla-row">
-                        <span>{dir.id}</span>
-                        <span>{dir.descripcion}</span>
-                        <span>{dir.estado}</span>
-                        <span>{dir.usuarioInsercion}</span>
-                        <span>{dir.fechaInsercion}</span>
-                        <span className="edit-icon">
-              <FaEdit
-                  onClick={() =>
-                      navigate("/configuraciones/direcciones/abm", {
-                          state: { direccion: dir },
-                      })
-                  }
-                  style={{ cursor: "pointer" }}
-              />
-            </span>
-                    </div>
+                    <tr key={dir.id}>
+                        <td>{dir.id}</td>
+                        <td>{dir.descripcion}</td>
+                        <td>{dir.estado}</td>
+                        <td>{dir.usuarioInsercion}</td>
+                        <td>{dir.fechaInsercion}</td>
+                        <td className="edit-icon">
+                          <FaEdit
+                              onClick={() =>
+                                  navigate("/configuraciones/direcciones/abm", {
+                                      state: {direccion: dir},
+                                  })
+                              }
+                              style={{cursor: "pointer"}}
+                          />
+                        </td>
+                    </tr>
                 ))}
-            </div>
+                </tbody>
+            </table>
 
             {showDepartamentosPanel && (
                 <div className="departamentos-panel">

@@ -3,11 +3,23 @@
     color: white;
     min-height: 100vh;
     margin-left: 220px;
+    font-family: "Poppins", sans-serif;
 }
 
 .abm-eventos-card {
     padding: 20px;
     border-radius: 10px;
+}
+
+.acciones-eventos-abm button {
+    padding: 10px 20px;
+    border-radius: 20px;
+    background-color: #3b3b5e;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+    width: 13%;
 }
 
 .form-group {

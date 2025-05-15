@@ -127,63 +127,67 @@ const AbmEventos = () => {
         <div className="abm-eventos-container">
             <div className="abm-eventos-card">
                 <h1>{id ? "Editar Evento" : "Agregar Evento"}</h1>
-                <div className="volver" onClick={() => navigate("/configuraciones/eventos")}>← Volver</div>
-                <div className="form-group">
-                    <label style={{ fontSize: "22px", fontWeight: "bold", color: "#FFFFFF" }}>Descripción</label>
-                    <input
-                        type="text"
-                        name="descripcion"
-                        placeholder="Ingrese la descripción"
-                        value={formData.descripcion}
-                        onChange={handleChange}
-                        style={{ backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '98%' }}
-                        required
-                    />
-                    <label style={{ fontSize: "22px", fontWeight: "bold", color: "#FFFFFF" }}>Fecha</label>
-                    <input
-                        type="date"
-                        name="fecha"
-                        value={formData.fecha}
-                        onChange={handleChange}
-                        style={{ backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '98%' }}
-                        required
-                    />
-                    <label style={{ fontSize: "22px", fontWeight: "bold", color: "#FFFFFF" }}>Tipo de Evento</label>
-                    <select
-                        name="codTipEvento"
-                        value={formData.codTipEvento}
-                        onChange={handleChange}
-                        style={{ backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '99%' }}
-                        required
-                    >
-                        <option value="">Seleccione una opción</option>
-                        {tiposEvento.map((evento) => (
-                            <option key={evento.codTipEvento} value={evento.codTipEvento}>
-                                {evento.descripcion}
-                            </option>
-                        ))}
-                    </select>
-                    <label style={{ fontSize: "22px", fontWeight: "bold", color: "#FFFFFF" }}>Vigente</label>
-                    <select
-                        name="vigente"
-                        value={formData.vigente}
-                        onChange={handleChange}
-                        style={{ backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '99%' }}
-                        required
-                    >
-                        <option value="S">SÍ</option>
-                        <option value="N">NO</option>
-                    </select>
+                <div className="acciones-eventos-abm">
+                    <button onClick={() => navigate("/configuraciones/eventos")}>
+                        ← VOLVER
+                    </button>
                 </div>
+                    <div className="form-group">
+                        <label style={{fontSize: "22px", fontWeight: "bold", color: "#FFFFFF"}}>Descripción</label>
+                        <input
+                            type="text"
+                            name="descripcion"
+                            placeholder="Ingrese la descripción"
+                            value={formData.descripcion}
+                            onChange={handleChange}
+                            style={{backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '98%'}}
+                            required
+                        />
+                        <label style={{fontSize: "22px", fontWeight: "bold", color: "#FFFFFF"}}>Fecha</label>
+                        <input
+                            type="date"
+                            name="fecha"
+                            value={formData.fecha}
+                            onChange={handleChange}
+                            style={{backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '98%'}}
+                            required
+                        />
+                        <label style={{fontSize: "22px", fontWeight: "bold", color: "#FFFFFF"}}>Tipo de Evento</label>
+                        <select
+                            name="codTipEvento"
+                            value={formData.codTipEvento}
+                            onChange={handleChange}
+                            style={{backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '99%'}}
+                            required
+                        >
+                            <option value="">Seleccione una opción</option>
+                            {tiposEvento.map((evento) => (
+                                <option key={evento.codTipEvento} value={evento.codTipEvento}>
+                                    {evento.descripcion}
+                                </option>
+                            ))}
+                        </select>
+                        <label style={{fontSize: "22px", fontWeight: "bold", color: "#FFFFFF"}}>Vigente</label>
+                        <select
+                            name="vigente"
+                            value={formData.vigente}
+                            onChange={handleChange}
+                            style={{backgroundColor: "#697099", fontSize: "18px", color: "#FFFFFF", width: '99%'}}
+                            required
+                        >
+                            <option value="S">SÍ</option>
+                            <option value="N">NO</option>
+                        </select>
+                    </div>
 
-                <div className="agregar-actions">
-                    <button onClick={handleSave}>{id ? "Actualizar" : "Guardar"}</button>
-                    <button onClick={() => navigate("/configuraciones/eventos")}>Cancelar</button>
+                    <div className="agregar-actions">
+                        <button onClick={handleSave}>{id ? "Actualizar" : "Guardar"}</button>
+                        <button onClick={() => navigate("/configuraciones/eventos")}>Cancelar</button>
+                    </div>
                 </div>
+                <ToastContainer/>
             </div>
-            <ToastContainer />
-        </div>
-    );
-};
+            );
+            };
 
-export default AbmEventos;
+            export default AbmEventos;

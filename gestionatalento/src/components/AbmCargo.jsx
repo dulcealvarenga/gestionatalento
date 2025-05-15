@@ -81,7 +81,11 @@ const AbmCargo = () => {
         <div className="abm-cargo-container">
             <div className="abm-cargo-card">
                 <h1>{cargo.codCargo ? "Editar Cargo" : "Agregar Cargo"}</h1>
-                <div className="volver" onClick={() => navigate("/configuraciones/cargos")}>← Volver</div>
+                <div className="acciones-eventos-abm">
+                    <button onClick={() => navigate("/configuraciones/cargos")}>
+                        ← VOLVER
+                    </button>
+                </div>
                 <div className="form-group">
                     <label style={{fontSize: "22px", fontWeight: "bold", color: "#FFFFFF"}}>Descripción</label>
                     <input

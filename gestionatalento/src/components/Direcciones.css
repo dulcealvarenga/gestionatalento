@@ -1,34 +1,24 @@
 .tabla-direcciones {
+    width: 100%;
+    border-collapse: collapse;
     margin-top: 20px;
+    background-color: #2c2d3f;
     border-radius: 10px;
     overflow: hidden;
-    width: 100%;
+    font-size: 20px;
 }
 
-.tabla-header,
-.tabla-row {
-    display: grid;
-    grid-template-columns: 60px 1fr 120px 150px 150px 60px;
-    padding: 12px 16px;
-    align-items: center;
-    width: 100%;
+.tabla-direcciones th,
+.tabla-direcciones td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #3b3c4f;
 }
 
-.tabla-header {
-    background-color: #2b2b4b;
-    color: #bbb;
+.tabla-direcciones th {
+    background-color: #3b3c4f;
+    color: white;
     font-weight: bold;
-}
-
-.tabla-row {
-    background-color: #202036;
-    color: #ddd;
-    border-bottom: 1px solid #2e2e4e;
-    transition: background-color 0.2s ease;
-}
-
-.tabla-row:hover {
-    background-color: #2a2a48;
 }
 
 .estado-badge {
@@ -65,6 +55,7 @@
     color: white;
     min-height: 100vh;
     margin-left: 220px;
+    font-family: Poppins, sans-serif;
 }
 
 .actions {

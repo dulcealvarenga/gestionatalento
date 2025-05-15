@@ -1,8 +1,9 @@
 .eventos-container {
-    padding: 40px;
+    padding: 30px;
     color: white;
     min-height: 100vh;
     margin-left: 220px;
+    font-family: "Poppins", sans-serif;
 }
 
 .eventos-container h2 {
@@ -34,18 +35,21 @@
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    background-color: #2f3248;
+    background-color: #2c2d3f;
     border-radius: 10px;
     overflow: hidden;
+    font-size: 20px;
 }
 
 .tabla-eventos th,
 .tabla-eventos td {
     padding: 12px;
     text-align: left;
-    border-bottom: 1px solid #44475a;
+    border-bottom: 1px solid #3b3c4f;
 }
 
 .tabla-eventos th {
-    background-color: #3a3e57;
+    background-color: #3b3c4f;
+    color: white;
+    font-weight: bold;
 }

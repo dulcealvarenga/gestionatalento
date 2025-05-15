@@ -40,10 +40,9 @@ const Eventos = () => {
                 <tr>
                 <th>ID</th>
                         <th>Descripción</th>
-                        <th>Estado</th>
+                        <th>Vigente</th>
                         <th>Fecha</th>
                         <th>Tipo de Evento</th>
-                        {/* ✅ Cambiado */}
                         <th>Acciones</th>
                     </tr>
                     </thead>
@@ -62,7 +61,7 @@ const Eventos = () => {
                                         navigate(`/configuraciones/eventos/abm/${evento.nroEvento}`)
                                     }
                                 >
-                                    ✏️
+                                    <img src="/public/editar.png" alt="Editar" className="icono-accion"/>
                                 </button>
                             </td>
                         </tr>
