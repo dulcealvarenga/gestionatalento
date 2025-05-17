@@ -69,14 +69,16 @@ const HorasExtras = () => {
                     </select>
                 </div>
                 <div className="botones-acciones">
-                        <button className="btn-volver" onClick={() => navigate("/marcaciones")}>← Volver</button>
-                        <button className="btn-agregar" onClick={() => navigate("/marcaciones/horasExtras/abm")}>AGREGAR</button>
-                        <button className="btn-exportar" onClick={handleExportarExcel}>EXPORTAR</button>
+                    <button className="btn-volver" onClick={() => navigate("/marcaciones")}>← Volver</button>
+                    <button className="btn-agregar" onClick={() => navigate("/marcaciones/horasExtras/abm")}>AGREGAR
+                    </button>
+                    <button className="btn-exportar" onClick={handleExportarExcel}>EXPORTAR</button>
+                    <button className="btn-exportar" onClick={handleExportarExcel}>CIERRE</button>
                 </div>
             </div>
 
             <table className="tabla-horas-extras">
-                <thead>
+            <thead>
                 <tr>
                     <th>ID</th>
                     <th>Foto</th>

@@ -1,7 +1,8 @@
 .abm-importadas-container {
-    padding: 40px;
+    padding: 20px;
+    background-color: #1e1f2f;
     color: white;
-    font-family: "Inter", sans-serif;
+    font-family: "Poppins", sans-serif;
     min-height: 100vh;
     margin-left: 220px;
 }

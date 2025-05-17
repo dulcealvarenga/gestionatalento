@@ -2,17 +2,14 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Configuraciones.css";
 
-const ConfigScreen = ({ isAdmin }) => {
+const ConfigScreen = () => {
     const navigate = useNavigate();
 
     const configuraciones = [
         { nombre: "Eventos", ruta: "/configuraciones/eventos", icono: "/public/eventos.png" },
         { nombre: "Direcciones", ruta: "/configuraciones/direcciones", icono: "/public/direcciones.png" },
+        { nombre: "Usuarios", ruta: "/configuraciones/usuarios", icono: "/public/usuario.png" },
     ];
-
-    if (isAdmin) {
-        configuraciones.push({ nombre: "Usuarios", ruta: "/configuraciones/usuarios", icono: "👤" });
-    }
 
     return (
         <div className="config-container">

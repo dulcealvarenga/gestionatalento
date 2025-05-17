@@ -62,7 +62,7 @@ const AbmMarcacionesImportadas = () => {
 
     return (
         <div className="abm-importadas-container">
-            <h1 className="titulo">ABM Marcaciones Importadas</h1>
+            <h1>ABM Marcaciones Importadas</h1>
             <div className="volver" onClick={() => navigate("/marcaciones/importadas")}>← Volver</div>
 
             <div className="file-section">

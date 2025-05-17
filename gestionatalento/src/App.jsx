@@ -3,9 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import Menu from "./components/Menu";
 import Sidebar from "./components/Sidebar";
-import Empleados from "./components/Empleados"; // la nueva pantalla
+import Empleados from "./components/Empleados";
 import AbmEmpleados from "./components/AbmEmpleados";
-import Dashboard from "./components/DashboardEmp";  // Asegúrate de que la ruta sea correcta
+import Dashboard from "./components/DashboardEmp";
 import BajaEmpleados from "./components/BajaEmpleados";
 import Marcaciones from "./components/Marcaciones";
 import MarcacionesImportadas from "./components/MarcacionesImportadas";
@@ -37,6 +37,8 @@ import Salarios from "./components/Salarios.jsx";
 import AbmSalarios from "./components/AbmSalarios.jsx";
 import AbmAguinaldo from "./components/AbmAguinaldo.jsx";
 import GestionDocumentos from "./components/GestionDocumentos.jsx";
+import Usuarios from "./components/Usuarios.jsx";
+import AbmUsuarios from "./components/AbmUsuarios.jsx";
 
 function App() {
     return (
@@ -306,6 +308,33 @@ function App() {
                         <div className="app-container">
                             <Sidebar/>
                             <GestionDocumentos/>
+                        </div>
+                    }
+                />
+                <Route
+                    path="/configuraciones/usuarios"
+                    element={
+                        <div className="app-container">
+                            <Sidebar/>
+                            <Usuarios/>
+                        </div>
+                    }
+                />
+                <Route
+                    path="/configuraciones/usuarios/abm"
+                    element={
+                        <div className="app-container">
+                            <Sidebar/>
+                            <AbmUsuarios/>
+                        </div>
+                    }
+                />
+                <Route
+                    path="/configuraciones/usuarios/abm/:id"
+                    element={
+                        <div className="app-container">
+                            <Sidebar />
+                            <AbmUsuarios/>
                         </div>
                     }
                 />

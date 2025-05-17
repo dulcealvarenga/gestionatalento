@@ -1,0 +1,57 @@
+.abm-usuarios-container {
+    padding: 20px;
+    color: white;
+    min-height: 100vh;
+    margin-left: 220px;
+    font-family: "Poppins", sans-serif;
+}
+
+.abm-usuarios-card {
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.acciones-usuarios-abm button {
+    padding: 10px 20px;
+    border-radius: 20px;
+    background-color: #3b3b5e;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+    width: 13%;
+}
+
+.form-group-usu {
+    background-color: #44465f;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.agregar-actions-usu {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    width: 30%;
+}
+
+.btn-guardar-usu,
+.btn-cancelar-usu {
+    background-color: #7278a5;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.btn-guardar-usu,
+.btn-cancelar-usu:hover {
+    background-color: #8388b5;
+}
