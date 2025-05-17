@@ -4,6 +4,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import { pdf, Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import FichaEmpleadoPDF from './FichaEmpleado';
+import { saveAs } from "file-saver";
 
 const styles = StyleSheet.create({
     table: {
@@ -310,6 +312,16 @@ const Empleados = () => {
         }));
     };
 
+    const handleVerEmpleado = async (empleado) => {
+        const blob = await pdf(<FichaEmpleadoPDF empleado={empleado} />).toBlob();
+
+        // Generar nombre personalizado
+        const nombre = `${empleado.persona.apellidos}_${empleado.persona.nombres}_CI${empleado.persona.nroDocumento}.pdf`
+            .replace(/\s+/g, "_"); // Reemplaza espacios por guiones bajos
+
+        saveAs(blob, nombre);
+    };
+
     return (
         <div className="empleados-container">
             <h1>Empleados</h1>
@@ -407,7 +419,7 @@ const Empleados = () => {
                 {empleadosFiltrados.map((emp) => (
                     <tr key={emp.codEmpleado}>
                         <td>
-                            <button className="ver-btn">ver</button>
+                            <button className="ver-btn" onClick={() => handleVerEmpleado(emp)}>ver</button>
                         </td>
                         <td>
                             <img src="/avatar.png" alt="Foto" className="foto-empleado" />

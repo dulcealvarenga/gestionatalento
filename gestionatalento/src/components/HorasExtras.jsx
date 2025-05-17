@@ -9,6 +9,8 @@ import { saveAs } from "file-saver";
 const HorasExtras = () => {
     const navigate = useNavigate();
     const [listaHorasExtras, setListaHorasExtras] = useState([]);
+    const [showConfirmModalHE, setShowConfirmModalHE] = useState(false);
+    const [comentario, setComentario] = useState("");
 
     useEffect(() => {
         const obtenerLista = async () => {
@@ -73,9 +75,30 @@ const HorasExtras = () => {
                     <button className="btn-agregar" onClick={() => navigate("/marcaciones/horasExtras/abm")}>AGREGAR
                     </button>
                     <button className="btn-exportar" onClick={handleExportarExcel}>EXPORTAR</button>
-                    <button className="btn-exportar" onClick={handleExportarExcel}>CIERRE</button>
+                    <button className="btn-exportar" onClick={() => setShowConfirmModalHE(true)}>CIERRE</button>
                 </div>
             </div>
+
+            {showConfirmModalHE && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h2>Confirmar Cierre de Periodo</h2>
+                        <label>Periodo a Cerrar</label>
+                        <input type="text" name="periodo" value='05/2025' readOnly={true}/>
+                        <label>Comentario</label>
+                        <input
+                            type="text"
+                            name="comentario"
+                            value={comentario}
+                            onChange={(e) => setComentario(e.target.value)}
+                        />
+                        <div className="modal-buttons">
+                            <button onClick={() => setShowConfirmModalHE(false)}>Confirmar</button>
+                            <button onClick={() => setShowConfirmModalHE(false)}>Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <table className="tabla-horas-extras">
             <thead>

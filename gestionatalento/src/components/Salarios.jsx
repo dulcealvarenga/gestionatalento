@@ -71,6 +71,8 @@ const Salarios = () => {
     const [modalInformeTipo, setModalInformeTipo] = useState(null); // "altas", "bajas", "modificaciones"
 
     const [mostrarMenuInformes, setMostrarMenuInformes] = useState(false);
+    const [showConfirmModalSA, setShowConfirmModalSA] = useState(false);
+    const [comentario, setComentario] = useState("");
 
     const abrirPDFEnPestana = async () => {
         const documento = await generarPDFIndividual(modalInformeTipo, periodo);
@@ -191,7 +193,8 @@ const Salarios = () => {
 
             <div className="actions-section">
                 <button className="primary-btn" onClick={() => navigate("/salarios/abm")}>AGREGAR SALARIOS</button>
-                <button className="primary-btn" onClick={() => navigate("/salarios/aguinaldo")}>INCLUIR AGUINALDO</button>
+                <button className="primary-btn" onClick={() => navigate("/salarios/aguinaldo")}>INCLUIR AGUINALDO
+                </button>
                 <select>
                     <option>Enero</option>
                     <option>Febrero</option>
@@ -254,8 +257,30 @@ const Salarios = () => {
                     </select>
                     <button className="primary-btn">Generar</button>
                     <button className="primary-btn">Exportar Aguinaldo</button>
+                    <button className="primary-btn" onClick={() => setShowConfirmModalSA(true)}>Cierre</button>
                 </div>
             </div>
+
+            {showConfirmModalSA && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h2>Confirmar Cierre de Periodo</h2>
+                        <label>Periodo a Cerrar</label>
+                        <input type="text" name="periodo" value='05/2025' readOnly={true}/>
+                        <label>Comentario</label>
+                        <input
+                            type="text"
+                            name="comentario"
+                            value={comentario}
+                            onChange={(e) => setComentario(e.target.value)}
+                        />
+                        <div className="modal-buttons">
+                            <button onClick={() => setShowConfirmModalSA(false)}>Confirmar</button>
+                            <button onClick={() => setShowConfirmModalSA(false)}>Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <table className="salaries-table">
                 <thead>

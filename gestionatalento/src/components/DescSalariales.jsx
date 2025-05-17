@@ -12,6 +12,8 @@ const DescuentosSalariales = () => {
     const [selectedDescuento, setSelectedDescuento] = useState(null);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [descuentoToDelete, setDescuentoToDelete] = useState(null);
+    const [showConfirmModalDS, setShowConfirmModalDS] = useState(false);
+    const [comentario, setComentario] = useState("");
 
     const fetchDescuentos = async () => {
         try {
@@ -98,7 +100,29 @@ const DescuentosSalariales = () => {
                 <button>EXONERADOS</button>
                 <button>EXPORTAR BORRADOR</button>
                 <button>EXPORTAR RECIBIDOS</button>
+                <button onClick={() => setShowConfirmModalDS(true)}>CIERRE</button>
             </div>
+
+            {showConfirmModalDS && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h2>Confirmar Cierre de Periodo</h2>
+                        <label>Periodo a Cerrar</label>
+                        <input type="text" name="periodo" value='05/2025' readOnly={true}/>
+                        <label>Comentario</label>
+                        <input
+                            type="text"
+                            name="comentario"
+                            value={comentario}
+                            onChange={(e) => setComentario(e.target.value)}
+                        />
+                        <div className="modal-buttons">
+                            <button onClick={() => setShowConfirmModalDS(false)}>Confirmar</button>
+                            <button onClick={() => setShowConfirmModalDS(false)}>Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <table className="tabla-descuentos">
                 <thead>
