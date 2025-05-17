@@ -39,6 +39,8 @@ import AbmAguinaldo from "./components/AbmAguinaldo.jsx";
 import GestionDocumentos from "./components/GestionDocumentos.jsx";
 import Usuarios from "./components/Usuarios.jsx";
 import AbmUsuarios from "./components/AbmUsuarios.jsx";
+import InformeRecibos from "./components/InformeRecibos.jsx";
+import InformeDescuentoSalarial from "./components/InformeDescuentoSalarial.jsx";
 
 function App() {
     return (
@@ -337,6 +339,12 @@ function App() {
                             <AbmUsuarios/>
                         </div>
                     }
+                />
+                <Route path="/informe-recibos" element={<InformeRecibos />} />
+
+                <Route
+                    path="/informe-recibidos"
+                    element={<InformeDescuentoSalarial />}
                 />
             </Routes>
         </Router>

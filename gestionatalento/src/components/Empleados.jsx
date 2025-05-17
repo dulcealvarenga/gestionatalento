@@ -187,6 +187,20 @@ const Empleados = () => {
             const response = await axios.get(endpoint[tipo]);
             const datos = response.data.objeto;
 
+            if (!Array.isArray(datos) || datos.length === 0) {
+                return (
+                    <Document>
+                        <Page style={styles.page}>
+                            <Text style={styles.title}>
+                                Informe de {tipo.charAt(0).toUpperCase() + tipo.slice(1)}
+                            </Text>
+                            <Text style={styles.periodo}>Período: {periodo}</Text>
+                            <Text>No se encontraron registros para este período.</Text>
+                        </Page>
+                    </Document>
+                );
+            }
+
             return (
                 <Document>
                     <Page style={styles.page}>
@@ -242,7 +256,9 @@ const Empleados = () => {
                                         <Text style={styles.tableCellHeader}>Dependencia</Text>
                                         <Text style={styles.tableCellHeader}>Cargo</Text>
                                         <Text style={styles.tableCellHeader}>Salario</Text>
-                                        <Text style={styles.tableCellHeader}>Fecha Alta</Text>
+                                        <Text style={styles.tableCellHeader}>
+                                            {tipo === "bajas" ? "Fecha Baja" : "Fecha Alta"}
+                                        </Text>
                                     </View>
 
                                     {datos.map((item, i) => (
@@ -259,7 +275,9 @@ const Empleados = () => {
                                                 {item.SALARIO !== undefined ? item.SALARIO : "-"}
                                             </Text>
                                             <Text style={styles.tableCell}>
-                                                {item.FECHA_ALTA !== undefined ? item.FECHA_ALTA : "-"}
+                                                {tipo === "bajas"
+                                                    ? item.FECHA_BAJA ?? "-"
+                                                    : item.FECHA_ALTA ?? "-"}
                                             </Text>
                                         </View>
                                     ))}
