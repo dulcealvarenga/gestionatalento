@@ -34,13 +34,17 @@ const AbmSalarios = () => {
         codDireccion: "",
         codSituacionLaboral: "",
         monto: "",
-        codPeriodo:"2025/05",
+        periodo: { nroPeriodo: 5 },
+        codPeriodo: "05/2025",
         horaExtra: "",
         observacion: "",
         exoneraEntrada: "",
         fuenteFinancimiento: "",
         gradoSalarial: "",
         objetoGasto: "",
+        presupuesto: "",
+        programa: "",
+        subprograma: "",
     });
 
     const handleChange = (e) => {
@@ -63,7 +67,7 @@ const AbmSalarios = () => {
 
                 setFormData(prev => ({
                     ...prev,
-                    nombres: persona.nombres || '',
+                    nombres: `${persona.nombres} ${persona.apellidos}`,
                     apellidos: persona.apellidos || '',
                     horaEntrada: empleado.horaEntrada || '',
                     horaSalida: empleado.horaSalida || '',
@@ -90,42 +94,66 @@ const AbmSalarios = () => {
     const handleGuardarSalarios = async () => {
         const {
             codEmpleado,
-            codPeriodo,
-            horaExtra,
-            monto,
-            observacion,
-            exoneraEntrada
+            periodo,
+            fuenteFinancimiento,
+            gradoSalarial,
+            objetoGasto,
+            presupuesto,
+            programa,
+            subprograma,
+            codSituacionLaboral,
+            asignacion
         } = formData;
 
-        if (!codEmpleado || !codPeriodo || !horaExtra || !monto) {
-            toast.warn("Faltan datos obligatorios para guardar", { autoClose: 2000 });
+        if (!codEmpleado || !periodo || !fuenteFinancimiento || !objetoGasto || !presupuesto || !programa || !subprograma || !gradoSalarial || !asignacion) {
+            toast.warn("Faltan datos obligatorios para guardar", { autoClose: 2500 });
             return;
         }
 
         const body = {
-            empleado: { codEmpleado: parseInt(codEmpleado) },
-            codPeriodo,
-            horaExtra: parseFloat(horaExtra),
-            monto: monto,
-            observacion: observacion || "",
-            exoneraEntrada: exoneraEntrada || "N"
+            nroPlanilla: 0,
+            empleado: {
+                codEmpleado: parseInt(codEmpleado)
+            },
+            periodo,
+            presupuesto: {
+                codPresupuesto: parseInt(presupuesto)
+            },
+            programa: {
+                codPrograma: parseInt(programa)
+            },
+            situacionLaboral: {
+                codSituacionLaboral: parseInt(codSituacionLaboral)
+            },
+            fuenteFinanciamiento: {
+                codFuenteFinanciamiento: parseInt(fuenteFinancimiento)
+            },
+            objetoGasto: {
+                codObjetoGasto: parseInt(objetoGasto)
+            },
+            subprograma: {
+                codSubprograma: parseInt(subprograma)
+            },
+            gradoSalarial: {
+                nroGrado: parseInt(gradoSalarial)
+            },
+            asignacion: parseFloat(asignacion)
         };
 
-        console.log("Body a enviar:", body); // 👀 Debug
+        console.log("Body a enviar:", body);
 
         try {
             const response = await axios.post("http://localhost:8080/salarios/crear", body);
+
             if (response.data.codigoMensaje === "200") {
-                toast.success("Salario guardado con éxito", { autoClose: 2000 });
-                // limpiar si querés
-                // setFormData({...})
+                toast.success("Planilla salarial creada exitosamente", { autoClose: 2000 });
+                navigate("/salarios");
             } else {
                 toast.error("Error: " + response.data.mensaje);
-                console.log(response.data.mensaje); // 👀 Debug
             }
         } catch (error) {
             console.error("Error al guardar salario:", error);
-            toast.error("No se pudo guardar");
+            toast.error("No se pudo guardar la planilla");
         }
     };
 
@@ -153,8 +181,8 @@ const AbmSalarios = () => {
                         />
                     </div>
                     <div className="campo">
-                        <label>Nombres</label>
-                        <input name="nombres" value={formData.nombres} onChange={handleChange} readOnly={true}/>
+                        <label>Nombre Completo</label>
+                        <input name="nombres" value={formData.nombres || formData.apellidos} onChange={handleChange} readOnly={true}/>
                     </div>
                     <div className="campo">
                         <label>Cargo</label>
@@ -174,10 +202,10 @@ const AbmSalarios = () => {
                         />
                     </div>
                     <div className="campo">
-                        <label>Direccion</label>
+                        <label>Asignacion</label>
                         <input
-                            name="descDireccion"
-                            value={formData.descDireccion}
+                            name="asignacion"
+                            value={formData.asignacion}
                             readOnly
                         />
                     </div>
@@ -285,8 +313,9 @@ const AbmSalarios = () => {
                         GUARDAR
                     </button>
                 </div>
-                <ToastContainer/>
+
             </div>
+            <ToastContainer/>
         </div>
     );
 };

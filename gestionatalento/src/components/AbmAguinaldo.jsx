@@ -120,6 +120,14 @@ const AbmAguinaldo = () => {
         }
     };
 
+    const descripcionesSituacionesLab = {
+        1: "CONTRATADO",
+        2: "PERMANENTE",
+        3: "COMISIONADO",
+        4: "PASANTIA EDUCATIVA",
+        5: "PASANTIA UNIVERSITARIA",
+    };
+
     return (
         <div className="abm-aguinaldo-container">
             <h1>Incluir Aguinaldo</h1>
@@ -143,32 +151,24 @@ const AbmAguinaldo = () => {
                         />
                     </div>
                     <div className="campo">
-                        <label>Nombres</label>
-                        <input name="nombres" value={formData.nombres} onChange={handleChange} readOnly/>
-
+                        <label>Nombre Completo</label>
+                        <input name="nombres" value={formData.nombres || formData.apellidos} onChange={handleChange}
+                               readOnly={true}/>
                     </div>
                     <div className="campo">
-                        <label>Apellidos</label>
-                        <input name="apellidos" value={formData.apellidos}
+                        <label>Cargo</label>
+                        <input name="descCargo" value={formData.descCargo}
                                onChange={handleChange}
-                               readOnly/>
+                               readOnly={true}/>
                     </div>
                 </div>
 
                 <div className="fila-triple">
                     <div className="campo">
-                        <label>Cargo</label>
+                        <label>Situación Laboral</label>
                         <input
-                            name="cargo"
-                            value={descripcionesCargo[formData.codCargo] || ""}
-                            readOnly
-                        />
-                    </div>
-                    <div className="campo">
-                        <label>Grado Salarial</label>
-                        <input
-                            name="gradoSalarial"
-                            value={formData.nombres}
+                            name="sitLaboral"
+                            value={descripcionesSituacionesLab[formData.codSituacionLaboral] || ""}
                             readOnly
                         />
                     </div>
@@ -180,55 +180,102 @@ const AbmAguinaldo = () => {
                             readOnly
                         />
                     </div>
+                    <div className="campo">
+                        <label>Fuente de Financiamiento</label>
+                        <select
+                            name="fuenteFinancimiento"
+                            value={formData.fuenteFinancimiento}
+                            onChange={handleChange}
+                        >
+                            <option value="">Seleccionar</option>
+                            <option value="1">Recursos Propios</option>
+                            <option value="2">Recursos Propios, Royalties y Compensaciones Segun Disponibilidad</option>
+                            <option value="30">Recursos Institucionales</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div className="fila-triple">
                     <div className="campo">
-                        <label>Fuente de Financiamiento</label>
-                        <input
-                            name="financiamiento"
-                            value={descripcionesCargo[formData.codCargo] || ""}
-                            readOnly
-                        />
+                        <label>Grado</label>
+                        <select
+                            name="gradoSalarial"
+                            value={formData.gradoSalarial}
+                            onChange={handleChange}
+                        >
+                            <option value="">Seleccionar</option>
+                            <option value="0">Grado Salarial Contratado</option>
+                        </select>
                     </div>
                     <div className="campo">
                         <label>Objeto de Gasto</label>
-                        <input
-                            name="objGasto"
-                            value={formData.descSituacionLaboral}
-                            readOnly
-                        />
+                        <select
+                            name="objetoGasto"
+                            value={formData.objetoGasto}
+                            onChange={handleChange}
+                        >
+                            <option value="">Seleccionar</option>
+                            <option value="1">Honorarios Profesionales</option>
+                            <option value="2">Contratacion del Personal Tecnico</option>
+                            <option value="3">Jornal - Royalties y Compensaciones</option>
+                            <option value="4">Jornales</option>
+                            <option value="5">Jornal - Fondos Propios 60%</option>
+                            <option value="111">Sueldos</option>
+                            <option value="112">Dietas</option>
+                            <option value="113">Gastos de Representación</option>
+                            <option value="114">Aguinaldo Personal Permanente</option>
+                        </select>
                     </div>
                     <div className="campo">
-                        <label>Programa</label>
+                        <label>Periodo</label>
                         <input
-                            name="programa"
-                            value={formData.codDireccion}
-                            readOnly
+                            type="text"
+                            name="codPeriodo"
+                            value={formData.codPeriodo}
+                            onChange={handleChange}
                         />
                     </div>
                 </div>
 
-                <div className="fila-doble">
+                <div className="fila-triple">
                     <div className="campo">
-                        <label>SubPrograma</label>
+                        <label>Presupuesto</label>
                         <select
-                            name="subprograma"
-                            value={formData.exoneraEntrada}
+                            name="presupuesto"
+                            value={formData.presupuesto}
                             onChange={handleChange}
                         >
                             <option value="">Seleccionar</option>
-                            <option value="S">Sí</option>
-                            <option value="N">No</option>
+                            <option value="1">Actividades Centrales</option>
+                            <option value="2">Servicios Personales</option>
                         </select>
                     </div>
                     <div className="campo">
-                        <label>Situación Laboral</label>
-                        <input
-                            name="sitLaboral"
-                            value={formData.descSituacionLaboral}
+                        <label>Programa</label>
+                        <select
+                            name="programa"
+                            value={formData.programa}
                             onChange={handleChange}
-                        />
+                        >
+                            <option value="">Seleccionar</option>
+                            <option value="1">Legislativo Municipal</option>
+                            <option value="2">Ejecutivo Municipal - Permanente</option>
+                            <option value="3">Ejecutivo Municipal - Contratado</option>
+                        </select>
+                    </div>
+                    <div className="campo">
+                        <label>Sub Programa</label>
+                        <select
+                            name="subprograma"
+                            value={formData.subprograma}
+                            onChange={handleChange}
+                        >
+                            <option value="">Seleccionar</option>
+                            <option value="1">Justa Municipal</option>
+                            <option value="2">Intendencia Municipal</option>
+                            <option value="3">Administración y Finanzas</option>
+                            <option value="5">Obras y Servicios Publicos</option>
+                        </select>
                     </div>
                 </div>
 

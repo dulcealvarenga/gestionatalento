@@ -1,8 +1,8 @@
 // src/components/Salaries.jsx
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import './Salarios.css';
 import { FaEdit } from 'react-icons/fa';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { pdf, Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import axios from "axios";
 
@@ -68,11 +68,13 @@ const Salarios = () => {
 
     // para mostrar formulario de edicion
     const [periodo, setPeriodo] = useState("");
+    const [periodoBuscar, setPeriodoBuscar] = useState("");
     const [modalInformeTipo, setModalInformeTipo] = useState(null); // "altas", "bajas", "modificaciones"
 
     const [mostrarMenuInformes, setMostrarMenuInformes] = useState(false);
     const [showConfirmModalSA, setShowConfirmModalSA] = useState(false);
     const [comentario, setComentario] = useState("");
+    const [salarios, setSalarios] = useState([]);
 
     const abrirPDFEnPestana = async () => {
         const documento = await generarPDFIndividual(modalInformeTipo, periodo);
@@ -187,21 +189,48 @@ const Salarios = () => {
         }
     };
 
+    useEffect(() => {
+        const obtenerSalarios = async () => {
+            try {
+                const res = await axios.get("http://localhost:8080/salarios/obtenerLista");
+                const lista = res.data.objeto || [];
+                setTodosLosSalarios(lista); // copia completa
+                setSalarios(lista);         // visible en la tabla
+            } catch (err) {
+                console.error("Error al obtener salarios:", err);
+                setTodosLosSalarios([]);
+                setSalarios([]);
+            }
+        };
+
+        obtenerSalarios();
+    }, []);
+
+    const [todosLosSalarios, setTodosLosSalarios] = useState([]);
+
+    const filtrarPorPeriodo = () => {
+        const filtrado = todosLosSalarios.filter(
+            (s) => s.periodo.codPeriodo === periodoBuscar
+        );
+        setSalarios(filtrado);
+    };
+
     return (
         <div className="salaries-container">
             <h1>Salarios</h1>
-
+            <p className="acciones-title-salario">Acciones</p>
             <div className="actions-section">
                 <button className="primary-btn" onClick={() => navigate("/salarios/abm")}>AGREGAR SALARIOS</button>
                 <button className="primary-btn" onClick={() => navigate("/salarios/aguinaldo")}>INCLUIR AGUINALDO
                 </button>
-                <select>
-                    <option>Enero</option>
-                    <option>Febrero</option>
-                    <option>Marzo</option>
-                    {/* otros meses */}
-                </select>
-                <button className="primary-btn">Buscar</button>
+                <input
+                    type="text"
+                    placeholder="Periodo (Ej: 2025/05)"
+                    value={periodoBuscar}
+                    onChange={(e) => setPeriodoBuscar(e.target.value)}
+                    className="periodo-input"
+                />
+                <button className="primary-btn" onClick={filtrarPorPeriodo}>Buscar</button>
                 <div className="dropdown-wrapper">
                     <button
                         className="primary-btn"
@@ -250,11 +279,13 @@ const Salarios = () => {
             <div className="export-section">
                 <h3>Exportar planilla de salarios</h3>
                 <div className="export-group">
-                    <select>
-                        <option>Enero</option>
-                        <option>Febrero</option>
-                        <option>Marzo</option>
-                    </select>
+                    <input
+                        type="text"
+                        placeholder="Periodo (Ej: 2025/05)"
+                        value={periodo}
+                        onChange={(e) => setPeriodo(e.target.value)}
+                        className="periodo-input"
+                    />
                     <button className="primary-btn">Generar</button>
                     <button className="primary-btn">Exportar Aguinaldo</button>
                     <button className="primary-btn" onClick={() => setShowConfirmModalSA(true)}>Cierre</button>
@@ -285,29 +316,31 @@ const Salarios = () => {
             <table className="salaries-table">
                 <thead>
                 <tr>
-                <th>C.I Nro.</th>
-                    <th>Nombre Completo</th>
+                    <th>C.I Nro.</th>
+                    <th>Funcionario</th>
                     <th>Cargo</th>
                     <th>Grado Salarial</th>
-                    <th>Asig. Salarial</th>
+                    <th>Asignación</th>
+                    <th>Periodo</th>
                     <th>Obj. de Gasto</th>
                     <th>Programa</th>
-                    <th>Situación Laboral</th>
+                    <th>Subprograma</th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                {[1, 2].map((row, index) => (
+                {salarios.map((s, index) => (
                     <tr key={index}>
-                        <td>1.234.567</td>
-                        <td>Juan Perez</td>
-                        <td>Asesor de Obras</td>
-                        <td>2,000,000</td>
-                        <td>2,000,000</td>
-                        <td>Honorarios Profesionales</td>
-                        <td>Ejecutivo Principal</td>
-                        <td>Contratado</td>
-                        <td><FaEdit className="edit-icon" /></td>
+                        <td>{s.empleado.persona.nroDocumento}</td>
+                        <td>{`${s.empleado.persona.nombres} ${s.empleado.persona.apellidos}`}</td>
+                        <td>{s.empleado.cargo.descripcion}</td>
+                        <td>{s.gradoSalarial.descripcion}</td>
+                        <td>{s.asignacion.toLocaleString("es-PY")}</td>
+                        <td>{s.periodo.codPeriodo}</td>
+                        <td>{s.objetoGasto.descripcion}</td>
+                        <td>{s.programa.descripcion}</td>
+                        <td>{s.subprograma.descripcion}</td>
+                        <td><FaEdit className="edit-icon"/></td>
                     </tr>
                 ))}
                 </tbody>
