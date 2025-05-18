@@ -14,6 +14,7 @@ const DescuentosSalariales = () => {
     const [descuentoToDelete, setDescuentoToDelete] = useState(null);
     const [showConfirmModalDS, setShowConfirmModalDS] = useState(false);
     const [comentario, setComentario] = useState("");
+    const [mesSeleccionado, setMesSeleccionado] = useState(1);
 
     const fetchDescuentos = async () => {
         try {
@@ -80,6 +81,30 @@ const DescuentosSalariales = () => {
         }
     };
 
+    const exportarMarcaciones = () => {
+        const nuevaVentana = window.open(
+            `/informe-recibos?mes=${mesSeleccionado}`,
+            "_blank"
+        );
+        if (!nuevaVentana)
+            alert(
+                "Por favor, permití las ventanas emergentes para poder generar el PDF."
+            );
+    };
+
+    const exportarRecibidos = () => {
+        const anio = new Date().getFullYear();
+        const periodo = `${anio}/${String(mesSeleccionado).padStart(2, "0")}`;
+        const nuevaVentana = window.open(
+            `/informe-recibidos?periodo=${periodo}`,
+            "_blank"
+        );
+        if (!nuevaVentana) {
+            alert(
+                "Por favor, permití las ventanas emergentes para poder generar el PDF."
+            );
+        }
+    };
 
     return (
         <div className="descuentos-container">
@@ -88,18 +113,32 @@ const DescuentosSalariales = () => {
 
             <div className="acciones-top-row">
                 <button className="btn-agregar" onClick={() => navigate("/descuentos/abm")}>AGREGAR</button>
-                <select className="select-mes">
-                    <option>Enero</option>
-                    <option>Febrero</option>
+                <select
+                    className="select-mes"
+                    value={mesSeleccionado}
+                    onChange={(e) => setMesSeleccionado(parseInt(e.target.value))}
+                >
+                    <option value={1}>Enero</option>
+                    <option value={2}>Febrero</option>
+                    <option value={3}>Marzo</option>
+                    <option value={4}>Abril</option>
+                    <option value={5}>Mayo</option>
+                    <option value={6}>Junio</option>
+                    <option value={7}>Julio</option>
+                    <option value={8}>Agosto</option>
+                    <option value={9}>Septiembre</option>
+                    <option value={10}>Octubre</option>
+                    <option value={11}>Noviembre</option>
+                    <option value={12}>Diciembre</option>
                 </select>
                 <button className="btn-buscar">BUSCAR</button>
             </div>
 
             <div className="acciones-buttons">
-                <button>EXPORTAR MARCACIONES</button>
+                <button onClick={exportarMarcaciones}>EXPORTAR MARCACIONES</button>
                 <button>EXONERADOS</button>
                 <button>EXPORTAR BORRADOR</button>
-                <button>EXPORTAR RECIBIDOS</button>
+                <button onClick={exportarRecibidos}>EXPORTAR RECIBIDOS</button>
                 <button onClick={() => setShowConfirmModalDS(true)}>CIERRE</button>
             </div>
 
