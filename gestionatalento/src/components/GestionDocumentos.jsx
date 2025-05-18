@@ -3,52 +3,93 @@ import "./GestionDocumentos.css";
 import axios from "axios";
 
 const GestionDocumentos = () => {
-    const [allJustificativos, setAllJustificativos] = useState([]);
+    const [allDocumentos, setAllDocumentos] = useState([]);
     const [documentos, setDocumentos] = useState([]);
     const [page, setPage] = useState(0);
     const pageSize = 100;
     const [filtroTipo, setFiltroTipo] = useState("");
 
     useEffect(() => {
-        fetchAllJustificativos();
+        fetchAllDocumentos();
     }, []);
 
     useEffect(() => {
         setDocumentos(
-            allJustificativos.slice(page * pageSize, (page + 1) * pageSize)
+            allDocumentos.slice(page * pageSize, (page + 1) * pageSize)
         );
-    }, [page, allJustificativos]);
+    }, [page, allDocumentos]);
 
     useEffect(() => {
         const filtrados = filtroTipo === ""
-            ? allJustificativos
-            : allJustificativos.filter(j => j.tipoJustificativo.descripcion === filtroTipo);
+            ? allDocumentos
+            : allDocumentos.filter(d => d.tipo === filtroTipo);
 
         setDocumentos(
             filtrados.slice(page * pageSize, (page + 1) * pageSize)
         );
-    }, [page, allJustificativos, filtroTipo]);
+    }, [page, allDocumentos, filtroTipo]);
 
-    const fetchAllJustificativos = async () => {
+    const fetchAllDocumentos = async () => {
         try {
-            const response = await axios.get(
-                'http://localhost:8080/justificativos/obtenerListaVacaciones'
-            );
-            const allData = response.data.objeto || [];
-            setAllJustificativos(allData);
+            const [justRes, vacRes, contRes] = await Promise.all([
+                axios.get('http://localhost:8080/justificativos/obtenerListaJustificativos'),
+                axios.get('http://localhost:8080/justificativos/obtenerListaVacaciones'),
+                axios.get('http://localhost:8080/contratos/obtenerLista')
+            ]);
+            console.log("Justificativos: ", justRes.data.objeto);
+            console.log("Vacaciones: ", vacRes.data.objeto);
+            console.log("Contratos: ", contRes.data.objeto);
+
+            const justData = justRes.data.objeto?.map(j => ({
+                tipo: j.tipoJustificativo?.codTipJustificativo === 9
+                    ? "Vacaciones"
+                    : "Justificativo",
+                persona: j.persona,
+                fechaInicio: j.fecha,
+                fechaFin: j.fecha,
+                estado: j.estado,
+                descripcion: j.descripcion || "-"
+            })) || [];
+
+            const vacData = vacRes.data.objeto?.map(j => ({
+                tipo: j.tipoJustificativo?.codTipJustificativo === 9
+                    ? "Vacaciones"
+                    : "Justificativo",
+                persona: j.persona,
+                fechaInicio: j.fecha,
+                fechaFin: j.fecha,
+                estado: j.estado,
+                descripcion: j.descripcion || "-"
+            })) || [];
+
+            const contData = contRes.data.objeto?.map(c => ({
+                tipo: "Contrato",
+                persona: {
+                    nombres: c.contrato.nombres,
+                    apellidos: c.contrato.apellidos
+                },
+                fechaInicio: c.contrato.fecDesde,
+                fechaFin: c.contrato.fecHasta,
+                estado: "V",
+                descripcion: c.observacion || "-"
+            })) || [];
+
+            const todo = [...justData, ...contData, ...vacData];
+            setAllDocumentos(todo);
+            console.log(todo);
             setPage(0);
-            setDocumentos(allData.slice(0, pageSize));
+            setDocumentos(todo.slice(0, pageSize));
         } catch (error) {
-            console.error("Error al obtener justificativos:", error);
-            setAllJustificativos([]);
+            console.error("Error al obtener documentos:", error);
+            setAllDocumentos([]);
             setDocumentos([]);
         }
     };
 
     const totalPages = Math.ceil(
         (filtroTipo === ""
-                ? allJustificativos.length
-                : allJustificativos.filter(j => j.tipoJustificativo.descripcion === filtroTipo).length
+                ? allDocumentos.length
+                : allDocumentos.filter(d => d.tipo === filtroTipo).length
         ) / pageSize
     );
 
@@ -89,10 +130,10 @@ const GestionDocumentos = () => {
                     <tbody>
                     {documentos.map((j, index) => (
                         <tr key={index}>
-                            <td>{j.tipoJustificativo.descripcion}</td>
+                            <td>{j.tipo}</td>
                             <td>{(j.persona.nombres || "") + " " + (j.persona.apellidos || "")}</td>
-                            <td>{j.fecha}</td>
-                            <td>{j.fecha}</td>
+                            <td>{j.fechaInicio}</td>
+                            <td>{j.fechaFin}</td>
                             <td>{j.estado}</td>
                             <td>{j.descripcion}</td>
                         </tr>
