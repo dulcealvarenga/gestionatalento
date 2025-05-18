@@ -93,6 +93,28 @@ const GestionDocumentos = () => {
         ) / pageSize
     );
 
+    const [modalAbierto, setModalAbierto] = useState(false);
+    const [documentoSeleccionado, setDocumentoSeleccionado] = useState(null);
+    const [nuevoEstado, setNuevoEstado] = useState("");
+    const [comentario, setComentario] = useState("");
+
+    const abrirModal = (doc) => {
+        setDocumentoSeleccionado(doc);
+        setNuevoEstado(doc.estado); // valor por defecto
+        setComentario("");
+        setModalAbierto(true);
+    };
+
+    const confirmarCambioEstado = () => {
+        const actualizado = allDocumentos.map((doc) =>
+            doc === documentoSeleccionado
+                ? { ...doc, estado: nuevoEstado, comentario: comentario }
+                : doc
+        );
+        setAllDocumentos(actualizado);
+        setModalAbierto(false);
+    };
+
     return (
         <div className="documentos-container">
             <h2 style={{fontSize: "50px"}}>Gestión de Documentos</h2>
@@ -135,11 +157,31 @@ const GestionDocumentos = () => {
                             <td>{j.fechaInicio}</td>
                             <td>{j.fechaFin}</td>
                             <td>{j.estado}</td>
-                            <td>{j.descripcion}</td>
+                            <td>
+                                <button onClick={() => abrirModal(j)}>Cambiar Estado</button>
+                            </td>
                         </tr>
                     ))}
                     </tbody>
                 </table>
+                {modalAbierto && (
+                    <div className="modal-doc">
+                        <div className="modal-content-doc">
+                            <h3>Cambiar Estado del Documento</h3>
+                            <p><strong>Tipo de Documento:</strong> {documentoSeleccionado.tipo}</p>
+                            <p><strong>Funcionario:</strong> {documentoSeleccionado.persona.nombres} {documentoSeleccionado.persona.apellidos}</p>
+                            <p><strong>Estado Actual:</strong> {documentoSeleccionado.estado}</p>
+                            <p><strong>Nuevo Estado:</strong> {documentoSeleccionado.estado}</p>
+                            <label>Comentario:</label>
+                            <textarea value={comentario} onChange={(e) => setComentario(e.target.value)}/>
+
+                            <div className="modal-buttons-doc">
+                                <button onClick={() => setModalAbierto(false)}>Cancelar</button>
+                                <button onClick={() => confirmarCambioEstado()}>Confirmar</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
             <div className="pagination">
                 <button disabled={page === 0} onClick={() => setPage(page - 1)}>Anterior</button>

@@ -155,3 +155,42 @@
     border: 2px solid #8f9eff;
 }
 
+.modal-doc {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content-doc {
+    background: #1e1e2f;
+    padding: 25px;
+    border-radius: 12px;
+    width: 400px;
+    color: white;
+}
+
+.modal-content-doc{
+    font-weight: bolder;
+}
+
+.modal-content-doc select, .modal-content-doc textarea {
+    width: 100%;
+    padding: 8px;
+    background: #2e2e3f;
+    border: none;
+    color: white;
+    margin-bottom: 15px;
+    border-radius: 6px;
+}
+
+.modal-buttons-doc {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+

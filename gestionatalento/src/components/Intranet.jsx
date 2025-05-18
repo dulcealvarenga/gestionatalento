@@ -1,9 +1,11 @@
 // src/components/Intranet.jsx
-import React, { useState }  from 'react';
+import React, { useState, useEffect }  from 'react';
 import { useRef } from 'react';
 import './Intranet.css';
 import { useNavigate } from "react-router-dom";
 import { FaDownload, FaFolder } from 'react-icons/fa';
+import axios from "axios";
+import {toast} from "react-toastify";
 
 const Intranet = () => {
     const navigate = useNavigate();
@@ -26,33 +28,162 @@ const Intranet = () => {
         fileInputRef.current.click();  // 👉 abre el file picker
     };
 
-    const handleFileChange = (event) => {
-        const selectedFiles = event.target.files;
-        console.log("Archivos seleccionados:", selectedFiles);
-        // acá podés enviar al backend o guardar en estado
+    const handleFileChange = async (event) => {
+        const archivo = event.target.files[0];
+        if (!archivo || !codPersona || !selectedFolder) {
+            toast.warning("Seleccioná un archivo, un funcionario y una carpeta.");
+            return;
+        }
+
+        // Acá podés tener un mapping más elaborado si tenés más tipos
+        const codTipoDocumento = selectedFolder === "personales" ? 2 : 1;
+
+        const formData = new FormData();
+        formData.append("archivo", archivo);
+
+        const metadata = {
+            persona: { codPersona },
+            tipoDocumento: { codTipoDocumento },
+            estado: "C",
+            fecDocumento: new Date().toISOString().split("T")[0],
+            observacion: "Documento escaneado y cargado correctamente"
+        };
+
+        formData.append("data", JSON.stringify(metadata));
+
+        try {
+            const response = await axios.post("http://localhost:8080/personas/documentos/crear", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            });
+
+            if (response.data.codigoMensaje === "200") {
+                toast.success("Documento subido correctamente", { autoClose: 2000 });
+                await obtenerDocumentosFuncionario(codPersona);
+            } else {
+                toast.error("Error al subir el documento");
+            }
+        } catch (error) {
+            console.error("Error al subir archivo:", error);
+            toast.error("Error inesperado al subir archivo");
+        }
     };
 
-    const handleSearch = async () => {
+    const [codPersona, setCodPersona] = useState(null);
+    const [documentosEmpleado, setDocumentosEmpleado] = useState([]);
+    const [nombreCompleto, setNombreCompleto] = useState("");
+
+    const obtenerDocumentosFuncionario = async (codPersona) => {
+        try {
+            const response = await axios.get("http://localhost:8080/personas/documentos/obtenerLista");
+            const todos = response.data.objeto || [];
+            const filtrados = todos.filter(item => item.documento.persona.codPersona === codPersona);
+            setDocumentosEmpleado(filtrados);
+        } catch (error) {
+            console.error("Error al traer documentos", error);
+        }
+    };
+
+    const handleBuscarPorDocumentoEmp = async () => {
+        if (!documento) return;
         setIsLoading(true);
         try {
-            // 👉 Simulación de llamada a backend
-            const response = await fakeBackendCheck(documento);
-            setHasDocuments(response);
-            setSelectedFolder(false);
+            const response = await axios.get(`http://localhost:8080/empleados/obtener/documento/${documento}`);
+            if (response.data.codigoMensaje === "200") {
+                const empleado = response.data.objeto[0];
+                const persona = empleado.persona;
+                setCodPersona(persona.codPersona);
+                setNombreCompleto(`${persona.nombres} ${persona.apellidos}`);
+                toast.success("Empleado encontrado", { autoClose: 2000 });
+                await obtenerDocumentosFuncionario(persona.codPersona);
+                setHasDocuments(true);
+            } else {
+                toast.info("No se encontró el empleado", { autoClose: 2000 });
+                setHasDocuments(false);
+            }
         } catch (error) {
-            console.error("Error buscando funcionario", error);
+            console.log(error);
+            toast.error("Error al buscar", { autoClose: 2000 });
         } finally {
             setIsLoading(false);
         }
     };
 
-    // solo para simular
-    const fakeBackendCheck = (doc) => {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(doc === "123456"); // 👉 si se escribe 123456, muestra carpetas
-            }, 1000);
-        });
+    const descargarArchivo = (item) => {
+        const byteCharacters = atob(item.documento.archivo);
+        const byteArrays = [];
+        for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+            const slice = byteCharacters.slice(offset, offset + 512);
+            const byteNumbers = new Array(slice.length);
+            for (let i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+            byteArrays.push(new Uint8Array(byteNumbers));
+        }
+
+        const blob = new Blob(byteArrays, { type: item.documento.tipArchivo });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = item.documento.nomArchivo;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    };
+
+    const [documentosRecientes, setDocumentosRecientes] = useState([]);
+
+    useEffect(() => {
+        const obtenerRecientes = async () => {
+            try {
+                const response = await axios.get("http://localhost:8080/personas/documentos/obtenerLista");
+                const todos = response.data.objeto || [];
+
+                const ordenados = todos
+                    .filter(d => d.documento?.fecDocumento)
+                    .sort((a, b) => new Date(b.documento.fecDocumento) - new Date(a.documento.fecDocumento));
+
+                setDocumentosRecientes(ordenados.slice(0, 5));
+            } catch (error) {
+                console.error("Error al obtener documentos recientes", error);
+            }
+        };
+
+        obtenerRecientes();
+    }, []);
+
+    const [documentosGlobales, setDocumentosGlobales] = useState([]);
+    const [mostrarGlobales, setMostrarGlobales] = useState(false);
+
+    const handleVerTodosLosDocumentos = async () => {
+        try {
+            const response = await axios.get("http://localhost:8080/personas/documentos/obtenerLista");
+            setDocumentosGlobales(response.data.objeto || []);
+            setMostrarGlobales(true);
+            setSelectedFolder(null);
+            setHasDocuments(false); // Oculta vistas anteriores
+        } catch (error) {
+            console.error("Error al obtener documentos globales", error);
+            toast.error("No se pudieron cargar los documentos");
+        }
+    };
+
+    const visualizarArchivo = (item) => {
+        const byteCharacters = atob(item.documento.archivo);
+        const byteArrays = [];
+
+        for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+            const slice = byteCharacters.slice(offset, offset + 512);
+            const byteNumbers = new Array(slice.length);
+            for (let i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+            byteArrays.push(new Uint8Array(byteNumbers));
+        }
+
+        const blob = new Blob(byteArrays, { type: item.documento.tipArchivo });
+        const url = window.URL.createObjectURL(blob);
+        window.open(url, "_blank");
     };
 
     return (
@@ -68,9 +199,15 @@ const Intranet = () => {
                 />
                 <h1>Intranet</h1>
                     <nav>
-                        <a onClick={() => navigate("/menu")}>Home</a>
-                        <a href="#">Mis Documentos</a>
-                        <a onClick={handleUploadClick} href="#">Subir</a>
+                        <a onClick={() => {
+                               setMostrarGlobales(false);
+                               navigate("/intranet");
+                           }}>Home</a>
+                        <a onClick={handleVerTodosLosDocumentos}>Mis Documentos</a>
+                        <a onClick={() => {
+                            setMostrarGlobales(false);
+                            handleUploadClick();
+                        }}>Subir</a>
                     </nav>
             </div>
 
@@ -80,10 +217,17 @@ const Intranet = () => {
                 <div className="search-bar">
                     <input
                         type="text"
+                        name="nroDocumento"
                         placeholder="Ingrese Nro de Documento"
                         value={documento}
                         onChange={e => setDocumento(e.target.value)}
-                        onKeyDown={e => e.key === "Enter" && handleSearch()}
+                        onBlur={handleBuscarPorDocumentoEmp}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                handleBuscarPorDocumentoEmp();
+                            }
+                        }}
+                        required
                     />
                 </div>
                 {isLoading && <p>Buscando documentos...</p>}
@@ -91,6 +235,7 @@ const Intranet = () => {
                 {!isLoading && hasDocuments && !selectedFolder && (
                     <>
                         <h3>Nombre del Funcionario</h3>
+                        <h4>{nombreCompleto}</h4>
                         <h3>Carpetas del Funcionario</h3>
                         <div className="folders-grid">
                             <div className="folder-card" onClick={() => setSelectedFolder('personales')}>
@@ -107,21 +252,27 @@ const Intranet = () => {
 
                 {selectedFolder && (
                     <>
-                        <h3>Documentos {selectedFolder === 'personales' ? 'Personales' : 'Laborales'}</h3>
+                        <h3>Documentos {selectedFolder === 'personales' ? 'Personales' : 'Laborales'} de {nombreCompleto}</h3>
                         <div className="documentos-grid">
-                            {documentos.map((doc) => (
-                                <div key={doc.id} className="document-card">
-                                    <div className="icono-doc">
-                                        <FaDownload size={40}/>
-                                        <p>{doc.nombre}</p>
+                            {documentosEmpleado
+                                .filter((item) => {
+                                    const tipo = item.documento?.tipoDocumento?.tipCategoria;
+                                    return selectedFolder === "personales"
+                                        ? tipo === "P"
+                                        : tipo === "E";
+                                })
+                                .map((item, i) => (
+                                    <div key={i} className="document-card">
+                                        <div className="icono-doc">
+                                            <FaDownload size={40} />
+                                            <p>{item.documento.nomArchivo}</p>
+                                        </div>
+                                        <div className="botones-doc">
+                                            <button onClick={() => descargarArchivo(item)}>Descargar</button>
+                                            <button>Eliminar</button>
+                                        </div>
                                     </div>
-                                    <div className="botones-doc">
-                                        <button>Ver</button>
-                                        <button>Descargar</button>
-                                        <button>Eliminar</button>
-                                    </div>
-                                </div>
-                            ))}
+                                ))}
                         </div>
                         <div className="botones-acciones-intra">
                             <button className="volver-btn" onClick={() => setSelectedFolder(null)}>← Volver a Carpetas</button>
@@ -131,7 +282,6 @@ const Intranet = () => {
                             type="file"
                             ref={fileInputRef}
                             style={{display: "none"}}
-                            multiple
                             onChange={handleFileChange}
                         />
                     </>
@@ -141,20 +291,40 @@ const Intranet = () => {
                     <p>No se encontraron documentos vinculados a este funcionario.</p>
                 )}
 
+                {mostrarGlobales && (
+                    <>
+                        <h3>Todos los Documentos</h3>
+                        <div className="documentos-grid">
+                            {documentosGlobales.map((item, i) => (
+                                <div key={i} className="document-card">
+                                    <div className="icono-doc">
+                                        <FaDownload size={40} />
+                                        <p>{item.documento.nomArchivo}</p>
+                                    </div>
+                                    <div className="botones-doc">
+                                        <button onClick={() => descargarArchivo(item)}>Descargar</button>
+                                        <button>Eliminar</button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </>
+                )}
+
                 {/* Documentos */}
-                {!hasDocuments && (
+                {!hasDocuments && !mostrarGlobales &&(
                     <>
                         <h3>Recientes</h3>
                         <div className="documentos-grid">
-                            {documentos.map((doc) => (
-                                <div key={doc.id} className="document-card">
+                            {documentosRecientes.map((item, i) => (
+                                <div key={i} className="document-card">
                                     <div className="icono-doc">
-                                        <FaDownload size={40} />
-                                        <p>{doc.nombre}</p>
+                                        <FaDownload size={40}/>
+                                        <p>{item.documento.nomArchivo}</p>
                                     </div>
                                     <div className="botones-doc">
-                                        <button>Ver</button>
-                                        <button>Descargar</button>
+                                        <button onClick={() => visualizarArchivo(item)}>Ver</button>
+                                        <button onClick={() => descargarArchivo(item)}>Descargar</button>
                                         <button>Eliminar</button>
                                     </div>
                                 </div>
