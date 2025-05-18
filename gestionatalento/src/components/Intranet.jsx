@@ -3,7 +3,7 @@ import React, { useState }  from 'react';
 import { useRef } from 'react';
 import './Intranet.css';
 import { useNavigate } from "react-router-dom";
-import { FaDownload, FaSearch, FaPlus, FaFolder } from 'react-icons/fa';
+import { FaDownload, FaFolder } from 'react-icons/fa';
 
 const Intranet = () => {
     const navigate = useNavigate();
@@ -68,7 +68,7 @@ const Intranet = () => {
                 />
                 <h1>Intranet</h1>
                     <nav>
-                        <a onClick={() => navigate("/intranet")} href="#">Home</a>
+                        <a onClick={() => navigate("/menu")}>Home</a>
                         <a href="#">Mis Documentos</a>
                         <a onClick={handleUploadClick} href="#">Subir</a>
                     </nav>

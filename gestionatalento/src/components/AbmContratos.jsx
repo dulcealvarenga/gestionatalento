@@ -16,6 +16,7 @@ const AbmContratos = () => {
         periodo: "",
         contrato: "",
         observacion: "",
+
     });
 
     const handleChange = (e) => {
@@ -47,9 +48,11 @@ const AbmContratos = () => {
                     fecIngreso: empleado.fecIngreso || '',
                     fecActoAdministrativo: empleado.fecActoAdministrativo || '',
                     codCargo: empleado.cargo?.codCargo || '',
+                    descripcionCargo: empleado.cargo?.descripcion || '',
                     codSede: empleado.sede?.codSede || '',
                     codDireccion: empleado.cargo?.departamento?.direccion?.codDireccion || '',
                     codSituacionLaboral: empleado.situacionLaboral?.codSituacionLaboral || '',
+                    descripcionLab: empleado.situacionLaboral?.descripcion || '',
                     codEmpleado: empleado.codEmpleado || '',
                 }));
             } else {
@@ -63,16 +66,37 @@ const AbmContratos = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const codPersona = localStorage.getItem("codPersona");
+        const body = {
+            nroContrato: null,
+            periodo: { nroPeriodo: 5 },
+            persona: { codPersona: parseInt(codPersona) },
+            nroDocumento: form.nroDocumento,
+            nombres: form.nombres,
+            apellidos: form.apellidos,
+            asignacion: parseFloat(form.asignacion || 0),
+            montoLetras: form.montoLetras || "",
+            estado: form.estado || "ACTIVO",
+            fecDesde: form.fecDesde,
+            fecHasta: form.fecHasta,
+            situacionLaboral: { codSituacionLaboral: parseInt(form.codSituacionLaboral || 1) },
+            nomFirmante1: form.nomFirmante1 || "",
+            nomFirmante2: form.nomFirmante2 || "",
+            observacion: form.observacion || ""
+        };
+
+        console.log("Contrato:", body);
+
         try {
             const response = await axios.post(
-                "http://localhost:8080/api/contratos",
-                form
+                "http://localhost:8080/contratos/crear",
+                body
             );
-            console.log("Contrato creado:", response.data);
             toast.success("Contrato guardado exitosamente", { autoClose: 2000 });
+            navigate("/contratos"); // o adonde quieras redirigir
         } catch (error) {
             console.error("Error al guardar contrato:", error);
-            toast.error("Hubo un error al guardar el contrato:", error);
+            toast.error("Hubo un error al guardar el contrato", { autoClose: 2000 });
         }
     };
 
@@ -80,9 +104,9 @@ const AbmContratos = () => {
         <div className="abm-contratos-container">
             <h1>Agregar Contratos</h1>
             <p className="volver-btn" onClick={() => navigate(-1)}>← Volver</p>
-            <form className="form-contrato">
-                <div className="form-grid">
-                    <div className="form-group">
+            <form className="form-contrato" onSubmit={handleSubmit}>
+                <div className="fila-triple">
+                    <div className="campo">
                         <label>Nro. de Documento</label>
                         <input
                             type="text"
@@ -98,64 +122,92 @@ const AbmContratos = () => {
                             required
                         />
                     </div>
-                    <div className="form-group">
+                    <div className="campo">
                         <label>Nombres</label>
                         <input
                             type="text"
                             name="nombres"
                             value={form.nombres}
                             onChange={handleChange}
-                            placeholder=" "
+                            readOnly={true}
                         />
                     </div>
-                    <div className="form-group">
+                    <div className="campo">
                         <label>Apellidos</label>
                         <input
                             type="text"
                             name="apellidos"
                             value={form.apellidos}
                             onChange={handleChange}
-                            placeholder=" "
+                            readOnly={true}
                         />
                     </div>
                 </div>
-                <div className="form-grid-dos">
-                    <div className="form-group">
-                        <label>Periodo</label>
+                <div className="fila-triple">
+                    <div className="campo">
+                        <label>Cargo</label>
                         <input
                             type="text"
-                            name="periodo"
-                            value={form.periodo}
+                            name="descripcionCargo"
+                            value={form.descripcionCargo}
                             onChange={handleChange}
-                            placeholder=" "
+                            readOnly={true}
                         />
                     </div>
-                    <div className="form-group">
-                        <label>Contrato</label>
-                        <select
-                            name="contrato"
-                            value={form.contrato}
+                    <div className="campo">
+                        <label>Situacion Laboral</label>
+                        <input
+                            type="text"
+                            name="descripcionLab"
+                            value={form.descripcionLab}
                             onChange={handleChange}
-                        >
-                            <option value="">Seleccionar...</option>
-                            <option value="Contrato A">Contrato A</option>
-                            <option value="Contrato B">Contrato B</option>
-                        </select>
+                            readOnly={true}
+                        />
                     </div>
-                    <div className="form-group">
-                        <label>Observacion</label>
+                    <div className="campo">
+                        <label>Asignación</label>
+                        <input
+                            type="text"
+                            name="asignacion"
+                            value={form.asignacion}
+                            onChange={handleChange}
+                            readOnly={true}
+                        />
+                    </div>
+                </div>
+
+                <div className="fila-triple">
+                    <div className="campo">
+                        <label>Fecha desde</label>
+                        <input
+                            type="date"
+                            name="fecDesde"
+                            value={form.fecDesde}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="campo">
+                        <label>Fecha Hasta</label>
+                        <input
+                            type="date"
+                            name="fecHasta"
+                            value={form.fecHasta}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="campo">
+                        <label>Observación</label>
                         <input
                             type="text"
                             name="observacion"
                             value={form.observacion}
                             onChange={handleChange}
-                            placeholder=" "
                         />
                     </div>
                 </div>
 
                 <div className="btn-guardar-container">
-                    <button type="submit" className="guardar-btn" onClick={handleSubmit}>
+                    <button type="submit" className="guardar-btn">
                         GUARDAR
                     </button>
                 </div>

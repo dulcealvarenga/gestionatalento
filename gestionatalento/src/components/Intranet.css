@@ -11,7 +11,7 @@
 /* ---------- SIDEBAR ---------- */
 .sidebar-intra {
     width: 220px;
-    background-color: #2d2f4a;
+    background-color: #1a1a2e;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -41,7 +41,7 @@
 }
 
 .sidebar-intra nav a:hover {
-    color: #f9c74f;
+    color: #8f99ff;
 }
 
 /* ---------- MAIN ---------- */
