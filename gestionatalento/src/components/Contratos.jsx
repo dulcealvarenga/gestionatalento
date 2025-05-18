@@ -49,15 +49,20 @@ const Contratos = () => {
 
     const totalPages = Math.ceil(allContratos.length / pageSize);
 
+    const gestionDoc = () => {navigate("/documentos");};
+
     return (
         <div className="contratos-container">
             <h1>Contratos</h1>
             <p className="acciones-title-con">Acciones</p>
             <button
-                className="boton-accion"
+                className="boton-accion-contratos"
                 onClick={() => navigate("/contratos/abm")}
             >
                 AGREGAR
+            </button>
+            <button className="boton-accion-contratos" onClick={gestionDoc}>
+                GESTION
             </button>
             <div className="tabla-scroll">
                 <table className="tabla-empleados">

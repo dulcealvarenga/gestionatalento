@@ -9,12 +9,10 @@ const GestionDocumentos = () => {
     const pageSize = 100;
     const [filtroTipo, setFiltroTipo] = useState("");
 
-    // 👉 Al cargar, trae todos los justificativos sin filtrar
     useEffect(() => {
         fetchAllJustificativos();
     }, []);
 
-    // 👉 Cada vez que cambia page, actualiza la porción visible
     useEffect(() => {
         setDocumentos(
             allJustificativos.slice(page * pageSize, (page + 1) * pageSize)

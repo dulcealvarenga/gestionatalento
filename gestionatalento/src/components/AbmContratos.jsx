@@ -4,6 +4,9 @@ import "./AbmContratos.css";
 import axios from "axios";
 import { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
+import { pdf } from '@react-pdf/renderer';
+import { saveAs } from 'file-saver';
+import ContratoPDF from "./ContratoPDF.jsx";
 
 const AbmContratos = () => {
     const navigate = useNavigate();
@@ -80,8 +83,8 @@ const AbmContratos = () => {
             fecDesde: form.fecDesde,
             fecHasta: form.fecHasta,
             situacionLaboral: { codSituacionLaboral: parseInt(form.codSituacionLaboral || 1) },
-            nomFirmante1: form.nomFirmante1 || "",
-            nomFirmante2: form.nomFirmante2 || "",
+            nomFirmante1: form.nomFirmante1 || "Lic. Ana Méndez",
+            nomFirmante2: form.nomFirmante2 || "Ing. Pedro López",
             observacion: form.observacion || ""
         };
 
@@ -93,7 +96,13 @@ const AbmContratos = () => {
                 body
             );
             toast.success("Contrato guardado exitosamente", { autoClose: 2000 });
-            navigate("/contratos"); // o adonde quieras redirigir
+            // ✅ Generar PDF automáticamente
+            console.log("Response:", response.data.objeto);
+            const blob = await pdf(<ContratoPDF contrato={response.data.objeto} />).toBlob();
+            saveAs(blob, `Contrato_${form.nroDocumento}.pdf`);
+
+            // ⏳ Pequeña espera y redirección
+            setTimeout(() => navigate("/contratos"), 2000);
         } catch (error) {
             console.error("Error al guardar contrato:", error);
             toast.error("Hubo un error al guardar el contrato", { autoClose: 2000 });

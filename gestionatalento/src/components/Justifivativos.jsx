@@ -73,6 +73,8 @@ const Justificativos = () => {
 
     const totalPages = Math.ceil(allJustificativos.length / pageSize);
 
+    const gestionDoc = () => {navigate("/documentos");};
+
     return (
         <div className="justificativos-container">
             <h2 style={{ fontSize: "50px" }}>Justificativos</h2>
@@ -83,7 +85,7 @@ const Justificativos = () => {
                     AGREGAR
                 </button>
 
-                <label style={{ display: "flex", flexDirection: "column", color: "white" }}>
+                <label style={{display: "flex", flexDirection: "column", color: "white"}}>
                     Fecha Desde
                     <input
                         type="date"
@@ -93,7 +95,7 @@ const Justificativos = () => {
                     />
                 </label>
 
-                <label style={{ display: "flex", flexDirection: "column", color: "white" }}>
+                <label style={{display: "flex", flexDirection: "column", color: "white"}}>
                     Fecha Hasta
                     <input
                         type="date"
@@ -106,11 +108,15 @@ const Justificativos = () => {
                 <button className="boton-buscar-jus" onClick={fetchFilteredJustificativos}>
                     BUSCAR
                 </button>
+
+                <button className="boton-buscar-jus" onClick={gestionDoc}>
+                    GESTION
+                </button>
             </div>
 
             <div className="tabla-scroll">
                 <table className="tabla-justificativos">
-                    <thead>
+                <thead>
                     <tr>
                         <th>ID</th>
                         <th>Fecha</th>
