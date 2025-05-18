@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const Contratos = () => {
     const [listaContratos, setListaContratos] = useState([]);
     const [allContratos, setAllContratos] = useState([]);
-    const [setContratos] = useState([]);
+    const [contratos, setContratos] = useState([]);
     const [page, setPage] = useState(0);
     const pageSize = 100;
 
