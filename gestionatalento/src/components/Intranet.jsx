@@ -204,10 +204,11 @@ const Intranet = () => {
                                navigate("/intranet");
                            }}>Home</a>
                         <a onClick={handleVerTodosLosDocumentos}>Mis Documentos</a>
+                        {/* Sidebar
                         <a onClick={() => {
                             setMostrarGlobales(false);
                             handleUploadClick();
-                        }}>Subir</a>
+                        }}>Subir</a>*/}
                     </nav>
             </div>
 
@@ -268,8 +269,9 @@ const Intranet = () => {
                                             <p>{item.documento.nomArchivo}</p>
                                         </div>
                                         <div className="botones-doc">
+                                            <button onClick={() => visualizarArchivo(item)}>Ver</button>
                                             <button onClick={() => descargarArchivo(item)}>Descargar</button>
-                                            <button>Eliminar</button>
+                                            <button>Anular</button>
                                         </div>
                                     </div>
                                 ))}
@@ -303,7 +305,7 @@ const Intranet = () => {
                                     </div>
                                     <div className="botones-doc">
                                         <button onClick={() => descargarArchivo(item)}>Descargar</button>
-                                        <button>Eliminar</button>
+                                        <button>Anular</button>
                                     </div>
                                 </div>
                             ))}
@@ -325,7 +327,7 @@ const Intranet = () => {
                                     <div className="botones-doc">
                                         <button onClick={() => visualizarArchivo(item)}>Ver</button>
                                         <button onClick={() => descargarArchivo(item)}>Descargar</button>
-                                        <button>Eliminar</button>
+                                        <button>Anular</button>
                                     </div>
                                 </div>
                             ))}

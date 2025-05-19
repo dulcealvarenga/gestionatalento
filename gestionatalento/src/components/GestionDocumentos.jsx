@@ -127,11 +127,21 @@ const GestionDocumentos = () => {
     };
 
     const confirmarCambioEstado = () => {
-        const actualizado = allDocumentos.map((doc) =>
-            doc === documentoSeleccionado
-                ? { ...doc, estado: nuevoEstado, comentario: comentario }
-                : doc
-        );
+        const fechaHoy = new Date().toISOString().split("T")[0];
+
+        const actualizado = allDocumentos.map((doc) => {
+            if (doc === documentoSeleccionado) {
+                const nuevaFechaFin = nuevoEstado === "2" ? fechaHoy : doc.fechaFin;
+                return {
+                    ...doc,
+                    estado: nuevoEstado,
+                    comentario: comentario,
+                    fechaFin: nuevaFechaFin,
+                };
+            }
+            return doc;
+        });
+
         setAllDocumentos(actualizado);
         setModalAbierto(false);
     };
