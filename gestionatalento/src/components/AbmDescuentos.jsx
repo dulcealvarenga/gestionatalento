@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./AbmDescuentos.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -21,7 +21,13 @@ const DescuentoForm = () => {
         direccion: "",
         sede: "",
         empleado: "",
-        monto: ""
+        monto: "",
+        mtoSalidaAnticipada:"",
+        mtoEntradaTardia: "",
+        mtoAusencias: "",
+        entradaTardiaSis: "",
+        salidaAnticipadaSis: "",
+        ausenciasSis: "",
     });
 
     // Función para actualizar el estado de formData
@@ -33,114 +39,144 @@ const DescuentoForm = () => {
         }));
     };
 
-    const fetchEmpleado = async () => {
+    const handleBuscarPorDocumentoEmp = async () => {
+        const nroDocumento = formData.nroDocumento;
+        if (!nroDocumento) return;
+
         try {
-            const response = await axios.get('http://localhost:8080/empleados/obtener/documento/activo/7086037');
-            const empleado = response.data.objeto;
-            // Actualizar formData con los datos obtenidos
-            setFormData({
-                ...formData,
-                nroDocumento: empleado.nroDocumento,
-                nombres: empleado.persona.nombres,
-                apellidos: empleado.persona.apellidos,
-                nroRuc: empleado.nroRuc,
-                fecNacimiento: empleado.fecNacimiento,
-                asignacion: empleado.asignacion,
-                direccion:empleado.cargo.departamento.direccion,
-                sede: empleado.sede,
-                empleado: empleado
-                // Otros campos que desees actualizar
-            });
+            const response = await axios.get(`http://localhost:8080/empleados/obtener/documento/${nroDocumento}`);
+            if (response.data.codigoMensaje === "200") {
+                const empleado = response.data.objeto[0];
+                const persona = empleado.persona;
+
+                toast.success("Empleado encontrado", { autoClose: 2000 });
+
+                localStorage.setItem('codPersona', persona.codPersona);
+
+                setFormData(prev => ({
+                    ...prev,
+                    nombres: persona.nombres || '',
+                    apellidos: persona.apellidos || '',
+                    horaEntrada: empleado.horaEntrada || '',
+                    horaSalida: empleado.horaSalida || '',
+                    asignacion: empleado.asignacion || '',
+                    fecIngreso: empleado.fecIngreso || '',
+                    fecActoAdministrativo: empleado.fecActoAdministrativo || '',
+                    codCargo: empleado.cargo?.codCargo || '',
+                    descripcionCargo: empleado.cargo?.descripcion || '',
+                    codSede: empleado.sede?.codSede || '',
+                    descSede: empleado.sede?.descripcion || '',
+                    codDireccion: empleado.cargo?.departamento?.direccion?.codDireccion || '',
+                    descDireccion: empleado.cargo?.departamento?.direccion?.descripcion || '',
+                    codSituacionLaboral: empleado.situacionLaboral?.codSituacionLaboral || '',
+                    descripcionLab: empleado.situacionLaboral?.descripcion || '',
+                    codEmpleado: empleado.codEmpleado || '',
+                }));
+            } else {
+                toast.info("No se encontró el empleado registrado", { autoClose: 2000 });
+            }
         } catch (error) {
-            console.error("Error al obtener empleado:", error);
+            console.error("Error al buscar empleado:", error);
+            toast.error("Error al buscar empleado", { autoClose: 2000 });
         }
     };
 
-    useEffect(() => {
-        fetchEmpleado();
-    }, []);
-
     const handleCalcular = async () => {
+        const nroDocumento = formData.nroDocumento;
+        const response = await axios.get(`http://localhost:8080/empleados/obtener/documento/${nroDocumento}`);
+        const empleado = response.data.objeto[0];
         try {
-            const descuento = {entradaTardia: formData.entradaTardia,
-                salidaAnticipada: formData.salidaAnticipada,
-                ausencia: formData.ausencia,
-                codPeriodo: "2025/05",
-                empleado: formData.empleado};
-                console.log(descuento);
-            const response = await axios.post('http://localhost:8080/descuentos-salariales/calcular', descuento);
+            const requestBody = {
+                entradaTardia: formData.entradaTardia || "0",
+                salidaAnticipada: formData.salidaAnticipada || "0",
+                ausencia: formData.ausencia || "0",
+                periodo: {
+                    nroPeriodo: 1 //
+                },
+                empleado: empleado //
+            };
+
+            console.log(requestBody);
+
+            const response = await axios.post("http://localhost:8080/descuentos-salariales/calcular", requestBody);
             const descuentoSalarial = response.data.objeto;
-            setFormData({
-                ...formData,
-                nroDocumento: descuentoSalarial.empleado.nroDocumento,
-                nombres: descuentoSalarial.empleado.persona.nombres,
-                apellidos: descuentoSalarial.empleado.persona.apellidos,
-                nroRuc: descuentoSalarial.empleado.nroRuc,
-                fecNacimiento: descuentoSalarial.empleado.fecNacimiento,
-                asignacion: descuentoSalarial.empleado.asignacion,
-                direccion:descuentoSalarial.empleado.cargo.departamento.direccion,
-                sede: descuentoSalarial.empleado.sede,
+
+            if (!descuentoSalarial || !descuentoSalarial.empleado) {
+                toast.error("No se recibió respuesta válida del cálculo");
+                return;
+            }
+
+            setFormData((prev) => ({
+                ...prev,
+                monto: descuentoSalarial.monto,
                 empleado: descuentoSalarial.empleado,
-                monto: descuentoSalarial.monto
-                // Otros campos que desees actualizar
-            });
-                /*
-            const response = await axios.post('http://localhost:8080/descuentos-salariales/calcular', {
-                entradaTardia: formData.entradaTardia,
-                salidaAnticipada: formData.salidaAnticipada,
-                ausencia: formData.ausencia,
-                codPeriodo: "2025/05",
-                empleado: formData.empleado
-            });*/
-            
-            // Aquí puedes procesar la respuesta de la API y actualizar el estado con los resultados si es necesario
-            console.log("Resultado de cálculo:", descuentoSalarial);
+                nombres: descuentoSalarial.empleado.persona?.nombres || '',
+                apellidos: descuentoSalarial.empleado.persona?.apellidos || '',
+                asignacion: descuentoSalarial.empleado.asignacion || '',
+                direccion: descuentoSalarial.empleado.cargo?.departamento?.direccion || '',
+                sede: descuentoSalarial.empleado.sede || ''
+            }));
+
+            toast.success("Cálculo realizado con éxito", { autoClose: 2000 });
+
         } catch (error) {
-            console.error("Error al calcular:", error);
+            console.error("Error en cálculo:", error);
+            toast.error("Error al calcular descuento salarial");
         }
     };
 
     const handleGuardar = async () => {
+        const nroDocumento = formData.nroDocumento;
+        const response = await axios.get(`http://localhost:8080/empleados/obtener/documento/${nroDocumento}`);
+        const empleado = response.data.objeto[0];
+
+        if (!empleado || !empleado.codEmpleado) {
+            toast.warning("Buscá primero un funcionario válido.", { autoClose: 2000 });
+            return;
+        }
+
+        const requestBody = {
+            entradaTardia:  parseInt(formData.entradaTardia || "0"),
+            salidaAnticipada: parseInt(formData.salidaAnticipada || "0"),
+            ausencia: parseInt(formData.ausencia || "0"),
+            periodo: {
+                nroPeriodo: 1 // Podés hacerlo dinámico si lo necesitás
+            },
+            empleado: {
+                codEmpleado: formData.empleado.codEmpleado
+            },
+            monto: parseInt(formData.monto || "0"),
+            observacion: formData.observacion || "",
+        };
+
+        console.log("guardar: ", requestBody);
+
         try {
-            const descuento = {entradaTardia: formData.entradaTardia,
-                salidaAnticipada: formData.salidaAnticipada,
-                ausencia: formData.ausencia,
-                codPeriodo: "2025/05",
-                empleado: formData.empleado};
-                console.log(descuento);
-            const response = await axios.post('http://localhost:8080/descuentos-salariales/crear', descuento);
+            const response = await axios.post("http://localhost:8080/descuentos-salariales/crear", requestBody);
             const descuentoSalarial = response.data.objeto;
-            setFormData({
-                ...formData,
-                nroDocumento: descuentoSalarial.empleado.nroDocumento,
-                nombres: descuentoSalarial.empleado.persona.nombres,
-                apellidos: descuentoSalarial.empleado.persona.apellidos,
-                nroRuc: descuentoSalarial.empleado.nroRuc,
-                fecNacimiento: descuentoSalarial.empleado.fecNacimiento,
-                asignacion: descuentoSalarial.empleado.asignacion,
-                direccion:descuentoSalarial.empleado.cargo.departamento.direccion,
-                sede: descuentoSalarial.empleado.sede,
+
+            if (!descuentoSalarial || !descuentoSalarial.empleado) {
+                toast.error("No se pudo guardar correctamente.");
+                return;
+            }
+
+            setFormData(prev => ({
+                ...prev,
+                monto: descuentoSalarial.monto,
                 empleado: descuentoSalarial.empleado,
-                monto: descuentoSalarial.monto
-                // Otros campos que desees actualizar
-            });
-                /*
-            const response = await axios.post('http://localhost:8080/descuentos-salariales/calcular', {
-                entradaTardia: formData.entradaTardia,
-                salidaAnticipada: formData.salidaAnticipada,
-                ausencia: formData.ausencia,
-                codPeriodo: "2025/05",
-                empleado: formData.empleado
-            });*/
-            
-            // Aquí puedes procesar la respuesta de la API y actualizar el estado con los resultados si es necesario
-            console.log("Resultado de cálculo:", descuentoSalarial);
-            toast.success("Descuento Salarial cargado exitosamente", { autoClose: 2000 });
-                setTimeout(() => {
-                    navigate("/descuentos");
-                }, 2000);
+                nombres: descuentoSalarial.empleado.persona?.nombres || '',
+                apellidos: descuentoSalarial.empleado.persona?.apellidos || '',
+                asignacion: descuentoSalarial.empleado.asignacion || '',
+                direccion: descuentoSalarial.empleado.cargo?.departamento?.direccion || '',
+                sede: descuentoSalarial.empleado.sede || ''
+            }));
+
+            toast.success("Descuento Salarial guardado exitosamente", { autoClose: 2000 });
+            setTimeout(() => navigate("/descuentos"), 2000);
         } catch (error) {
-            console.error("Error al calcular:", error);
+            console.log(error);
+            console.error("Error al guardar descuento:", error);
+            toast.error("Error al guardar descuento salarial");
         }
     };
 
@@ -162,56 +198,154 @@ const DescuentoForm = () => {
 
                     <div className="foto-area">
                         <img src="/avatar.png" alt="Foto" className="foto-empleado"/>
-                        <p>Nro. 7.086.037</p>
+                        <input
+                            type="text"
+                            name="nroDocumento"
+                            value={formData.nroDocumento}
+                            onChange={handleChange}
+                            onBlur={handleBuscarPorDocumentoEmp}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    handleBuscarPorDocumentoEmp();
+                                }
+                            }}
+                            required
+                        />
                     </div>
 
-                    <div className="campo-triple">
-                        <div>
-                            <label style={{ fontSize: '20px' }}>Nombre Completo</label>
-                            <input 
-                                type="text" 
-                                value={formData.nombres + " " + formData.apellidos} 
-                                disabled 
-                            />
-                        </div>
-                        <div>
-                            <label style={{ fontSize: '20px' }}>Asignación</label>
-                            <input 
-                                type="text" 
-                                name="asignacion" 
-                                value={formData.asignacion} 
-                                onChange={handleChange} 
-                            />
-                        </div>
+                    <div className="campo-doble">
+                        <label style={{fontSize: '20px'}}>Nombre Completo</label>
+                        <input
+                            type="text"
+                            value={formData.nombres + " " + formData.apellidos}
+                            disabled
+                        />
+                    </div>
+                    <div className="campo-doble">
+                        <label style={{fontSize: '20px'}}>Asignación</label>
+                        <input
+                            type="text"
+                            name="asignacion"
+                            value={formData.asignacion}
+                            disabled
+                        />
                     </div>
                 </div>
 
                 <div className="grid-form-columns">
                     <div className="col">
-                        <div className="campo"><label>Entradas Tardías</label><input type="number" name="entradaTardia" 
-                                value={formData.entradaTardia} 
-                                onChange={handleChange} /></div>
-                        <div className="campo"><label>Sede</label><input type="text" value = "SEDE CENTRAL" disabled/></div>
+                        <div className="campo">
+                            <label>Entradas Tardías Sis</label>
+                            <input type="number" name="entradaTardiaSis"
+                                   value={formData.entradaTardiaSis}
+                                   onChange={handleChange}/>
+                        </div>
+                        <div className="campo">
+                            <label>Entradas Tardías</label>
+                            <input type="number" name="entradaTardia"
+                                   value={formData.entradaTardia}
+                                   onChange={handleChange}/>
+                        </div>
+                        <div className="campo">
+                            <label>Monto E.T.</label>
+                            <input type="number"
+                                   name="mtoEntradaTardia"
+                                   value={formData.mtoEntradaTardia}
+                                   disabled/>
+                        </div>
+                        <div className="campo">
+                            <label>Sede</label>
+                            <input type="text"
+                                   name="descSede"
+                                   value={formData.descSede}
+                                   disabled/>
+                        </div>
                     </div>
 
                     <div className="col">
-                        <div className="campo"><label>Salidas Anticipadas</label><input type="number" name="salidaAnticipada" 
-                                value={formData.salidaAnticipada} 
-                                onChange={handleChange} /></div>
-                        <div className="campo"><label>Horario de Entrada</label><input type="time" value="07:00"/></div>
+                        <div className="campo">
+                            <label>Salidas Anticipadas Sis</label>
+                            <input type="number"
+                                   name="salidaAnticipadaSis"
+                                   value={formData.salidaAnticipadaSis}
+                                   onChange={handleChange}/>
+                        </div>
+                        <div className="campo">
+                            <label>Salidas Anticipadas</label>
+                            <input type="number"
+                                   name="salidaAnticipada"
+                                   value={formData.salidaAnticipada}
+                                   onChange={handleChange}/>
+                        </div>
+                        <div className="campo">
+                            <label>Monto S.A.</label>
+                            <input type="number"
+                                   name="mtoSalidaAnticipada"
+                                   value={formData.mtoSalidaAnticipada}
+                                   disabled/>
+                        </div>
+                        <div className="campo">
+                            <label>Horario de Entrada</label>
+                            <input
+                                type="time"
+                                value={formData.horaEntrada}
+                                disabled
+                            />
+                        </div>
                     </div>
 
                     <div className="col">
-                        <div className="campo"><label>Ausencias</label><input type="number" name="ausencia" 
-                                value={formData.ausencia} 
-                                onChange={handleChange} /></div>
-                        <div className="campo"><label>Horario de Salida</label><input type="time" value="13:00"/></div>
+                        <div className="campo">
+                            <label>Ausencias Sis</label>
+                            <input type="number"
+                                   name="ausenciasSis"
+                                   value={formData.ausenciasSis}
+                                   onChange={handleChange}/>
+                        </div>
+                        <div className="campo">
+                            <label>Ausencias</label>
+                            <input type="number"
+                                   name="ausencia"
+                                   value={formData.ausencia}
+                                   onChange={handleChange}/>
+                        </div>
+                        <div className="campo">
+                            <label>Monto Ausencias</label>
+                            <input type="number"
+                                   name="mtoAusencias"
+                                   value={formData.mtoAusencias}
+                                   onChange={handleChange}/>
+                        </div>
+                        <div className="campo">
+                            <label>Horario de Salida</label>
+                            <input
+                                type="time"
+                                name="horaSalida"
+                                value={formData.horaSalida}
+                                disabled
+                            />
+                        </div>
                     </div>
 
                     <div className="col">
-                        <div className="campo"><label>Dependencia</label><input type="text" value = {formData.direccion.descripcion} disabled/></div>
-                        <div className="campo"><label>Observación</label><input type="text" /></div>
-                        <div className="campo"><label>Monto Total</label><input type="text" value = {formData.monto} /></div>
+                        <div className="campo">
+                            <label>Dependencia</label>
+                            <input type="text"
+                                   name="descDireccion"
+                            value={formData.descDireccion}
+                            disabled/>
+                        </div>
+                        <div className="campo">
+                            <label>Observación</label>
+                            <input type="text"
+                                   name="observacion"
+                                   value={formData.observacion}
+                                   onChange={handleChange}/>
+                        </div>
+                        <div className="campo">
+                            <label>Monto Total</label>
+                            <input type="text" value={formData.monto} />
+                        </div>
                     </div>
                 </div>
 

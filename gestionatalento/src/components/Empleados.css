@@ -23,7 +23,7 @@ body, html, #root {
     margin-bottom: 10px;
 }
 
-.acciones-buttons {
+.acciones-buttons-emp {
     background-color: #1e1f2f;
     border: none;
     border-radius: 20px;
@@ -31,7 +31,6 @@ body, html, #root {
     color: white;
     font-weight: bold;
     cursor: pointer;
-    font-size: 14px;
     transition: background 0.3s;
     display: flex;
     gap: 20px; /* Ajustá según el espacio deseado */
@@ -39,31 +38,37 @@ body, html, #root {
     width: 1000px;
 }
 
-.boton-accion {
+.boton-accion-emp {
     width: 50px;
     height: 45px;
-    background-color: #5b5b6b;
+    background-color: #44465f;
     color: white;
     border: none;
     border-radius: 20px;
     text-transform: uppercase;
-    font-size: 16px;
     cursor: pointer;
     transition: background-color 0.2s ease;
-    min-width: 180px;
+    min-width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.boton-accion:hover {
+.boton-accion-emp:hover {
     background-color: #707088;
 }
 
-.filtro-comisionado {
-    margin: 5px 5px;
+.filtro-comisionado-emp {
     display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    font-size: 14px;
-    width: 70%;
+    gap: 40px; /* espacio entre los dos bloques */
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.filtro-item {
+    display: flex;
+    align-items: center;
 }
 
 .tabla-empleados {
@@ -132,11 +137,11 @@ body, html, #root {
     z-index: 1000;
 }
 
-.modal-content {
+.modal-content-edit {
     background-color: #2f2f45;
     padding: 30px;
     border-radius: 10px;
-    width: 500px;
+    width: 70%;
     color: white;
 
 }
@@ -151,13 +156,19 @@ body, html, #root {
 
 .botones-modal {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     gap: 10px;
+    margin-top: 20px;
+    width: 30%;
 }
 
-.form-columns {
+.form-columns-emp {
+    background-color: #44465f;
+    border-radius: 10px;
+    padding: 20px;
     display: flex;
-    gap: 35px;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .columna {
@@ -183,12 +194,12 @@ body, html, #root {
     font-size: 15px;
 }
 
-.dropdown {
+.dropdown-emp {
     position: relative;
     display: inline-block;
 }
 
-.dropdown-menu {
+.dropdown-menu-emp {
     position: absolute;
     top: 50px; /* o ajustá a gusto */
     left: 0;
@@ -201,7 +212,7 @@ body, html, #root {
     padding: 10px;
 }
 
-.dropdown-menu button {
+.dropdown-menu-emp button {
     background-color: #44465f;
     color: white;
     border: none;
@@ -215,9 +226,31 @@ body, html, #root {
     display: flex;
 }
 
-.dropdown-content button:hover {
+.dropdown-menu-emp button:hover {
     background-color: #707088;
 }
+
+.modal-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.modal-tabs button {
+    padding: 10px 20px;
+    background-color: #44465f;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.modal-tabs .tab-activa {
+    background-color: #707088;
+}
+
 
 
 
