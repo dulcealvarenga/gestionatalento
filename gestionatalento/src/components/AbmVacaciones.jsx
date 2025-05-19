@@ -109,7 +109,7 @@ const AbmVacaciones = () => {
                 tipoJustificativo: {
                     codTipJustificativo: 9
                 },
-                estado      : "V",
+                estado      : 1,
                 persona: {
                     codPersona: localStorage.getItem('codPersona')
                 },

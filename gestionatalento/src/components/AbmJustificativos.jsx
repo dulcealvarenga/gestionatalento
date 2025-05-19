@@ -110,7 +110,7 @@ const AbmJustificativos = () => {
                 tipoJustificativo: {
                     codTipJustificativo: formData.codTipJustificativo
                 },
-                estado      : "V",
+                estado      : 1,
                 persona: {
                     codPersona: localStorage.getItem('codPersona')
                 },

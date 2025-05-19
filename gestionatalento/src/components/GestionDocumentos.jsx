@@ -67,7 +67,7 @@ const GestionDocumentos = () => {
                     : "Justificativo",
                 persona: j.persona,
                 fechaInicio: j.fecha,
-                fechaFin: j.fecha,
+                fechaFin: j.estado === 1 ? null : null,
                 estado: j.estado,
                 descripcion: j.tipoJustificativo.descripcion || "-"
             })) || [];
@@ -78,7 +78,7 @@ const GestionDocumentos = () => {
                     : "Justificativo",
                 persona: j.persona,
                 fechaInicio: j.fecha,
-                fechaFin: j.fecha,
+                fechaFin: j.estado === 1 ? null : j.fecha,
                 estado: j.estado,
                 descripcion: j.tipoJustificativo.descripcion
             })) || [];
@@ -90,7 +90,7 @@ const GestionDocumentos = () => {
                     apellidos: c.contrato.apellidos
                 },
                 fechaInicio: c.contrato.fecDesde,
-                fechaFin: c.contrato.fecHasta,
+                fechaFin: c.estado === 1 ? null : c.fecha,
                 estado: c.contrato.estado,
                 descripcion: "Contrato"
             })) || [];
