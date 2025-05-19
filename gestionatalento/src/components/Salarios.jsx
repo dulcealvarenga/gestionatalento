@@ -84,6 +84,8 @@ const Salarios = () => {
         window.open(url, "_blank"); // abre en nueva pestaña
     };
 
+    const [mes, setMes] = useState("MAYO");
+
     const generarPDFIndividual = async (tipo, periodo) => {
         const endpoint = {
             altas: `http://localhost:8080/empleados/altas?periodo=${periodo}`,
@@ -215,14 +217,183 @@ const Salarios = () => {
         setSalarios(filtrado);
     };
 
+    const handleClickGenerar = async () => {
+        try {
+            const response = await axios.get(
+                "http://localhost:8080/salarios/obtenerLista"
+            );
+            const registros = response.data.objeto || [];
+
+            // Agrupar por claves de cabecera
+            const agrupado = {};
+
+            registros.forEach((r) => {
+                const clave = JSON.stringify({
+                    presupuesto: r.presupuesto?.descripcion,
+                    programa: r.programa?.descripcion,
+                    subprograma: r.subprograma?.descripcion,
+                    objetoGasto: r.objetoGasto?.descripcion,
+                    fuenteFinanciamiento: r.fuenteFinanciamiento?.descripcion,
+                });
+
+                if (!agrupado[clave]) {
+                    agrupado[clave] = {
+                        cabecera: {
+                            presupuesto: r.presupuesto,
+                            programa: r.programa,
+                            subprograma: r.subprograma,
+                            objetoGasto: r.objetoGasto,
+                            fuenteFinanciamiento: r.fuenteFinanciamiento,
+                        },
+                        detalle: [],
+                    };
+                }
+
+                agrupado[clave].detalle.push({
+                    ci: r.empleado?.persona?.nroDocumento || "-",
+                    nombre: `${r.empleado?.persona?.nombres || ""} ${
+                        r.empleado?.persona?.apellidos || ""
+                    }`,
+                    cargo: r.empleado?.cargo?.descripcion || "-",
+                    grado: r.gradoSalarial?.descripcion || "-",
+                    asignacion: r.asignacion || 0,
+                });
+            });
+
+            const listaAgrupada = Object.values(agrupado);
+
+            const doc = (
+                <Document>
+                    {listaAgrupada.map((item, index) => {
+                        const total = item.detalle.reduce(
+                            (sum, d) => sum + Number(d.asignacion || 0),
+                            0
+                        );
+                        const totalFormateado = total.toLocaleString("es-PY");
+
+                        return (
+                            <Page key={index} size="A4" style={{ padding: 20, fontSize: 10 }}>
+                                <Text
+                                    style={{
+                                        fontSize: 14,
+                                        textAlign: "center",
+                                        marginBottom: 10,
+                                    }}
+                                >
+                                    PLANILLA DE SUELDOS - {mes}
+                                </Text>
+
+                                <View style={{ marginBottom: 10 }}>
+                                    <Text>
+                                        Presupuesto: {item.cabecera.presupuesto?.descripcion || "-"}
+                                    </Text>
+                                    <Text>
+                                        Programa: {item.cabecera.programa?.descripcion || "-"}
+                                    </Text>
+                                    <Text>
+                                        Subprograma: {item.cabecera.subprograma?.descripcion || "-"}
+                                    </Text>
+                                    <Text>
+                                        Objeto Gasto:{" "}
+                                        {item.cabecera.objetoGasto?.descripcion || "-"}
+                                    </Text>
+                                    <Text>
+                                        Fuente Financiamiento:{" "}
+                                        {item.cabecera.fuenteFinanciamiento?.descripcion || "-"}
+                                    </Text>
+                                </View>
+
+                                <View>
+                                    <View
+                                        style={{
+                                            flexDirection: "row",
+                                            backgroundColor: "#2f2f45",
+                                            color: "white",
+                                            paddingVertical: 6,
+                                            paddingHorizontal: 4,
+                                            borderBottomWidth: 1,
+                                            borderTopWidth: 1,
+                                            borderColor: "#000",
+                                        }}
+                                    >
+                                        <Text style={{ flex: 0.6, fontSize: 10 }}>N°</Text>
+                                        <Text style={{ flex: 1, fontSize: 10 }}>C.I</Text>
+                                        <Text style={{ flex: 1.5, fontSize: 10 }}>Nombre</Text>
+                                        <Text style={{ flex: 2, fontSize: 10 }}>Cargo</Text>
+                                        <Text style={{ flex: 2, fontSize: 10 }}>Grado</Text>
+                                        <Text style={{ flex: 1, fontSize: 10, textAlign: "right" }}>
+                                            Asignación
+                                        </Text>
+                                    </View>
+
+                                    {item.detalle.map((d, i) => (
+                                        <View
+                                            key={i}
+                                            style={{
+                                                flexDirection: "row",
+                                                paddingVertical: 6,
+                                                paddingHorizontal: 4,
+                                                borderBottomWidth: 0.5,
+                                                borderColor: "#ccc",
+                                            }}
+                                        >
+                                            <Text style={{ flex: 0.6 }}>{i + 1}</Text>
+                                            <Text style={{ flex: 1 }}>{d.ci}</Text>
+                                            <Text style={{ flex: 1.5 }}>{d.nombre}</Text>
+                                            <Text style={{ flex: 2 }}>{d.cargo}</Text>
+                                            <Text style={{ flex: 2 }}>{d.grado}</Text>
+                                            <Text style={{ flex: 1, textAlign: "right" }}>
+                                                {Number(d.asignacion).toLocaleString("es-PY")}
+                                            </Text>
+                                        </View>
+                                    ))}
+
+                                    <View
+                                        style={{
+                                            flexDirection: "row",
+                                            paddingVertical: 6,
+                                            paddingHorizontal: 4,
+                                            borderTopWidth: 1,
+                                            marginTop: 5,
+                                            borderColor: "#000",
+                                        }}
+                                    >
+                                        <Text style={{ flex: 6.1, fontWeight: "bold" }}>TOTAL</Text>
+                                        <Text
+                                            style={{
+                                                flex: 1,
+                                                textAlign: "right",
+                                                fontWeight: "bold",
+                                            }}
+                                        >
+                                            {totalFormateado}
+                                        </Text>
+                                    </View>
+                                </View>
+                            </Page>
+                        );
+                    })}
+                </Document>
+            );
+
+            const blob = await pdf(doc).toBlob();
+            const blobURL = URL.createObjectURL(blob);
+            window.open(blobURL, "_blank");
+        } catch (error) {
+            console.error("Error al generar el PDF:", error);
+            alert("No se pudo generar el informe.");
+        }
+    };
+
     return (
         <div className="salaries-container">
             <h1>Salarios</h1>
             <p className="acciones-title-salario">Acciones</p>
             <div className="actions-section">
                 <button className="primary-btn" onClick={() => navigate("/salarios/abm")}>AGREGAR SALARIOS</button>
+                {/* Este es un comentario dentro de JSX
                 <button className="primary-btn" onClick={() => navigate("/salarios/aguinaldo")}>INCLUIR AGUINALDO
-                </button>
+                </button>*/}
                 <input
                     type="text"
                     placeholder="Periodo (Ej: 2025/05)"
@@ -286,8 +457,9 @@ const Salarios = () => {
                         onChange={(e) => setPeriodo(e.target.value)}
                         className="periodo-input"
                     />
-                    <button className="primary-btn">Generar</button>
-                    <button className="primary-btn">Exportar Aguinaldo</button>
+                    <button className="primary-btn"  onClick={() => handleClickGenerar(mes)}>Generar</button>
+                    {/* Este es un comentario dentro de JSX
+                    <button className="primary-btn">Exportar Aguinaldo</button>*/}
                     <button className="primary-btn" onClick={() => setShowConfirmModalSA(true)}>Cierre</button>
                 </div>
             </div>
