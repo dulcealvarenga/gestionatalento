@@ -79,7 +79,7 @@ const AbmContratos = () => {
             apellidos: form.apellidos,
             asignacion: parseFloat(form.asignacion || 0),
             montoLetras: form.montoLetras || "",
-            estado: form.estado || "ACTIVO",
+            estado: 1,
             fecDesde: form.fecDesde,
             fecHasta: form.fecHasta,
             situacionLaboral: { codSituacionLaboral: parseInt(form.codSituacionLaboral || 1) },

@@ -10,6 +10,11 @@ const Contratos = () => {
     const [page, setPage] = useState(0);
     const pageSize = 100;
 
+    const estadosContratos = {
+        1: "Cargado",
+        2: "Confirmado"
+    };
+
     // 👉 Al cargar, trae todos
     useEffect(() => {
         fetchAllContratos();
@@ -77,13 +82,13 @@ const Contratos = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {listaContratos.map((contrato, index) => (
+                    {contratos.map((contrato, index) => (
                         <tr key={index}>
                             <td>{contrato.contrato.nroContrato}</td>
                             <td>{contrato.contrato.nroDocumento}</td>
                             <td>{contrato.contrato.nombres} {contrato.contrato.apellidos}</td>
                             <td>{contrato.contrato.periodo.codPeriodo}</td>
-                            <td>{contrato.contrato.estado || "-"}</td>
+                            <td>{estadosContratos[contrato.contrato.estado] || ""}</td>
                             <td>{contrato.contrato.observacion || "-"}</td>
                         </tr>
                     ))}

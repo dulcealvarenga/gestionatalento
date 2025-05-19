@@ -9,6 +9,27 @@ const GestionDocumentos = () => {
     const pageSize = 100;
     const [filtroTipo, setFiltroTipo] = useState("");
 
+    const estadosHabilitados = {
+        1: "CARGADO",
+        2: "CONFIRMADO",
+        3: "ANULADO",
+    };
+
+    const opcionesEstadoPorTipo = {
+        "CONTRATO": [
+            { label: "CONFIRMADO", value: 2 },
+            { label: "ANULADO", value: 3 }
+        ],
+        "JUSTIFICATIVO": [
+            { label: "CONFIRMADO", value: 2 },
+            { label: "ANULADO", value: 3 }
+        ],
+        "VACACIONES": [
+            { label: "CONFIRMADO", value: 2 },
+            { label: "ANULADO", value: 3 }
+        ]
+    };
+
     useEffect(() => {
         fetchAllDocumentos();
     }, []);
@@ -48,7 +69,7 @@ const GestionDocumentos = () => {
                 fechaInicio: j.fecha,
                 fechaFin: j.fecha,
                 estado: j.estado,
-                descripcion: j.descripcion || "-"
+                descripcion: j.tipoJustificativo.descripcion || "-"
             })) || [];
 
             const vacData = vacRes.data.objeto?.map(j => ({
@@ -59,7 +80,7 @@ const GestionDocumentos = () => {
                 fechaInicio: j.fecha,
                 fechaFin: j.fecha,
                 estado: j.estado,
-                descripcion: j.descripcion || "-"
+                descripcion: j.tipoJustificativo.descripcion
             })) || [];
 
             const contData = contRes.data.objeto?.map(c => ({
@@ -70,8 +91,8 @@ const GestionDocumentos = () => {
                 },
                 fechaInicio: c.contrato.fecDesde,
                 fechaFin: c.contrato.fecHasta,
-                estado: "V",
-                descripcion: c.observacion || "-"
+                estado: c.contrato.estado,
+                descripcion: "Contrato"
             })) || [];
 
             const todo = [...justData, ...contData, ...vacData];
@@ -142,6 +163,7 @@ const GestionDocumentos = () => {
                     <thead>
                     <tr>
                         <th>Tipo de Documento</th>
+                        <th>Subtipo</th>
                         <th>Funcionario</th>
                         <th>Fecha de Inicio</th>
                         <th>Fecha de Fin</th>
@@ -153,10 +175,11 @@ const GestionDocumentos = () => {
                     {documentos.map((j, index) => (
                         <tr key={index}>
                             <td>{j.tipo}</td>
+                            <td>{j.descripcion}</td>
                             <td>{(j.persona.nombres || "") + " " + (j.persona.apellidos || "")}</td>
                             <td>{j.fechaInicio}</td>
                             <td>{j.fechaFin}</td>
-                            <td>{j.estado}</td>
+                            <td>{estadosHabilitados[j.estado] || ""}</td>
                             <td>
                                 <button onClick={() => abrirModal(j)}>Cambiar Estado</button>
                             </td>
@@ -170,8 +193,17 @@ const GestionDocumentos = () => {
                             <h3>Cambiar Estado del Documento</h3>
                             <p><strong>Tipo de Documento:</strong> {documentoSeleccionado.tipo}</p>
                             <p><strong>Funcionario:</strong> {documentoSeleccionado.persona.nombres} {documentoSeleccionado.persona.apellidos}</p>
-                            <p><strong>Estado Actual:</strong> {documentoSeleccionado.estado}</p>
-                            <p><strong>Nuevo Estado:</strong> {documentoSeleccionado.estado}</p>
+                            <p><strong>Estado Actual:</strong> {estadosHabilitados[documentoSeleccionado.estado] || ""}</p>
+                            <label>Nuevo Estado:</label>
+                            <select
+                                value={nuevoEstado}
+                                onChange={(e) => setNuevoEstado(e.target.value)}
+                            >
+                                <option value="">Seleccionar nuevo estado</option>
+                                {(opcionesEstadoPorTipo[documentoSeleccionado.tipo.toUpperCase()] || []).map(op => (
+                                    <option key={op.value} value={op.value}>{op.label}</option>
+                                ))}
+                            </select>
                             <label>Comentario:</label>
                             <textarea value={comentario} onChange={(e) => setComentario(e.target.value)}/>
 
