@@ -88,6 +88,7 @@ const AbmEmpleados = () => {
             persona.apellidos = formData.apellidos;
             persona.nroRuc = formData.nroRuc;
             persona.lugarNacimiento = formData.lugarNacimiento;
+            persona.pais = { codPais: 1 };
             persona.codPaisNacimiento = 1;//formData.codPaisNacimiento;
             persona.fecNacimiento = formData.fecNacimiento;
             persona.codNivelEstudio = formData.codNivelEstudio;
