@@ -36,7 +36,7 @@ const DescuentosSalariales = () => {
             await axios.delete('http://localhost:8080/descuentos-salariales/eliminar', {
                 data: {
                     empleado: { codEmpleado: descuentoToDelete.empleado.codEmpleado },
-                    codPeriodo: descuentoToDelete.id.codPeriodo
+                    periodo: { nroPeriodo: descuentoToDelete.periodo.nroPeriodo },
                 }
             });
             toast.success("Registro eliminado correctamente", { autoClose: 2000 });
@@ -65,7 +65,7 @@ const DescuentosSalariales = () => {
                 empleado: {
                     codEmpleado: selectedDescuento.empleado.codEmpleado
                 },
-                codPeriodo: selectedDescuento.id.codPeriodo,
+                codPeriodo: selectedDescuento.periodo.codPeriodo,
                 entradaTardia: parseInt(selectedDescuento.entradaTardia),
                 salidaAnticipada: parseInt(selectedDescuento.salidaAnticipada),
                 ausencia: parseInt(selectedDescuento.ausencia),
@@ -181,7 +181,7 @@ const DescuentosSalariales = () => {
                 <tbody>
                 {descuentos.map((d, index) => (
                     <tr key={index}>
-                        <td>{d.id.codPeriodo}</td>
+                        <td>{d.periodo.codPeriodo}</td>
                         <td>{d.empleado.persona.nroDocumento}</td>
                         <td>{(d.empleado.persona.nombres || "") + " " + (d.empleado.persona.apellidos || "")}</td>
                         <td>{d.empleado.asignacion}</td>

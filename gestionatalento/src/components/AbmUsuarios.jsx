@@ -98,6 +98,7 @@ const AbmUsuarios = () => {
             role: 'USER',
             password: '123456',
         };
+        console.log("datos: ", usuario);
         try {
 
             if (id) {

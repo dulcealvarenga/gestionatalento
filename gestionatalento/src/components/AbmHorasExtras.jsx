@@ -34,7 +34,7 @@ const HorasExtrasAbm = () => {
         codDireccion: "",
         codSituacionLaboral: "",
         monto: "",
-        codPeriodo:"2025/05",
+        periodo: "2025/05",
         horaExtra: "",
         observacion: "",
         exoneraEntrada: "",
@@ -83,7 +83,7 @@ const HorasExtrasAbm = () => {
     };
 
     const handleCalcularHorasExtras = async () => {
-        if (!formData.codEmpleado || !formData.codPeriodo || !formData.horaExtra) {
+        if (!formData.codEmpleado || !formData.periodo || !formData.horaExtra) {
             toast.warn("Faltan datos para calcular horas extras", { autoClose: 2000 });
             return;
         }
@@ -92,7 +92,7 @@ const HorasExtrasAbm = () => {
             empleado: {
                 codEmpleado: formData.codEmpleado
             },
-            codPeriodo: formData.codPeriodo,
+            periodo: { nroPeriodo: 1 },
             horaExtra: parseFloat(formData.horaExtra)
         };
 
@@ -117,21 +117,23 @@ const HorasExtrasAbm = () => {
     const handleGuardarHorasExtras = async () => {
         const {
             codEmpleado,
-            codPeriodo,
+            periodo,
             horaExtra,
             monto,
             observacion,
             exoneraEntrada
         } = formData;
 
-        if (!codEmpleado || !codPeriodo || !horaExtra || !monto) {
+        console.log("Datos: ", periodo, " OTRO1", horaExtra);
+
+        if (!codEmpleado || !periodo || !horaExtra || !monto) {
             toast.warn("Faltan datos obligatorios para guardar", { autoClose: 2000 });
             return;
         }
 
         const body = {
             empleado: { codEmpleado: parseInt(codEmpleado) },
-            codPeriodo,
+            periodo: { nroPeriodo: 5 },
             horaExtra: parseFloat(horaExtra),
             monto: monto,
             observacion: observacion || "",
@@ -251,8 +253,8 @@ const HorasExtrasAbm = () => {
                         <label>Periodo</label>
                         <input
                             type="text"
-                            name="codPeriodo"
-                            value={formData.codPeriodo}
+                            name="periodo"
+                            value={formData.periodo}
                             onChange={handleChange}
                             readOnly
                         />
