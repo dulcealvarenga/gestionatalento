@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./DescSalariales.css";
 import axios from "axios";
 import { toast } from 'react-toastify';
-
+import { API_BASE_URL } from '../config/constantes.js';
 
 const DescuentosSalariales = () => {
     const [descuentos, setDescuentos] = useState([]);
@@ -18,7 +18,7 @@ const DescuentosSalariales = () => {
 
     const fetchDescuentos = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/descuentos-salariales/obtenerLista');
+            const response = await axios.get(`${API_BASE_URL}descuentos-salariales/obtenerLista`);
             setDescuentos(response.data.objeto || []);
             console.log(response.data);
         } catch (error) {
@@ -33,7 +33,7 @@ const DescuentosSalariales = () => {
 
     const handleEliminar = async () => {
         try {
-            await axios.delete('http://localhost:8080/descuentos-salariales/eliminar', {
+            await axios.delete(`${API_BASE_URL}descuentos-salariales/eliminar`, {
                 data: {
                     empleado: { codEmpleado: descuentoToDelete.empleado.codEmpleado },
                     periodo: { nroPeriodo: descuentoToDelete.periodo.nroPeriodo },
@@ -61,7 +61,7 @@ const DescuentosSalariales = () => {
 
     const handleSave = async () => {
         try {
-            await axios.put(`http://localhost:8080/descuentos-salariales/actualizar`, {
+            await axios.put(`${API_BASE_URL}descuentos-salariales/actualizar`, {
                 empleado: {
                     codEmpleado: selectedDescuento.empleado.codEmpleado
                 },

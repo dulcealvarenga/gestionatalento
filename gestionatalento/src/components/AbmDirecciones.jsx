@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./AbmDirecciones.css";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const AbmDirecciones = () => {
     const navigate = useNavigate();
@@ -51,14 +52,14 @@ const AbmDirecciones = () => {
             if (isEdit) {
                 // EDITAR (PUT)
                 await axios.put(
-                    "http://localhost:8080/configuraciones/direcciones/actualizar",
+                    `${API_BASE_URL}configuraciones/direcciones/actualizar`,
                     payload
                 );
                 alert("Dirección actualizada con éxito");
             } else {
                 // CREAR (POST)
                 await axios.post(
-                    "http://localhost:8080/configuraciones/direcciones/crear",
+                    `${API_BASE_URL}configuraciones/direcciones/crear`,
                     payload
                 );
                 alert("Dirección guardada con éxito");

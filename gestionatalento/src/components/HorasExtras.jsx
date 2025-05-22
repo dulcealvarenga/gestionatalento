@@ -5,6 +5,7 @@ import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const HorasExtras = () => {
     const navigate = useNavigate();
@@ -15,7 +16,7 @@ const HorasExtras = () => {
     useEffect(() => {
         const obtenerLista = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/horas-extras/obtenerLista");
+                const response = await axios.get(`${API_BASE_URL}horas-extras/obtenerLista`);
                 if (response.data.codigoMensaje === "200") {
                     setListaHorasExtras(response.data.objeto);
                 } /*else {

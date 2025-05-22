@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import { loadFonts } from './Fonts';
+import { API_BASE_URL } from '../config/constantes.js';
 loadFonts();
 
 const AbmEmpleados = () => {
@@ -42,7 +43,7 @@ const AbmEmpleados = () => {
     useEffect(() => {
         const docBuscado = localStorage.getItem("empleadoBuscado");
         /*if (docBuscado) {
-            axios.get("http://localhost:8080/empleados/obtener/id/" + docBuscado)
+            axios.get(`${API_BASE_URL}empleados/obtener/id/" + docBuscado)
                 .then(res => {
                     const persona = res.data.find(p => p.nroDocumento === docBuscado);
                     if (persona) {
@@ -107,10 +108,10 @@ const AbmEmpleados = () => {
 
             
             // Aquí puedes enviar los datos al backend con un POST o PUT
-            const response = await axios.post("http://localhost:8080/personas/crear", persona);
+            const response = await axios.post(`${API_BASE_URL}personas/crear`, persona);
             const genericResponse = response.data;
             if (genericResponse.codigoMensaje === "409") {
-                const response = await axios.put("http://localhost:8080/personas/actualizar", persona);
+                const response = await axios.put(`${API_BASE_URL}personas/actualizar`, persona);
                 const genericResponse = response.data;
                 if (genericResponse.codigoMensaje == "200") {
                     toast.success("Persona Actualizada", { autoClose: 2000 });
@@ -143,7 +144,7 @@ const AbmEmpleados = () => {
                 empleado.nroResolucion = formData.nroResolucion;
                 empleado.observacion = formData.observacion;
                 console.log("Empleado enviado", empleado);
-                axios.post("http://localhost:8080/empleados/crear", empleado)
+                axios.post(`${API_BASE_URL}empleados/crear`, empleado)
                     .then((response) => {
                         if (response.data.codigoMensaje == "200") {
                             toast.info(response.data.mensaje, { autoClose: 2000 });

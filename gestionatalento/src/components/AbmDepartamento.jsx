@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./AbmDepartamento.css";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const AbmDepartamento = () => {
     const navigate = useNavigate();
@@ -54,13 +55,13 @@ const AbmDepartamento = () => {
         try {
             if (isEdit) {
                 await axios.put(
-                    "http://localhost:8080/configuraciones/departamentos/actualizar",
+                    `${API_BASE_URL}configuraciones/departamentos/actualizar`,
                     payload
                 );
                 alert("Departamento actualizado con éxito");
             } else {
                 await axios.post(
-                    "http://localhost:8080/configuraciones/departamentos/crear",
+                    `${API_BASE_URL}configuraciones/departamentos/crear`,
                     payload
                 );
                 alert("Departamento guardado con éxito");

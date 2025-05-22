@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Usuarios.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const Usuarios = () => {
     const navigate = useNavigate();
@@ -23,7 +24,7 @@ const Usuarios = () => {
     const fetchAllUsuarios = async () => {
         try {
             const response = await axios.get(
-                'http://localhost:8080/api/admin/users/obtenerTodos'
+                `${API_BASE_URL}api/admin/users/obtenerTodos`
             );
             const allData = response.data.objeto || [];
             setAllUsuarios(allData);
@@ -71,7 +72,6 @@ const Usuarios = () => {
                             <td>{usuario.cargo}</td>
                             <td>{usuario.fechaAlta}</td>
                             <td>{usuario.fechaBaja}</td>
-                            {/* ✅ Cambiado */}
                             <td>
                                 <button
                                     onClick={() =>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./GestionDocumentos.css";
 import axios from "axios";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const GestionDocumentos = () => {
     const [allDocumentos, setAllDocumentos] = useState([]);
@@ -53,9 +54,9 @@ const GestionDocumentos = () => {
     const fetchAllDocumentos = async () => {
         try {
             const [justRes, vacRes, contRes] = await Promise.all([
-                axios.get('http://localhost:8080/justificativos/obtenerListaJustificativos'),
-                axios.get('http://localhost:8080/justificativos/obtenerListaVacaciones'),
-                axios.get('http://localhost:8080/contratos/obtenerLista')
+                axios.get(`${API_BASE_URL}justificativos/obtenerListaJustificativos`),
+                axios.get(`${API_BASE_URL}justificativos/obtenerListaVacaciones`),
+                axios.get(`${API_BASE_URL}contratos/obtenerLista`)
             ]);
             console.log("Justificativos: ", justRes.data.objeto);
             console.log("Vacaciones: ", vacRes.data.objeto);

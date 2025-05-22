@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./AbmHorasExtras.css"; // Asegurate de importar tu CSS
 import { ToastContainer, toast } from 'react-toastify';
 import axios from "axios";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const HorasExtrasAbm = () => {
     const navigate = useNavigate();
@@ -49,7 +50,7 @@ const HorasExtrasAbm = () => {
         if (!nroDocumento) return;
 
         try {
-            const response = await axios.get(`http://localhost:8080/empleados/obtener/documento/${nroDocumento}`);
+            const response = await axios.get(`${API_BASE_URL}empleados/obtener/documento/${nroDocumento}`);
             if (response.data.codigoMensaje === "200") {
                 const empleado = response.data.objeto[0];
                 const persona = empleado.persona;
@@ -97,7 +98,7 @@ const HorasExtrasAbm = () => {
         };
 
         try {
-            const response = await axios.post("http://localhost:8080/horas-extras/calcular", body);
+            const response = await axios.post(`${API_BASE_URL}horas-extras/calcular`, body);
             if (response.data.codigoMensaje === "200") {
                 const resultado = response.data.objeto;
                 setFormData(prev => ({
@@ -140,10 +141,10 @@ const HorasExtrasAbm = () => {
             exoneraEntrada: exoneraEntrada || "N"
         };
 
-        console.log("Body a enviar:", body); // 👀 Debug
+        console.log("Body a enviar:", body);
 
         try {
-            const response = await axios.post("http://localhost:8080/horas-extras/crear", body);
+            const response = await axios.post(`${API_BASE_URL}horas-extras/crear`, body);
             if (response.data.codigoMensaje === "200") {
                 toast.success("Horas extras guardadas con éxito", { autoClose: 2000 });
                 // limpiar si querés

@@ -7,6 +7,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import axios from "axios";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const MarcacionesManuales = () => {
 
@@ -39,7 +40,7 @@ const MarcacionesManuales = () => {
         const nroDocumento = formData.nroDocumento;
         if (!nroDocumento) return;
         try {
-            const response = await axios.get('http://localhost:8080/personas/obtener/documento/' + nroDocumento);
+            const response = await axios.get(`${API_BASE_URL}personas/obtener/documento/` + nroDocumento);
             if (response.data.codigoMensaje === "200") {
                 toast.success("Persona encontrada", { autoClose: 2000 });
                 const persona = response.data.objeto;
@@ -257,7 +258,7 @@ const MarcacionesManuales = () => {
         };
 
         try {
-            const response = await axios.post('http://localhost:8080/marcaciones/manuales/crear', body);
+            const response = await axios.post(`${API_BASE_URL}marcaciones/manuales/crear`, body);
             if (response.data.codigoMensaje === "200") {
                 toast.success("Marcaciones enviadas con éxito", { autoClose: 2000 });
                 handleLimpiar();

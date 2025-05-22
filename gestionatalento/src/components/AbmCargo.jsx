@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./AbmCargo.css";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const AbmCargo = () => {
     const navigate = useNavigate();
@@ -54,13 +55,13 @@ const AbmCargo = () => {
         try {
             if (isEdit) {
                 await axios.put(
-                    "http://localhost:8080/configuraciones/cargos/actualizar",
+                    `${API_BASE_URL}configuraciones/cargos/actualizar`,
                     payload
                 );
                 alert("Cargo actualizado con éxito");
             } else {
                 await axios.post(
-                    "http://localhost:8080/configuraciones/cargos/crear",
+                    `${API_BASE_URL}configuraciones/cargos/crear`,
                     payload
                 );
                 alert("Cargo guardado con éxito");

@@ -3,6 +3,7 @@ import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 import "./BajaEmpleados.css";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const BajaEmpleados = () => {
     const [form, setForm] = useState({
@@ -30,7 +31,7 @@ const BajaEmpleados = () => {
         if (!nroDocumento) return;
         try {
             // Paso 1: buscar todas las personas
-            const response = await axios.get("http://localhost:8080/empleados/obtener/documento/activo/" + nroDocumento);
+            const response = await axios.get(`${API_BASE_URL}empleados/obtener/documento/activo/` + nroDocumento);
             const genericResponse = response.data;
             if (genericResponse.codigoMensaje == "200"){
                 const empleado = genericResponse.objeto;
@@ -79,7 +80,7 @@ const BajaEmpleados = () => {
             const existeEmpleado = await buscarEmpleadoPorDocumento();
             if (existeEmpleado == true) {
                 const response = await axios.put(
-                    "http://localhost:8080/empleados/bajar",
+                    `${API_BASE_URL}empleados/bajar`,
                     empleadoBaja
                 );
                 const genericResponse = response.data;

@@ -3,6 +3,7 @@ import "./AbmUsuarios.css";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate, useParams } from "react-router-dom";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const AbmUsuarios = () => {
     const navigate = useNavigate();
@@ -12,7 +13,7 @@ const AbmUsuarios = () => {
     useEffect(() => {
         const fetchCargos = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/configuraciones/cargos/obtenerLista");
+                const response = await axios.get(`${API_BASE_URL}configuraciones/cargos/obtenerLista`);
                 setCargos(response.data.objeto);
             } catch (error) {
                 console.error("Error al cargar cargos:", error);
@@ -36,7 +37,7 @@ const AbmUsuarios = () => {
         const fetchUsuarios = async () => {
             if (id) {
                 try {
-                    const response = await axios.get('http://localhost:8080/api/admin/users/' + id);
+                    const response = await axios.get(`${API_BASE_URL}api/admin/users/` + id);
                     const genericResponse = response.data;
                     const usuarioData = genericResponse.objeto;
 
@@ -102,7 +103,7 @@ const AbmUsuarios = () => {
         try {
 
             if (id) {
-                const response = await axios.put('http://localhost:8080/configuraciones/usuarios/actualizar', usuario);
+                const response = await axios.put(`${API_BASE_URL}configuraciones/usuarios/actualizar`, usuario);
                 const genericResponse = response.data;
                 if (genericResponse.codigoMensaje == "200") {
                     toast.success(genericResponse.mensaje, { autoClose: 2000 });
@@ -113,7 +114,7 @@ const AbmUsuarios = () => {
                     toast.error(genericResponse.mensaje, { autoClose: 2000 });
                 }
             } else {
-                const response = await axios.post("http://localhost:8080/api/admin/users", usuario);
+                const response = await axios.post(`${API_BASE_URL}api/admin/users`, usuario);
                 const genericResponse = response.data;
                 if (genericResponse.codigoMensaje == "200") {
                     toast.success(genericResponse.mensaje, { autoClose: 2000 });

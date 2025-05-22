@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import "./AbmJustificativos.css";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const AbmJustificativos = () => {
     const [tiposJustificativos, setTiposJustificativos] = useState([]);
@@ -21,7 +22,7 @@ const AbmJustificativos = () => {
     useEffect(() => {
         const fetchTiposJustificativos = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/configuraciones/tipos-justificativos/obtenerListaActiva");
+                const response = await axios.get(`${API_BASE_URL}configuraciones/tipos-justificativos/obtenerListaActiva`);
                 setTiposJustificativos(response.data.objeto);
             } catch (error) {
                 console.error("Error al cargar tipos de justificativos:", error);
@@ -47,7 +48,7 @@ const AbmJustificativos = () => {
         const nroDocumento = formData.nroDocumento;
         if (!nroDocumento) return;
         try {
-            const response = await axios.get('http://localhost:8080/personas/obtener/documento/' + nroDocumento);
+            const response = await axios.get(`${API_BASE_URL}personas/obtener/documento/` + nroDocumento);
             if (response.data.codigoMensaje === "200") {
                 toast.success("Persona encontrada", { autoClose: 2000 });
                 const persona = response.data.objeto;
@@ -117,7 +118,7 @@ const AbmJustificativos = () => {
                 fechaJustificativo: fechas
             };
             console.log(justificativo);
-            const response = await axios.post("http://localhost:8080/justificativos/crear", justificativo);
+            const response = await axios.post(`${API_BASE_URL}justificativos/crear`, justificativo);
             const genericResponse = response.data;
             if (genericResponse.codigoMensaje == "200") {
                 toast.success(genericResponse.mensaje, { autoClose: 2000 });

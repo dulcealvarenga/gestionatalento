@@ -3,6 +3,7 @@ import "./AbmDescuentos.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
+import { API_BASE_URL } from '../config/constantes.js';
 
 const DescuentoForm = () => {
 
@@ -44,7 +45,7 @@ const DescuentoForm = () => {
         if (!nroDocumento) return;
 
         try {
-            const response = await axios.get(`http://localhost:8080/empleados/obtener/documento/${nroDocumento}`);
+            const response = await axios.get(`${API_BASE_URL}empleados/obtener/documento/${nroDocumento}`);
             if (response.data.codigoMensaje === "200") {
                 const empleado = response.data.objeto[0];
                 const persona = empleado.persona;
@@ -83,7 +84,7 @@ const DescuentoForm = () => {
 
     const handleCalcular = async () => {
         const nroDocumento = formData.nroDocumento;
-        const response = await axios.get(`http://localhost:8080/empleados/obtener/documento/${nroDocumento}`);
+        const response = await axios.get(`${API_BASE_URL}empleados/obtener/documento/${nroDocumento}`);
         const empleado = response.data.objeto[0];
         try {
             const requestBody = {
@@ -98,7 +99,7 @@ const DescuentoForm = () => {
 
             console.log(requestBody);
 
-            const response = await axios.post("http://localhost:8080/descuentos-salariales/calcular", requestBody);
+            const response = await axios.post(`${API_BASE_URL}descuentos-salariales/calcular`, requestBody);
             const descuentoSalarial = response.data.objeto;
 
             if (!descuentoSalarial || !descuentoSalarial.empleado) {
@@ -127,7 +128,7 @@ const DescuentoForm = () => {
 
     const handleGuardar = async () => {
         const nroDocumento = formData.nroDocumento;
-        const response = await axios.get(`http://localhost:8080/empleados/obtener/documento/${nroDocumento}`);
+        const response = await axios.get(`${API_BASE_URL}empleados/obtener/documento/${nroDocumento}`);
         const empleado = response.data.objeto[0];
 
         if (!empleado || !empleado.codEmpleado) {
@@ -152,7 +153,7 @@ const DescuentoForm = () => {
         console.log("guardar: ", requestBody);
 
         try {
-            const response = await axios.post("http://localhost:8080/descuentos-salariales/crear", requestBody);
+            const response = await axios.post(`${API_BASE_URL}descuentos-salariales/crear`, requestBody);
             const descuentoSalarial = response.data.objeto;
 
             if (!descuentoSalarial || !descuentoSalarial.empleado) {

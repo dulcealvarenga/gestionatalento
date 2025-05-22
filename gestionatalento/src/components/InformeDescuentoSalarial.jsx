@@ -9,6 +9,8 @@ import {
     pdf,
 } from "@react-pdf/renderer";
 import { useSearchParams } from "react-router-dom";
+import { API_BASE_URL } from '../config/constantes.js';
+
 
 // Estilos
 const styles = StyleSheet.create({
@@ -143,7 +145,7 @@ const InformeDescuentoSalarial = () => {
                 }
 
                 const res = await axios.get(
-                    "http://localhost:8080/descuentos-salariales/obtenerLista"
+                    `${API_BASE_URL}descuentos-salariales/obtenerLista`
                 );
                 const descuentos = res.data.objeto || [];
 

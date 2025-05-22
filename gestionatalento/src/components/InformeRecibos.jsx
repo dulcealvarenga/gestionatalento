@@ -9,6 +9,8 @@ import {
     pdf,
 } from "@react-pdf/renderer";
 import { useSearchParams } from "react-router-dom";
+import { API_BASE_URL } from '../config/constantes.js';
+
 
 // Estilos
 const styles = StyleSheet.create({
@@ -221,9 +223,9 @@ const InformeRecibos = () => {
                 if (!mes) return alert("Falta el parámetro 'mes'.");
 
                 const [resMarc, resJust] = await Promise.all([
-                    axios.get("http://localhost:8080/marcaciones/manuales/obtenerLista"),
+                    axios.get(`${API_BASE_URL}marcaciones/manuales/obtenerLista`),
                     axios.get(
-                        "http://localhost:8080/justificativos/obtenerListaJustificativos"
+                        `${API_BASE_URL}justificativos/obtenerListaJustificativos`
                     ),
                 ]);
 

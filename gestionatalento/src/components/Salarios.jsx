@@ -5,6 +5,7 @@ import { FaEdit } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
 import { pdf, Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import axios from "axios";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const styles = StyleSheet.create({
     table: {
@@ -88,9 +89,9 @@ const Salarios = () => {
 
     const generarPDFIndividual = async (tipo, periodo) => {
         const endpoint = {
-            altas: `http://localhost:8080/empleados/altas?periodo=${periodo}`,
-            bajas: `http://localhost:8080/empleados/bajas?periodo=${periodo}`,
-            modificaciones: `http://localhost:8080/empleados/modificaionSalario?periodo=${periodo}`,
+            altas: `${API_BASE_URL}empleados/altas?periodo=${periodo}`,
+            bajas: `${API_BASE_URL}empleados/bajas?periodo=${periodo}`,
+            modificaciones: `${API_BASE_URL}empleados/modificaionSalario?periodo=${periodo}`,
         };
 
         try {
@@ -194,7 +195,7 @@ const Salarios = () => {
     useEffect(() => {
         const obtenerSalarios = async () => {
             try {
-                const res = await axios.get("http://localhost:8080/salarios/obtenerLista");
+                const res = await axios.get(`${API_BASE_URL}salarios/obtenerLista`);
                 const lista = res.data.objeto || [];
                 setTodosLosSalarios(lista); // copia completa
                 setSalarios(lista);         // visible en la tabla
@@ -220,7 +221,7 @@ const Salarios = () => {
     const handleClickGenerar = async () => {
         try {
             const response = await axios.get(
-                "http://localhost:8080/salarios/obtenerLista"
+                `${API_BASE_URL}salarios/obtenerLista`
             );
             const registros = response.data.objeto || [];
 

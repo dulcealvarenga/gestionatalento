@@ -3,6 +3,7 @@ import "./AbmEventos.css";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate, useParams } from "react-router-dom";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const AbmEventos = () => {
     const navigate = useNavigate();
@@ -22,7 +23,7 @@ const AbmEventos = () => {
     useEffect(() => {
         const fetchTiposEvento = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/configuraciones/tipos-eventos/obtenerListaActiva");
+                const response = await axios.get(`${API_BASE_URL}configuraciones/tipos-eventos/obtenerListaActiva`);
                 setTiposEvento(response.data.objeto);
             } catch (error) {
                 console.error("Error al cargar tipos de evento:", error);
@@ -36,7 +37,7 @@ const AbmEventos = () => {
         const fetchEvento = async () => {
             if (id) {
                 try {
-                    const response = await axios.get('http://localhost:8080/configuraciones/eventos/obtener/id/' + id);
+                    const response = await axios.get(`${API_BASE_URL}configuraciones/eventos/obtener/id/` + id);
                     const genericResponse = response.data;
                     const eventoData = genericResponse.objeto;
     
@@ -94,7 +95,7 @@ const AbmEventos = () => {
         try {
            
             if (id) {
-                const response = await axios.put('http://localhost:8080/configuraciones/eventos/actualizar', evento);
+                const response = await axios.put(`${API_BASE_URL}configuraciones/eventos/actualizar`, evento);
                 const genericResponse = response.data;
                 if (genericResponse.codigoMensaje == "200") {
                     toast.success(genericResponse.mensaje, { autoClose: 2000 });
@@ -105,7 +106,7 @@ const AbmEventos = () => {
                     toast.error(genericResponse.mensaje, { autoClose: 2000 });
                 }
             } else {
-                const response = await axios.post("http://localhost:8080/configuraciones/eventos/crear", evento);
+                const response = await axios.post(`${API_BASE_URL}configuraciones/eventos/crear`, evento);
                 const genericResponse = response.data;
                 if (genericResponse.codigoMensaje == "200") {
                     toast.success(genericResponse.mensaje, { autoClose: 2000 });

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./Departamentos.css";
-import { FaEdit } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const Departamentos = () => {
     const [departamentos, setDepartamentos] = useState([]);
@@ -15,7 +15,7 @@ const Departamentos = () => {
     const fetchDepartamentos = async () => {
         try {
             const response = await axios.get(
-                "http://localhost:8080/configuraciones/departamentos/obtenerLista"
+                `${API_BASE_URL}configuraciones/departamentos/obtenerLista`
             );
 
             const data =

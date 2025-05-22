@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./AbmAguinaldo.css";
 import { ToastContainer, toast } from 'react-toastify';
 import axios from "axios";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const AbmAguinaldo = () => {
     const navigate = useNavigate();
@@ -43,7 +44,7 @@ const AbmAguinaldo = () => {
         if (!nroDocumento) return;
 
         try {
-            const response = await axios.get(`http://localhost:8080/empleados/obtener/documento/${nroDocumento}`);
+            const response = await axios.get(`${API_BASE_URL}empleados/obtener/documento/${nroDocumento}`);
             if (response.data.codigoMensaje === "200") {
                 const empleado = response.data.objeto[0];
                 const persona = empleado.persona;
@@ -105,7 +106,7 @@ const AbmAguinaldo = () => {
         console.log("Body a enviar:", body);
 
         try {
-            const response = await axios.post("http://localhost:8080/salarios/crear", body);
+            const response = await axios.post(`${API_BASE_URL}salarios/crear`, body);
             if (response.data.codigoMensaje === "200") {
                 toast.success("Se incluyo con Exito el Aguinaldo", { autoClose: 2000 });
                 // limpiar si querés

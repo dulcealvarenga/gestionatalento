@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./AbmMarcacionesImportadas.css";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
+import { API_BASE_URL } from '../config/constantes.js';
 
 const AbmMarcacionesImportadas = () => {
     const navigate = useNavigate();
@@ -21,7 +22,7 @@ const AbmMarcacionesImportadas = () => {
                 const formData = new FormData();
                 formData.append("file", userinfoFile);
 
-                const response = await axios.post("http://localhost:8080/marcaciones/exportacion/cargar-usuario", formData, {
+                const response = await axios.post(`${API_BASE_URL}marcaciones/exportacion/cargar-usuario`, formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
@@ -38,7 +39,7 @@ const AbmMarcacionesImportadas = () => {
                 const formData = new FormData();
                 formData.append("file", checkoutFile);
 
-                const response = await axios.post("http://localhost:8080/marcaciones/exportacion/cargar-marcacion", formData, {
+                const response = await axios.post(`${API_BASE_URL}marcaciones/exportacion/cargar-marcacion`, formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },

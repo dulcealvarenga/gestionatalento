@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./Eventos.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_BASE_URL } from '../config/constantes.js';
+
 
 const Eventos = () => {
     const navigate = useNavigate();
@@ -9,7 +11,7 @@ const Eventos = () => {
 
     useEffect(() => {
         axios
-            .get("http://localhost:8080/configuraciones/eventos/obtenerLista")
+            .get(`${API_BASE_URL}configuraciones/eventos/obtenerLista`)
             .then((res) => {
                 if (res.data && res.data.objeto && res.data.objeto.length > 0) {
                     const eventosObtenidos = res.data.objeto.map((e) => e.evento);
@@ -54,7 +56,6 @@ const Eventos = () => {
                             <td>{evento.vigente === "S" ? "SI" : "NO"}</td>
                             <td>{evento.fecha}</td>
                             <td>{evento.tipoEvento.descripcion || "-"}</td>
-                            {/* ✅ Cambiado */}
                             <td>
                                 <button
                                     onClick={() =>

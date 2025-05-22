@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./MarcacionesImportadas.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const MarcacionesImportadas = () => {
 
@@ -12,7 +13,7 @@ const MarcacionesImportadas = () => {
     useEffect(() => {
         const obtenerMarcaciones = async () => {
             try {
-                const response = await axios.post("http://localhost:8080/marcaciones/manuales/obtener", {
+                const response = await axios.post(`${API_BASE_URL}marcaciones/manuales/obtener`, {
                     nroDocumento: "12344",
                     fecDesde: "2025-05-01",
                     fecHasta: "2025-05-19"

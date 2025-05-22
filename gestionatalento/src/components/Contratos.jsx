@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import "./Contratos.css"; // usa el mismo estilo visual dark
+import "./Contratos.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-//Esto es lo nuevo
+import { API_BASE_URL } from '../config/constantes.js';
+
+
 const Contratos = () => {
     const [listaContratos, setListaContratos] = useState([]);
     const [allContratos, setAllContratos] = useState([]);
@@ -30,7 +32,7 @@ const Contratos = () => {
     const fetchAllContratos = async () => {
         try {
             const response = await axios.get(
-                'http://localhost:8080/contratos/obtenerLista'
+                `${API_BASE_URL}contratos/obtenerLista`
             );
             const allData = response.data.objeto || [];
             setAllContratos(allData);
@@ -47,7 +49,7 @@ const Contratos = () => {
     useEffect(() => {
         // Simulación o llamada real
         axios
-            .get("http://localhost:8080/contratos/obtenerLista")
+            .get(`${API_BASE_URL}contratos/obtenerLista`)
             .then((res) => setListaContratos(res.data.objeto))
             .catch((err) => console.error("Error al obtener contratos:", err));
     }, []);

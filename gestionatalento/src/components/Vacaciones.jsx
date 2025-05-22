@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Vacaciones.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const Vacaciones = () => {
     const navigate = useNavigate();
@@ -33,7 +34,7 @@ const Vacaciones = () => {
     const fetchAllJustificativos = async () => {
         try {
             const response = await axios.get(
-                'http://localhost:8080/justificativos/obtenerListaVacaciones'
+                `${API_BASE_URL}justificativos/obtenerListaVacaciones`
             );
             const allData = response.data.objeto || [];
             setAllJustificativos(allData);

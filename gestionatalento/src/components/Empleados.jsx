@@ -6,6 +6,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import { pdf, Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import FichaEmpleadoPDF from './FichaEmpleado';
 import { saveAs } from "file-saver";
+import { API_BASE_URL } from '../config/constantes.js';
+
 
 const styles = StyleSheet.create({
     table: {
@@ -71,7 +73,7 @@ const Empleados = () => {
     useEffect(() => {
         const codEmpleado = localStorage.getItem("empleadoBuscado");
         if (codEmpleado) {
-            axios.get(`http://localhost:8080/empleados/obtener/id/${codEmpleado}`)
+            axios.get(`${API_BASE_URL}empleados/obtener/id/${codEmpleado}`)
                 .then(res => {
                     const objeto = {
                         empleado: res.data.objeto
@@ -81,7 +83,7 @@ const Empleados = () => {
                 });
         } else {
             // Trae toda la lista si no vino filtrado
-            axios.get("http://localhost:8080/empleados/obtenerLista")
+            axios.get(`${API_BASE_URL}empleados/obtenerLista`)
                 .then(response => {
                     const genericResponse = response.data;
                     if (genericResponse.codigoMensaje == "200") {
@@ -157,7 +159,7 @@ const Empleados = () => {
 
             console.log("persona: ", personaActualizada);
 
-            const response = await axios.put("http://localhost:8080/personas/actualizar", personaActualizada);
+            const response = await axios.put(`${API_BASE_URL}personas/actualizar`, personaActualizada);
 
             if (response.data.codigoMensaje !== "200") {
                 toast.error(response.data.mensaje, {
@@ -194,7 +196,7 @@ const Empleados = () => {
 
             console.log("empleado: ", empleadoActualizado);
 
-            const resEmpleado = await axios.put("http://localhost:8080/empleados/actualizar", empleadoActualizado);
+            const resEmpleado = await axios.put(`${API_BASE_URL}empleados/actualizar`, empleadoActualizado);
 
             if (resEmpleado.data.codigoMensaje !== "200") {
                 throw new Error(resEmpleado.data.mensaje);
@@ -208,7 +210,7 @@ const Empleados = () => {
             setMostrarModalEdicion(false);
 
             // Si querés refrescar la lista:
-            const res = await axios.get("http://localhost:8080/empleados/obtenerLista");
+            const res = await axios.get(`${API_BASE_URL}empleados/obtenerLista`);
             setListaEmpleados(res.data.objeto);
 
         } catch (error) {
@@ -226,9 +228,9 @@ const Empleados = () => {
 
     const generarPDFIndividual = async (tipo, periodo) => {
         const endpoint = {
-            altas: `http://localhost:8080/empleados/altas?periodo=${periodo}`,
-            bajas: `http://localhost:8080/empleados/bajas?periodo=${periodo}`,
-            modificaciones: `http://localhost:8080/empleados/modificacionSalario?periodo=${periodo}`,
+            altas: `${API_BASE_URL}empleados/altas?periodo=${periodo}`,
+            bajas: `${API_BASE_URL}empleados/bajas?periodo=${periodo}`,
+            modificaciones: `${API_BASE_URL}empleados/modificacionSalario?periodo=${periodo}`,
         };
 
         try {

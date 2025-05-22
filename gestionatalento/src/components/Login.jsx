@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./Login.css"; // Importamos los estilos
 import { useNavigate } from "react-router-dom"; // Importar para redirigir
 import axios from "axios";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const Login = () => {
 
@@ -15,7 +16,7 @@ const Login = () => {
     const handleLogin = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post("http://localhost:8080/auth/login", {
+            const response = await axios.post(`${API_BASE_URL}auth/login`, {
                 username,
                 password
             });

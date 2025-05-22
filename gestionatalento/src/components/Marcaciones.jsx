@@ -5,6 +5,7 @@ import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const Marcaciones = () => {
 
@@ -79,7 +80,7 @@ const Marcaciones = () => {
 
     const handleGenerarInforme = async () => {
         try {
-            const response = await axios.post("http://localhost:8080/marcaciones/manuales/obtener", {
+            const response = await axios.post(`${API_BASE_URL}marcaciones/manuales/obtener`, {
                 nroDocumento: formData.nroDocumento,
                 fecDesde: formData.fechaDesde,
                 fecHasta: formData.fechaHasta

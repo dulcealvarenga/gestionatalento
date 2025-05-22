@@ -3,6 +3,7 @@ import "./Cargos.css";
 import { FaEdit } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const Cargos = () => {
     const [cargos, setCargos] = useState([]);
@@ -15,7 +16,7 @@ const Cargos = () => {
     const fetchCargos = async () => {
         try {
             const response = await axios.get(
-                "http://localhost:8080/configuraciones/cargos/obtenerLista"
+                `${API_BASE_URL}configuraciones/cargos/obtenerLista`
             );
 
             const data =

@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { pdf } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver';
 import ContratoPDF from "./ContratoPDF.jsx";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const AbmContratos = () => {
     const navigate = useNavigate();
@@ -32,7 +33,7 @@ const AbmContratos = () => {
         if (!nroDocumento) return;
 
         try {
-            const response = await axios.get(`http://localhost:8080/empleados/obtener/documento/${nroDocumento}`);
+            const response = await axios.get(`${API_BASE_URL}empleados/obtener/documento/${nroDocumento}`);
             if (response.data.codigoMensaje === "200") {
                 const empleado = response.data.objeto[0];
                 const persona = empleado.persona;
@@ -92,7 +93,7 @@ const AbmContratos = () => {
 
         try {
             const response = await axios.post(
-                "http://localhost:8080/contratos/crear",
+                `${API_BASE_URL}contratos/crear`,
                 body
             );
             toast.success("Contrato guardado exitosamente", { autoClose: 2000 });

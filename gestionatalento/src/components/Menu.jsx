@@ -3,6 +3,7 @@ import "./Menu.css";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import axios from "axios";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const Menu = () => {
     const [searchType, setSearchType] = useState("documento");
@@ -26,7 +27,7 @@ const Menu = () => {
     const handleSearch = async () => {
         try {
             if (searchType === "documento") {
-                const response = await axios.get("http://localhost:8080/empleados/obtener/documento/" + searchValue);
+                const response = await axios.get(`${API_BASE_URL}empleados/obtener/documento/` + searchValue);
                 const genericResponse = response.data;
                 if (genericResponse.codigoMensaje == "200") {
                     const empleados = genericResponse.objeto;
@@ -58,7 +59,7 @@ const Menu = () => {
                 }
                 
             } else {
-                const response = await axios.get("http://localhost:8080/empleados/obtenerLista");
+                const response = await axios.get(`${API_BASE_URL}empleados/obtenerLista`);
                 const genericResponse = response.data;
                 if (genericResponse.codigoMensaje == "200") {
                     const empleados = genericResponse.objeto;
