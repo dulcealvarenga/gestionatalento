@@ -141,7 +141,7 @@ const DescuentoForm = () => {
             salidaAnticipada: parseInt(formData.salidaAnticipada || "0"),
             ausencia: parseInt(formData.ausencia || "0"),
             periodo: {
-                nroPeriodo: 1 // Podés hacerlo dinámico si lo necesitás
+                nroPeriodo: 5 // Podés hacerlo dinámico si lo necesitás
             },
             empleado: {
                 codEmpleado: formData.empleado.codEmpleado

@@ -551,234 +551,279 @@ const Empleados = () => {
                         <form onSubmit={handleGuardarCambios}>
                             {seccionActiva === "persona" && (
                                 <div className="form-columns-emp">
-                                    <div className="fila-triple">
-                                        <div className="campo">
-                                            <label>
-                                                Nro. de Documento:
+                                    <div className="form-grid-con-foto">
+                                        {/* Columna 1: Foto */}
+                                        <div className="foto-columna">
+                                            {empleadoEditando.persona.rutaFoto ? (
+                                                <img
+                                                    src={`${API_BASE_URL}fotos/${empleadoEditando.persona.rutaFoto}`}
+                                                    alt="Foto del empleado"
+                                                    className="foto-preview"
+                                                />
+                                            ) : (
+                                                <img
+                                                    src="/avatar.png"
+                                                    alt="Foto por defecto"
+                                                    className="foto-preview"
+                                                />
+                                            )}
+                                            <label className="btn-cambiar-foto">
+                                                Cambiar
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    hidden
+                                                    onChange={(e) => {
+                                                        const file = e.target.files[0];
+                                                        const reader = new FileReader();
+                                                        reader.onloadend = () => {
+                                                            setEmpleadoEditando((prev) => ({
+                                                                ...prev,
+                                                                persona: {
+                                                                    ...prev.persona,
+                                                                    nuevaFoto: file,
+                                                                    rutaFotoPreview: reader.result,
+                                                                },
+                                                            }));
+                                                        };
+                                                        if (file) reader.readAsDataURL(file);
+                                                    }}
+                                                />
                                             </label>
-                                            <input
-                                                type="text"
-                                                value={empleadoEditando.persona.nroDocumento}
-                                                onChange={(e) => actualizarPersona("nroDocumento", e.target.value)}
-                                            />
                                         </div>
-                                        <div className="campo">
-                                            <label>
-                                                Nombre:
-                                            </label>
-                                            <input
-                                                type="text"
-                                                value={empleadoEditando.persona.nombres}
-                                                onChange={(e) => actualizarPersona("nombres", e.target.value)}
-                                            />
-                                        </div>
-                                        <div className="campo">
-                                            <label>
-                                                Apellido:
-                                            </label>
-                                            <input
-                                                type="text"
-                                                value={empleadoEditando.persona.apellidos}
-                                                onChange={(e) => actualizarPersona("apellidos", e.target.value)}
-                                            />
-                                        </div>
-                                    </div>
 
-                                    <div className="fila-triple">
-                                        <div className="campo">
-                                            <label>
-                                                Último Título Obtenido:
-                                            </label>
-                                            <select name="codNivelEstudio" value={empleadoEditando.persona.codNivelEstudio}
-                                                    onChange={(e) => actualizarPersona("codNivelEstudio", e.target.value)}>
-                                                <option value="P">Primario</option>
-                                                <option value="S">Secundario</option>
-                                                <option value="T">Terciario</option>
-                                            </select>
-                                        </div>
-                                        <div className="campo">
-                                            <label>
-                                                Fecha de Nacimiento:
-                                            </label>
-                                            <input
-                                                type="date"
-                                                value={empleadoEditando.persona.fecNacimiento}
-                                                onChange={(e) => actualizarPersona("fecNacimiento", e.target.value)}
-                                            />
-                                        </div>
-                                        <div className="campo">
-                                            <label>
-                                                Lugar de Nacimiento:
-                                            </label>
-                                            <input
-                                                type="text"
-                                                value={empleadoEditando.persona.lugarNacimiento}
-                                                onChange={(e) => actualizarPersona("lugarNacimiento", e.target.value)}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="fila-triple">
-                                        <div className="campo">
-                                            <label>
-                                                Estado Civil:
-                                            </label>
-                                            <select
-                                                name="codEstadoCivil"
-                                                value={empleadoEditando.persona.estadoCivil?.codEstadoCivil || ""}
-                                                onChange={(e) =>
-                                                    actualizarPersona("codEstadoCivil", parseInt(e.target.value))
-                                                }
-                                            >
-                                                <option value="1">Soltero/a</option>
-                                                <option value="2">Casado/a</option>
-                                                <option value="3">Viudo/a</option>
-                                            </select>
-                                        </div>
-                                        <div className="campo">
-                                            <label>
-                                                <input type="checkbox" name="poseeDiscapacidad"
-                                                       checked={empleadoEditando.persona.poseeDiscapacidad}
-                                                       onChange={(e) => actualizarPersona("poseeDiscapacidad", e.target.checked)}/>
-                                                ¿Posee Discapacidad?
-                                            </label>
-                                        </div>
-                                        <div className="campo">
-                                            <label>
-                                                Discapacidad:
-                                            </label>
-                                            <input type="text"
-                                                   name="descripcionDiscapacidad"
-                                                   value={empleadoEditando.persona.descripcionDiscapacidad}
-                                                   onChange={(e) => actualizarPersona("descripcionDiscapacidad", e.target.value)}
-                                                   disabled={!empleadoEditando.persona.poseeDiscapacidad}
-                                                   required={empleadoEditando.persona.poseeDiscapacidad}/>
+                                        {/* Columnas 2 y 3: Campos */}
+                                        <div className="datos-grid">
+                                            <div className="campo">
+                                                <label>Nro Documento:</label>
+                                                <input type="text" value={empleadoEditando.persona.nroDocumento}
+                                                       onChange={(e) => actualizarPersona("nroDocumento", e.target.value)}/>
+                                            </div>
+                                            <div className="campo">
+                                                <label>Nombre:</label>
+                                                <input type="text" value={empleadoEditando.persona.nombres}
+                                                       onChange={(e) => actualizarPersona("nombres", e.target.value)}/>
+                                            </div>
+                                            <div className="campo">
+                                                <label>Apellido:</label>
+                                                <input type="text" value={empleadoEditando.persona.apellidos}
+                                                       onChange={(e) => actualizarPersona("apellidos", e.target.value)}/>
+                                            </div>
+                                            <div className="campo">
+                                                <label>Fecha de Nacimiento:</label>
+                                                <input type="date" value={empleadoEditando.persona.fecNacimiento}
+                                                       onChange={(e) => actualizarPersona("fecNacimiento", e.target.value)}/>
+                                            </div>
+                                            <div className="campo">
+                                                <label>Lugar de Nacimiento:</label>
+                                                <input type="text" value={empleadoEditando.persona.lugarNacimiento}
+                                                       onChange={(e) => actualizarPersona("lugarNacimiento", e.target.value)}/>
+                                            </div>
+                                            <div className="campo">
+                                                <label>Pais de Nacimiento:</label>
+                                                <input type="text" value={empleadoEditando.persona.pais.descripcion}
+                                                       onChange={(e) => actualizarPersona("lugarNacimiento", e.target.value)}/>
+                                            </div>
+                                            <div className="campo">
+                                                <label>Estado Civil:</label>
+                                                <select
+                                                    value={empleadoEditando.persona.estadoCivil?.codEstadoCivil || ""}
+                                                    onChange={(e) => actualizarPersona("codEstadoCivil", parseInt(e.target.value))}>
+                                                    <option value="1">Soltero/a</option>
+                                                    <option value="2">Casado/a</option>
+                                                    <option value="3">Viudo/a</option>
+                                                </select>
+                                            </div>
+                                            <div className="campo">
+                                                <label>
+                                                    Último Título Obtenido:
+                                                </label>
+                                                <select name="codNivelEstudio"
+                                                        value={empleadoEditando.persona.codNivelEstudio}
+                                                        onChange={(e) => actualizarPersona("codNivelEstudio", e.target.value)}>
+                                                    <option value="P">Primario</option>
+                                                    <option value="S">Secundario</option>
+                                                    <option value="T">Terciario</option>
+                                                </select>
+                                            </div>
+                                            <div className="campo campo-discapacidad">
+                                                <label>Discapacidad:</label>
+                                                <div className="input-checkbox-contenedor">
+                                                    <input
+                                                        type="checkbox"
+                                                        id="chkDiscapacidad"
+                                                        checked={empleadoEditando.persona.poseeDiscapacidad}
+                                                        onChange={(e) => actualizarPersona("poseeDiscapacidad", e.target.checked)}
+                                                    />
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Descripción"
+                                                        value={empleadoEditando.persona.descripcionDiscapacidad}
+                                                        onChange={(e) => actualizarPersona("descripcionDiscapacidad", e.target.value)}
+                                                        disabled={!empleadoEditando.persona.poseeDiscapacidad}
+                                                        required={empleadoEditando.persona.poseeDiscapacidad}
+                                                    />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            )}
+                                    )}
 
-                            {seccionActiva === "empleado" && (
-                                <div className="form-columns-emp">
-                                    <div className="fila-triple">
-                                        <div className="campo">
-                                        <label>
-                                                Nro. de Documento:
-                                            </label>
-                                            <input
-                                                type="text"
-                                                value={empleadoEditando.persona.nroDocumento}
-                                                onChange={(e) => actualizarPersona("nroDocumento", e.target.value)}
-                                                readOnly={true}
-                                            />
-                                        </div>
-                                        <div className="campo">
-                                            <label>
-                                                Nombre:
-                                            </label>
-                                            <input
-                                                type="text"
-                                                value={empleadoEditando.persona.nombres}
-                                                onChange={(e) => actualizarPersona("nombres", e.target.value)}
-                                                readOnly={true}
-                                            />
-                                        </div>
-                                        <div className="campo">
-                                            <label>
-                                                Apellido:
-                                            </label>
-                                            <input
-                                                type="text"
-                                                value={empleadoEditando.persona.apellidos}
-                                                onChange={(e) => actualizarPersona("apellidos", e.target.value)}
-                                                readOnly={true}
-                                            />
-                                        </div>
-                                    </div>
+                                    {seccionActiva === "empleado" && (
+                                        <div className="form-columns-emp">
+                                            <div className="fila-triple">
+                                                <div className="campo">
+                                                    <label>
+                                                        Nro. de Documento:
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        value={empleadoEditando.persona.nroDocumento}
+                                                        readOnly={true}
+                                                    />
+                                                </div>
+                                                <div className="campo">
+                                                    <label>
+                                                        Nombre:
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        value={`${empleadoEditando.persona.nombres || ""} ${empleadoEditando.persona.apellidos || ""}`}
+                                                        readOnly={true}
+                                                    />
+                                                </div>
+                                                <div className="campo">
+                                                    <label>
+                                                        Situacion Laboral:
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        value={empleadoEditando.situacionLaboral.descripcion}
+                                                        readOnly={true}
+                                                    />
+                                                </div>
+                                            </div>
 
-                                    <div className="fila-triple">
-                                        <div className="campo">
-                                            <label>
-                                                Fecha de Ingreso:
-                                            </label>
-                                            <input
-                                                type="date"
-                                                value={empleadoEditando.fecIngreso}
-                                                onChange={(e) => actualizarEmpleado("fecIngreso", e.target.value)}
-                                            />
+                                            <div className="fila-triple">
+                                                <div className="campo">
+                                                    <label>
+                                                        Fecha de Ingreso:
+                                                    </label>
+                                                    <input
+                                                        type="date"
+                                                        value={empleadoEditando.fecIngreso}
+                                                        onChange={(e) => actualizarEmpleado("fecIngreso", e.target.value)}
+                                                    />
+                                                </div>
+                                                <div className="campo">
+                                                    <label>
+                                                        Fecha de Acto Administrativo:
+                                                    </label>
+                                                    <input
+                                                        type="date"
+                                                        value={empleadoEditando.fecActoAdministrativo}
+                                                        onChange={(e) => actualizarEmpleado("fecActoAdministrativo", e.target.value)}
+                                                    />
+                                                </div>
+                                                <div className="campo">
+                                                    <label>
+                                                        Nro. de Resolucion:
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        value={empleadoEditando.nroResolucion}
+                                                        onChange={(e) => actualizarEmpleado("nroResolucion", e.target.value)}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="fila-triple">
+                                                <div className="campo">
+                                                    <label>
+                                                        Cargo:
+                                                    </label>
+                                                    <select name="codCargo" value={empleadoEditando.cargo.descripcion}
+                                                            onChange={(e) => actualizarEmpleado("cargo", e.target.value)}
+                                                            required>
+                                                        <option value="">{empleadoEditando.cargo.descripcion}</option>
+                                                        <option value="1">AUXILIAR</option>
+                                                        <option value="2">AUXILIAR</option>
+                                                    </select>
+                                                </div>
+                                                <div className="campo">
+                                                    <label>
+                                                        Salario:
+                                                    </label>
+                                                    <input
+                                                        type="number"
+                                                        value={empleadoEditando.asignacion}
+                                                        onChange={(e) => actualizarEmpleado("asignacion", e.target.value)}
+                                                    />
+                                                </div>
+                                                <div className="campo">
+                                                    <label>
+                                                        Observación:
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        value={empleadoEditando.observacion}
+                                                        onChange={(e) => actualizarEmpleado("observacion", e.target.value)}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="fila-triple">
+                                                <div className="campo">
+                                                    <label>
+                                                        Sede:
+                                                    </label>
+                                                    <select name="codSede"
+                                                            value={empleadoEditando.persona.fecNacimiento}
+                                                            onChange={(e) => actualizarEmpleado("sede", e.target.value)}>
+                                                        <option value="">{empleadoEditando.sede.descripcion}</option>
+                                                        <option value="1">Sede Central</option>
+                                                        <option value="2">Sede Antigua</option>
+                                                        <option value="3">Biblioteca Municipal</option>
+                                                        <option value="4">Juzgado de Faltas</option>
+                                                    </select>
+                                                </div>
+                                                <div className="campo">
+                                                    <label>
+                                                        Hora de Entrada:
+                                                    </label>
+                                                    <input
+                                                        type="time"
+                                                        value={empleadoEditando.horaEntrada}
+                                                        onChange={(e) => actualizarEmpleado("horaEntrada", e.target.value)}
+                                                    />
+                                                </div>
+                                                <div className="campo">
+                                                    <label>
+                                                        Hora de Salida:
+                                                    </label>
+                                                    <input
+                                                        type="time"
+                                                        value={empleadoEditando.horaSalida}
+                                                        onChange={(e) => actualizarEmpleado("horaSalida", e.target.value)}
+                                                    />
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="campo">
-                                            <label>
-                                                Nro. de Resolucion:
-                                            </label>
-                                            <input
-                                                type="text"
-                                                value={empleadoEditando.nroResolucion}
-                                                onChange={(e) => actualizarEmpleado("nroResolucion", e.target.value)}
-                                            />
-                                        </div>
-                                        <div className="campo">
-                                            <label>
-                                                Cargo:
-                                            </label>
-                                            <select name="codCargo" value={empleadoEditando.cargo.descripcion}
-                                                    onChange={(e) => actualizarEmpleado("cargo", e.target.value)}
-                                                    required>
-                                                <option value="">{empleadoEditando.cargo.descripcion}</option>
-                                                <option value="1">AUXILIAR</option>
-                                                <option value="2">AUXILIAR</option>
-                                            </select>
-                                        </div>
+                                    )}
+
+                                    <div className="botones-modal">
+                                        <button type="submit">Guardar</button>
+                                        <button type="button" onClick={() => setMostrarModalEdicion(false)}>Cancelar
+                                        </button>
                                     </div>
-                                    <div className="fila-triple">
-                                        <div className="campo">
-                                            <label>
-                                                Sede:
-                                            </label>
-                                            <select name="codSede" value={empleadoEditando.persona.fecNacimiento}
-                                                    onChange={(e) => actualizarEmpleado("sede", e.target.value)}>
-                                                <option value="">{empleadoEditando.sede.descripcion}</option>
-                                                <option value="1">Sede Central</option>
-                                                <option value="2">Sede Antigua</option>
-                                                <option value="3">Biblioteca Municipal</option>
-                                                <option value="4">Juzgado de Faltas</option>
-                                            </select>
-                                        </div>
-                                        <div className="campo">
-                                            <label>
-                                                Hora de Entrada:
-                                            </label>
-                                            <input
-                                                type="time"
-                                                value={empleadoEditando.horaEntrada}
-                                                onChange={(e) => actualizarEmpleado("horaEntrada", e.target.value)}
-                                            />
-                                        </div>
-                                        <div className="campo">
-                                            <label>
-                                                Hora de Salida:
-                                            </label>
-                                            <input
-                                                type="time"
-                                                value={empleadoEditando.horaSalida}
-                                                onChange={(e) => actualizarEmpleado("horaSalida", e.target.value)}
-                                            />
-                                        </div>
-                                    </div>
+                                </form>
                                 </div>
-                            )}
-
-                            <div className="botones-modal">
-                                <button type="submit">Guardar</button>
-                                <button type="button" onClick={() => setMostrarModalEdicion(false)}>Cancelar
-                                </button>
-                            </div>
-                        </form>
+                                </div>
+                                )}
+                            <ToastContainer/>
                     </div>
-                </div>
-            )}
-            <ToastContainer/>
-        </div>
-    );
-};
+                    );
+                    };
 
-export default Empleados;
+                    export default Empleados;

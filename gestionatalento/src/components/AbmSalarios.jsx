@@ -195,6 +195,14 @@ const AbmSalarios = () => {
 
                 <div className="fila-triple">
                     <div className="campo">
+                        <label>Asignacion</label>
+                        <input
+                            name="asignacion"
+                            value={formData.asignacion}
+                            readOnly
+                        />
+                    </div>
+                    <div className="campo">
                         <label>Situación Laboral</label>
                         <input
                             name="sitLaboral"
@@ -203,12 +211,32 @@ const AbmSalarios = () => {
                         />
                     </div>
                     <div className="campo">
-                        <label>Asignacion</label>
-                        <input
-                            name="asignacion"
-                            value={formData.asignacion}
-                            readOnly
-                        />
+                        <label>Presupuesto</label>
+                        <select
+                            name="presupuesto"
+                            value={formData.presupuesto}
+                            onChange={handleChange}
+                        >
+                            <option value="">Seleccionar</option>
+                            <option value="1">Actividades Centrales</option>
+                            <option value="2">Servicios Personales</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div className="fila-triple">
+                    <div className="campo">
+                        <label>Programa</label>
+                        <select
+                            name="programa"
+                            value={formData.programa}
+                            onChange={handleChange}
+                        >
+                            <option value="">Seleccionar</option>
+                            <option value="1">Legislativo Municipal</option>
+                            <option value="2">Ejecutivo Municipal - Permanente</option>
+                            <option value="3">Ejecutivo Municipal - Contratado</option>
+                        </select>
                     </div>
                     <div className="campo">
                         <label>Fuente de Financiamiento</label>
@@ -221,20 +249,6 @@ const AbmSalarios = () => {
                             <option value="1">Recursos Propios</option>
                             <option value="2">Recursos Propios, Royalties y Compensaciones Segun Disponibilidad</option>
                             <option value="30">Recursos Institucionales</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div className="fila-triple">
-                    <div className="campo">
-                        <label>Grado</label>
-                        <select
-                            name="gradoSalarial"
-                            value={formData.gradoSalarial}
-                            onChange={handleChange}
-                        >
-                            <option value="">Seleccionar</option>
-                            <option value="0">Grado Salarial Contratado</option>
                         </select>
                     </div>
                     <div className="campo">
@@ -256,43 +270,9 @@ const AbmSalarios = () => {
                             <option value="114">Aguinaldo Personal Permanente</option>
                         </select>
                     </div>
-                    <div className="campo">
-                        <label>Periodo</label>
-                        <input
-                            type="text"
-                            name="codPeriodo"
-                            value={formData.codPeriodo}
-                            onChange={handleChange}
-                        />
-                    </div>
                 </div>
 
                 <div className="fila-triple">
-                    <div className="campo">
-                        <label>Presupuesto</label>
-                        <select
-                            name="presupuesto"
-                            value={formData.presupuesto}
-                            onChange={handleChange}
-                        >
-                            <option value="">Seleccionar</option>
-                            <option value="1">Actividades Centrales</option>
-                            <option value="2">Servicios Personales</option>
-                        </select>
-                    </div>
-                    <div className="campo">
-                        <label>Programa</label>
-                        <select
-                            name="programa"
-                            value={formData.programa}
-                            onChange={handleChange}
-                        >
-                            <option value="">Seleccionar</option>
-                            <option value="1">Legislativo Municipal</option>
-                            <option value="2">Ejecutivo Municipal - Permanente</option>
-                            <option value="3">Ejecutivo Municipal - Contratado</option>
-                        </select>
-                    </div>
                     <div className="campo">
                         <label>Sub Programa</label>
                         <select
@@ -306,6 +286,26 @@ const AbmSalarios = () => {
                             <option value="3">Administración y Finanzas</option>
                             <option value="5">Obras y Servicios Publicos</option>
                         </select>
+                    </div>
+                    <div className="campo">
+                        <label>Grado</label>
+                        <select
+                            name="gradoSalarial"
+                            value={formData.gradoSalarial}
+                            onChange={handleChange}
+                        >
+                            <option value="">Seleccionar</option>
+                            <option value="0">Grado Salarial Contratado</option>
+                        </select>
+                    </div>
+                    <div className="campo">
+                        <label>Periodo</label>
+                        <input
+                            type="text"
+                            name="codPeriodo"
+                            value={formData.codPeriodo}
+                            onChange={handleChange}
+                        />
                     </div>
                 </div>
 

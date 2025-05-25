@@ -251,7 +251,69 @@ body, html, #root {
     background-color: #707088;
 }
 
+.foto-preview {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+.campo-foto {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-grid-con-foto {
+    display: grid;
+    grid-template-columns: 250px auto; /* 160px fijo para la foto, el resto para campos */
+    gap: 30px;
+    align-items: start;
+}
 
 
+.foto-columna {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
+.foto-preview {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
 
+.btn-cambiar-foto {
+    background-color: #444;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.datos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 2 columnas para los campos */
+    gap: 20px;
+}
+
+.input-checkbox-contenedor {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    margin-left: -80px;
+}
+
+.input-checkbox-contenedor input[type="checkbox"] {
+    transform: scale(1.2);
+    margin-top: 2px;
+}
+
+.input-checkbox-contenedor input[type="text"] {
+    flex: 1;
+    margin-left: -70px;
+}
