@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Justificativos.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const Justificativos = () => {
     const navigate = useNavigate();
@@ -31,7 +32,7 @@ const Justificativos = () => {
     const fetchAllJustificativos = async () => {
         try {
             const response = await axios.get(
-                'http://localhost:8080/justificativos/obtenerListaJustificativos'
+                `${API_BASE_URL}justificativos/obtenerListaJustificativos`
             );
             const allData = response.data.objeto || [];
             setAllJustificativos(allData);
@@ -47,7 +48,7 @@ const Justificativos = () => {
     const fetchFilteredJustificativos = async () => {
         try {
             const response = await axios.get(
-                'http://localhost:8080/justificativos/obtenerListaJustificativos'
+                    `${API_BASE_URL}justificativos/obtenerListaJustificativos`
             );
             let allData = response.data.objeto || [];
 

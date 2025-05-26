@@ -50,7 +50,7 @@ const Vacaciones = () => {
     const fetchFilteredJustificativos = async () => {
         try {
             const response = await axios.get(
-                'http://localhost:8080/justificativos/obtenerListaJustificativos'
+                `${API_BASE_URL}justificativos/obtenerListaJustificativos`
             );
             let allData = response.data.objeto || [];
 

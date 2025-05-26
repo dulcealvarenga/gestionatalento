@@ -6,9 +6,9 @@ const ConfigScreen = () => {
     const navigate = useNavigate();
 
     const configuraciones = [
-        { nombre: "Eventos", ruta: "/configuraciones/eventos", icono: "/public/eventos.png" },
-        { nombre: "Direcciones", ruta: "/configuraciones/direcciones", icono: "/public/direcciones.png" },
-        { nombre: "Usuarios", ruta: "/configuraciones/usuarios", icono: "/public/usuario.png" },
+        { nombre: "Eventos", ruta: "/configuraciones/eventos", icono: "/eventos.png" },
+        { nombre: "Direcciones", ruta: "/configuraciones/direcciones", icono: "/direcciones.png" },
+        { nombre: "Usuarios", ruta: "/configuraciones/usuarios", icono: "/usuario.png" },
     ];
 
     return (

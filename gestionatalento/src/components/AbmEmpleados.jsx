@@ -186,7 +186,7 @@ const AbmEmpleados = () => {
         const nroDocumento = formData.nroDocumento;
         if (!nroDocumento) return;
         try {
-            const response = await axios.get('http://localhost:8080/personas/obtener/documento/' + nroDocumento);
+            const response = await axios.get(`${API_BASE_URL}personas/obtener/documento/` + nroDocumento);
             if (response.data.codigoMensaje === "200") {
                 toast.success("Persona encontrada", { autoClose: 2000 });
                 const persona = response.data.objeto;
