@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { FaDownload, FaFolder } from 'react-icons/fa';
 import axios from "axios";
 import {toast} from "react-toastify";
-import { API_BASE_URL } from '../config/constantes.js';
 
 const Intranet = () => {
     const navigate = useNavigate();
@@ -15,6 +14,13 @@ const Intranet = () => {
     const [hasDocuments, setHasDocuments] = useState(false); // 👈 clave
     const [isLoading, setIsLoading] = useState(false);
     const [selectedFolder, setSelectedFolder] = useState(null);
+
+    // Datos mock para ejemplo
+    const documentos = [
+        { id: 1, nombre: 'Docum.pdf' },
+        { id: 2, nombre: 'Docum.pdf' },
+        { id: 3, nombre: 'Docum.pdf' },
+    ];
 
     const fileInputRef = useRef(null);
 
@@ -46,7 +52,7 @@ const Intranet = () => {
         formData.append("data", JSON.stringify(metadata));
 
         try {
-            const response = await axios.post(`${API_BASE_URL}personas/documentos/crear`, formData, {
+            const response = await axios.post("http://localhost:8080/personas/documentos/crear", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }
@@ -70,7 +76,7 @@ const Intranet = () => {
 
     const obtenerDocumentosFuncionario = async (codPersona) => {
         try {
-            const response = await axios.get(`${API_BASE_URL}personas/documentos/obtenerLista`);
+            const response = await axios.get("http://localhost:8080/personas/documentos/obtenerLista");
             const todos = response.data.objeto || [];
             const filtrados = todos.filter(item => item.documento.persona.codPersona === codPersona);
             setDocumentosEmpleado(filtrados);
@@ -83,7 +89,7 @@ const Intranet = () => {
         if (!documento) return;
         setIsLoading(true);
         try {
-            const response = await axios.get(`${API_BASE_URL}empleados/obtener/documento/${documento}`);
+            const response = await axios.get(`http://localhost:8080/empleados/obtener/documento/${documento}`);
             if (response.data.codigoMensaje === "200") {
                 const empleado = response.data.objeto[0];
                 const persona = empleado.persona;
@@ -130,7 +136,7 @@ const Intranet = () => {
     useEffect(() => {
         const obtenerRecientes = async () => {
             try {
-                const response = await axios.get(`${API_BASE_URL}personas/documentos/obtenerLista`);
+                const response = await axios.get("http://localhost:8080/personas/documentos/obtenerLista");
                 const todos = response.data.objeto || [];
 
                 const ordenados = todos
@@ -151,7 +157,7 @@ const Intranet = () => {
 
     const handleVerTodosLosDocumentos = async () => {
         try {
-            const response = await axios.get(`${API_BASE_URL}personas/documentos/obtenerLista`);
+            const response = await axios.get("http://localhost:8080/personas/documentos/obtenerLista");
             setDocumentosGlobales(response.data.objeto || []);
             setMostrarGlobales(true);
             setSelectedFolder(null);

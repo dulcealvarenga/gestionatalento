@@ -69,6 +69,7 @@ const Empleados = () => {
 
     const [listaEmpleados, setListaEmpleados] = useState([]);
     const navigate = useNavigate();
+    const [foto, setFoto] = useState(null);
 
     useEffect(() => {
         const codEmpleado = localStorage.getItem("empleadoBuscado");
@@ -139,7 +140,6 @@ const Empleados = () => {
         try {
 
             const personaActualizada = {
-                codEmpleado: empleadoEditando.codEmpleado,
                 codPersona: empleadoEditando.persona.codPersona,
                 nroDocumento: empleadoEditando.persona.nroDocumento,
                 nroRuc: empleadoEditando.persona.nroRuc,
@@ -157,9 +157,20 @@ const Empleados = () => {
                 },
             };
 
-            console.log("persona: ", personaActualizada);
+            const formDataToSend = new FormData();
+            formDataToSend.append("foto", empleadoEditando.persona.nuevaFoto);
 
-            const response = await axios.put(`${API_BASE_URL}personas/actualizar`, personaActualizada);
+            const personaJson = {
+                ...personaActualizada
+            };
+
+            formDataToSend.append("data", JSON.stringify(personaJson));
+
+            const response = await axios.put(`${API_BASE_URL}personas/actualizar`, formDataToSend, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            });
 
             if (response.data.codigoMensaje !== "200") {
                 toast.error(response.data.mensaje, {
@@ -215,6 +226,8 @@ const Empleados = () => {
 
         } catch (error) {
             console.error("Error al actualizar la persona:", error);
+            toast.error("Ha ocurrido un error al actualizar la persona", { autoClose: 2000 });
+            
         }
     };
 
@@ -512,7 +525,19 @@ const Empleados = () => {
                                     <button className="ver-btn" onClick={() => handleVerEmpleado(emp)}>ver</button>
                                 </td>
                                 <td>
-                                    <img src="/avatar.png" alt="Foto" className="foto-empleado"/>
+                                    {emp.persona.rutaFoto ? (
+                                        <img
+                                            src={`${API_BASE_URL}personas/obtener/foto/${emp.persona.codPersona}`}
+                                            lt="Foto"
+                                            className="foto-empleado"
+                                        />
+                                        ) : (
+                                        <img
+                                            src="/avatar.png"
+                                            lt="Foto"
+                                            className="foto-empleado"
+                                        />
+                                    )}
                                 </td>
                                 <td style={{fontSize: "20px"}}>{emp.persona.nroDocumento}</td>
                                 <td style={{fontSize: "20px"}}>{emp.persona.nombres} {emp.persona.apellidos}</td>
@@ -556,7 +581,7 @@ const Empleados = () => {
                                         <div className="foto-columna">
                                             {empleadoEditando.persona.rutaFoto ? (
                                                 <img
-                                                    src={`${API_BASE_URL}fotos/${empleadoEditando.persona.rutaFoto}`}
+                                                    src={`${API_BASE_URL}personas/obtener/foto/${empleadoEditando.persona.codPersona}`}
                                                     alt="Foto del empleado"
                                                     className="foto-preview"
                                                 />

@@ -92,7 +92,6 @@ const AbmEmpleados = () => {
             persona.nroRuc = formData.nroRuc;
             persona.lugarNacimiento = formData.lugarNacimiento;
             persona.pais = { codPais: 1 };
-            persona.codPaisNacimiento = 1;//formData.codPaisNacimiento;
             persona.fecNacimiento = formData.fecNacimiento;
             persona.codNivelEstudio = formData.codNivelEstudio;
             if (formData.poseeDiscapacidad){
@@ -106,39 +105,37 @@ const AbmEmpleados = () => {
             persona.estadoCivil = estadoCivil;
             persona.lugarNacimiento = formData.lugarNacimiento;
             persona.rutaFoto = formData.rutaFoto;
-            console.log("Datos enviados:", persona);
 
             const formDataToSend = new FormData();
-            console.log("foto",foto);
             formDataToSend.append("foto", foto);
 
-            console.log("foto",formDataToSend);
-
             const personaJson = {
-                ...persona,
-                rutaFoto: ""
+                ...persona
             };
 
-            console.log("persona:", personaJson);
+            formDataToSend.append("data", JSON.stringify(personaJson));
 
-            formDataToSend.append(
-                "data",
-                new Blob([JSON.stringify(personaJson)], { type: "application/json" })
-            );
-
-            console.log("a enviar:", formDataToSend);
-
-            const response = await axios.post(`${API_BASE_URL}personas/crear`, formDataToSend);
-
+            const response = await axios.post(`${API_BASE_URL}personas/crear`, formDataToSend, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            });
             const genericResponse = response.data;
             if (genericResponse.codigoMensaje === "409") {
-                const response = await axios.put(`${API_BASE_URL}personas/actualizar`, persona);
+                const response = await axios.put(`${API_BASE_URL}personas/actualizar`, formDataToSend, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            });
                 const genericResponse = response.data;
                 if (genericResponse.codigoMensaje == "200") {
                     toast.success("Persona Actualizada", { autoClose: 2000 });
                 }
             } else if (genericResponse.codigoMensaje === "200") {
+                toast.success("Persona cargada correctamente", { autoClose: 2000 });
                 localStorage.setItem('codPersona', genericResponse.objeto.codPersona);
+            } else {
+                toast.error("Ha ocurrido un error al crear la persona" || genericResponse.mensaje, { autoClose: 2000 });
             }
             if(formData.asignacion > 0){
                 const empleado = new Object;
