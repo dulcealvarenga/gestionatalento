@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useRef} from "react";
 import "./AbmEmpleados.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -37,6 +37,8 @@ const AbmEmpleados = () => {
 
     const [step, setStep] = useState(1); // Estado para controlar los pasos
     const navigate = useNavigate();
+    const [foto, setFoto] = useState(null);
+
     if (formData.nroDocumento.trim()===""){
         localStorage.removeItem("codPersona");
     }
@@ -106,9 +108,28 @@ const AbmEmpleados = () => {
             persona.rutaFoto = formData.rutaFoto;
             console.log("Datos enviados:", persona);
 
-            
-            // Aquí puedes enviar los datos al backend con un POST o PUT
-            const response = await axios.post(`${API_BASE_URL}personas/crear`, persona);
+            const formDataToSend = new FormData();
+            console.log("foto",foto);
+            formDataToSend.append("foto", foto);
+
+            console.log("foto",formDataToSend);
+
+            const personaJson = {
+                ...persona,
+                rutaFoto: ""
+            };
+
+            console.log("persona:", personaJson);
+
+            formDataToSend.append(
+                "data",
+                new Blob([JSON.stringify(personaJson)], { type: "application/json" })
+            );
+
+            console.log("a enviar:", formDataToSend);
+
+            const response = await axios.post(`${API_BASE_URL}personas/crear`, formDataToSend);
+
             const genericResponse = response.data;
             if (genericResponse.codigoMensaje === "409") {
                 const response = await axios.put(`${API_BASE_URL}personas/actualizar`, persona);
@@ -228,7 +249,7 @@ const AbmEmpleados = () => {
                         {/* Campos del Step 1 */}
                         <div className="campo-empleado">
                             <label>Nro. de Documento</label>
-                            <input 
+                            <input
                                 type="text"
                                 name="nroDocumento"
                                 value={formData.nroDocumento}
@@ -264,7 +285,7 @@ const AbmEmpleados = () => {
                                 <option value="P">Primario</option>
                                 <option value="S">Secundario</option>
                                 <option value="T">Terciario</option>
-                            </select> 
+                            </select>
                         </div>
                         <div className="checkbox-group">
                             <label>
@@ -291,7 +312,7 @@ const AbmEmpleados = () => {
                                 <option value="1">Soltero/a</option>
                                 <option value="2">Casado/a</option>
                                 <option value="3">Viudo/a</option>
-                            </select> 
+                            </select>
                         </div>
                         <div className="campo-empleado">
                             <label>Lugar de Nacimiento</label>
@@ -307,15 +328,19 @@ const AbmEmpleados = () => {
                         </div>
                         <div className="campo-empleado">
                             <label>Foto de la Persona</label>
-                            <input type="file" name="rutaFoto" value={formData.rutaFoto} onChange={handleChange}/>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => setFoto(e.target.files[0])}
+                            />
                         </div>
                         <div className="campo-empleado">
                             {formData.foto && (
                                 <div className="image-preview">
-                                    <img 
+                                    <img
                                         src="logo.png"
-                                      	
-                                        style={{ width: '200px', height: 'auto', marginTop: '10px' }} 
+
+                                        style={{ width: '200px', height: 'auto', marginTop: '10px' }}
                                     />
                                 </div>
                             )}
@@ -334,14 +359,14 @@ const AbmEmpleados = () => {
                                 <option value="3">DIRECCION DE TRANSITO</option>
                                 <option value="4">DIRECCION DE PMT</option>
                                 <option value="5">DIRECCION DE ADMINISTRACION Y FINANZAS</option>
-                            </select> 
+                            </select>
                         </div>
                         <div className="campo-empleado">
                             <label>Cargo</label>
                             <select name="codCargo" value={formData.codCargo} onChange={handleChange} required>
                                 <option value="1">AUXILIAR</option>
                                 <option value="2">AUXILIAR</option>
-                            </select> 
+                            </select>
                         </div>
                         <div className="campo-empleado">
                             <label>Fecha de Inicio</label>
@@ -365,7 +390,7 @@ const AbmEmpleados = () => {
                                 <option value="2">Sede Antigua</option>
                                 <option value="3">Biblioteca Municipal</option>
                                 <option value="4">Juzgado de Faltas</option>
-                            </select> 
+                            </select>
                         </div>
                         <div className="campo-empleado">
                             <label>Situación Laboral</label>
@@ -375,7 +400,7 @@ const AbmEmpleados = () => {
                                 <option value="4">Pasantia Educativa</option>
                                 <option value="5">Pasantia Universitaria</option>
                                 <option value="2">Permanente</option>
-                            </select> 
+                            </select>
                         </div>
                         <div className="campo-empleado">
                             <label>Horario de Entrada</label>
