@@ -74,7 +74,7 @@ const Justificativos = () => {
 
     const totalPages = Math.ceil(allJustificativos.length / pageSize);
 
-    const gestionDoc = () => {navigate("/documentos");};
+    const gestionDoc = () => {navigate("/gestion-documentos");};
 
     return (
         <div className="justificativos-container">

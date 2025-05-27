@@ -125,7 +125,7 @@ const HorasExtrasAbm = () => {
             exoneraEntrada
         } = formData;
 
-        console.log("Datos: ", periodo, " OTRO1", horaExtra);
+        console.log("Datos: ", periodo, " OTRO1", horaExtra, "monto: ", monto, "persona: ", codEmpleado);
 
         if (!codEmpleado || !periodo || !horaExtra || !monto) {
             toast.warn("Faltan datos obligatorios para guardar", { autoClose: 2000 });
@@ -134,7 +134,7 @@ const HorasExtrasAbm = () => {
 
         const body = {
             empleado: { codEmpleado: parseInt(codEmpleado) },
-            periodo: { nroPeriodo: 5 },
+            periodo: { nroPeriodo: 5, codPeriodo: '2025/05' },
             horaExtra: parseFloat(horaExtra),
             monto: monto,
             observacion: observacion || "",

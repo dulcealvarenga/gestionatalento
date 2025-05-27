@@ -141,7 +141,8 @@ const DescuentoForm = () => {
             salidaAnticipada: parseInt(formData.salidaAnticipada || "0"),
             ausencia: parseInt(formData.ausencia || "0"),
             periodo: {
-                nroPeriodo: 5 // Podés hacerlo dinámico si lo necesitás
+                nroPeriodo: 5,
+                codPeriodo: '2025/05'
             },
             empleado: {
                 codEmpleado: formData.empleado.codEmpleado
@@ -154,12 +155,14 @@ const DescuentoForm = () => {
 
         try {
             const response = await axios.post(`${API_BASE_URL}descuentos-salariales/crear`, requestBody);
-            const descuentoSalarial = response.data.objeto;
+            console.log("Respuesta completa:", response.data);
 
-            if (!descuentoSalarial || !descuentoSalarial.empleado) {
-                toast.error("No se pudo guardar correctamente.");
+            if (!response?.data?.objeto?.empleado) {
+                toast.error(response.data.mensaje);
                 return;
             }
+
+            const descuentoSalarial = response.data.objeto;
 
             setFormData(prev => ({
                 ...prev,

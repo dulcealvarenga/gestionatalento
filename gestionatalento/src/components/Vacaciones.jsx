@@ -16,7 +16,7 @@ const Vacaciones = () => {
         navigate("/vacaciones/abm");
     };
     const gestionDoc = () => {
-        navigate("/documentos");
+        navigate("/gestion-documentos");
     };
 
     // 👉 Al cargar, trae todos los justificativos sin filtrar

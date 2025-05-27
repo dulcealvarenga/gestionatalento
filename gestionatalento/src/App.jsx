@@ -41,6 +41,7 @@ import Usuarios from "./components/Usuarios.jsx";
 import AbmUsuarios from "./components/AbmUsuarios.jsx";
 import InformeRecibos from "./components/InformeRecibos.jsx";
 import InformeDescuentoSalarial from "./components/InformeDescuentoSalarial.jsx";
+import Documentos from "./components/Documentos.jsx";
 
 function App() {
     return (
@@ -305,7 +306,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/documentos"
+                    path="/gestion-documentos"
                     element={
                         <div className="app-container">
                             <Sidebar/>
@@ -345,6 +346,15 @@ function App() {
                 <Route
                     path="/informe-recibidos"
                     element={<InformeDescuentoSalarial />}
+                />
+                <Route
+                    path="/documentos"
+                    element={
+                        <div className="app-container">
+                            <Sidebar />
+                            <Documentos/>
+                        </div>
+                    }
                 />
             </Routes>
         </Router>

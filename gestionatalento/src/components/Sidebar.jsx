@@ -17,11 +17,9 @@ const Sidebar = () => {
 
             <ul className="sidebar-menu">
                 <li onClick={() => navigate("/empleados")}>Empleados</li>
-                <li onClick={() => navigate("/justificativos")}>Justificativos</li>
-                <li onClick={() => navigate("/vacaciones")}>Vacaciones</li>
                 <li onClick={() => navigate("/salarios")}>Salarios</li>
                 <li onClick={() => navigate("/descuentos")}>Desc. Salariales</li>
-                <li onClick={() => navigate("/contratos")}>Contratos</li>
+                <li onClick={() => navigate("/documentos")}>Documentos</li>
                 <li onClick={() => navigate("/marcaciones")}>Marcaciones</li>
                 <li onClick={() => navigate("/configuraciones")}>Configuraciones</li>
             </ul>
