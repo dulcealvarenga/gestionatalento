@@ -7,6 +7,7 @@ import { pdf, Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer
 import FichaEmpleadoPDF from './FichaEmpleado';
 import { saveAs } from "file-saver";
 import { API_BASE_URL } from '../config/constantes.js';
+import CertificadoTrabajoPDF from './CertificadoTrabajoPDF';
 
 
 const styles = StyleSheet.create({
@@ -421,6 +422,32 @@ const Empleados = () => {
 
     const [seccionActiva, setSeccionActiva] = useState("persona");
 
+    const [mostrarModalCertificado, setMostrarModalCertificado] = useState(false);
+    const [documentoCertificado, setDocumentoCertificado] = useState("");
+
+    const handleGenerarCertificadoPorDoc = async () => {
+        if (!documentoCertificado.trim()) {
+            toast.warning("Ingrese un Nro. de Documento", { autoClose: 2000 });
+            return;
+        }
+
+        try {
+            const response = await axios.get(`${API_BASE_URL}empleados/obtener/documento/${documentoCertificado}`);
+            if (response.data.codigoMensaje === "200") {
+                const empleado = response.data.objeto[0];
+                console.log("empleado", empleado);
+                const blob = await pdf(<CertificadoTrabajoPDF empleado={empleado} />).toBlob();
+                saveAs(blob, `Certificado_Trabajo_${empleado.persona.nroDocumento}.pdf`);
+                setMostrarModalCertificado(false);
+                setDocumentoCertificado("");
+            } else {
+                toast.error("Empleado no encontrado", { autoClose: 2000 });
+            }
+        } catch (error) {
+            console.error("Error al obtener empleado:", error);
+            toast.error("Error al generar certificado", { autoClose: 2000 });
+        }
+    };
 
     return (
         <div className="empleados-container">
@@ -449,10 +476,12 @@ const Empleados = () => {
                                 Modificaciones
                             </button>
                             <button onClick={() => navigate("/dashboard")}>Dashboard</button>
+                            <button onClick={() => setMostrarModalCertificado(true)}>Cert. de Trabajo</button>
                         </div>
                     )}
                 </div>
             </div>
+
 
             {modalInformeTipo && (
                 <div className="modal-overlay">
@@ -482,7 +511,26 @@ const Empleados = () => {
                 </div>
             )}
 
-            <div className="filtro-comisionado-emp">
+            {mostrarModalCertificado && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <h2>Generar Certificado de Trabajo</h2>
+                            <label>Nro. de Documento:</label>
+                            <input
+                                type="text"
+                                value={documentoCertificado}
+                                onChange={(e) => setDocumentoCertificado(e.target.value)}
+                                placeholder="Ej: 5198963"
+                            />
+                            <div className="modal-buttons">
+                                <button onClick={handleGenerarCertificadoPorDoc}>Generar PDF</button>
+                                <button onClick={() => setMostrarModalCertificado(false)}>Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+            )}
+
+                <div className="filtro-comisionado-emp">
                 <div className="filtro-item">
                     <input
                         type="checkbox"
