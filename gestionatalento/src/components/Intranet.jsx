@@ -15,13 +15,6 @@ const Intranet = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedFolder, setSelectedFolder] = useState(null);
 
-    // Datos mock para ejemplo
-    const documentos = [
-        { id: 1, nombre: 'Docum.pdf' },
-        { id: 2, nombre: 'Docum.pdf' },
-        { id: 3, nombre: 'Docum.pdf' },
-    ];
-
     const fileInputRef = useRef(null);
 
     const handleUploadClick = () => {
@@ -186,6 +179,11 @@ const Intranet = () => {
         window.open(url, "_blank");
     };
 
+    const [modalUploadVisible, setModalUploadVisible] = useState(false);
+    const [archivoSeleccionado, setArchivoSeleccionado] = useState(null);
+    const [comentarioDocumento, setComentarioDocumento] = useState("");
+
+
     return (
         <div className="intranet-container">
             {/* Sidebar */}
@@ -278,7 +276,7 @@ const Intranet = () => {
                         </div>
                         <div className="botones-acciones-intra">
                             <button className="volver-btn" onClick={() => setSelectedFolder(null)}>← Volver a Carpetas</button>
-                            <button className="subir-btn" onClick={handleUploadClick}>Subir</button>
+                            <button className="subir-btn" onClick={() => setModalUploadVisible(true)}>Subir</button>
                         </div>
                         <input
                             type="file"
@@ -287,6 +285,77 @@ const Intranet = () => {
                             onChange={handleFileChange}
                         />
                     </>
+                )}
+
+                {modalUploadVisible && (
+                    <div className="modal-overlay-intra">
+                        <div className="modal-content-intra">
+                            <h3>Subir Documento</h3>
+
+                            <label>
+                                Seleccionar archivo:
+                                <input
+                                    type="file"
+                                    onChange={(e) => setArchivoSeleccionado(e.target.files[0])}
+                                />
+                            </label>
+
+                            <label>
+                                Comentario:
+                                <textarea
+                                    rows="3"
+                                    value={comentarioDocumento}
+                                    onChange={(e) => setComentarioDocumento(e.target.value)}
+                                />
+                            </label>
+
+                            <div className="modal-buttons-intra">
+                                <button onClick={async () => {
+                                    if (!archivoSeleccionado || !codPersona || !selectedFolder) {
+                                        toast.warning("Faltan campos por completar.");
+                                        return;
+                                    }
+
+                                    const codTipoDocumento = selectedFolder === "personales" ? 2 : 1;
+
+                                    const formData = new FormData();
+                                    formData.append("archivo", archivoSeleccionado);
+
+                                    const metadata = {
+                                        persona: { codPersona },
+                                        tipoDocumento: { codTipoDocumento },
+                                        estado: "C",
+                                        fecDocumento: new Date().toISOString().split("T")[0],
+                                        observacion: comentarioDocumento || "Documento sin comentario"
+                                    };
+
+                                    formData.append("data", JSON.stringify(metadata));
+
+                                    try {
+                                        const res = await axios.post("http://localhost:8080/personas/documentos/crear", formData, {
+                                            headers: { "Content-Type": "multipart/form-data" }
+                                        });
+
+                                        if (res.data.codigoMensaje === "200") {
+                                            toast.success("Documento subido correctamente");
+                                            await obtenerDocumentosFuncionario(codPersona);
+                                            setModalUploadVisible(false);
+                                            setArchivoSeleccionado(null);
+                                            setComentarioDocumento("");
+                                        } else {
+                                            toast.error("No se pudo subir");
+                                        }
+                                    } catch (err) {
+                                        console.error(err);
+                                        toast.error("Error inesperado");
+                                    }
+                                }}>
+                                    Subir
+                                </button>
+                                <button onClick={() => setModalUploadVisible(false)}>Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
                 )}
 
                 {!isLoading && !hasDocuments && documento !== "" && (
