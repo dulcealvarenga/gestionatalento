@@ -3,7 +3,9 @@ import "./Contratos.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from '../config/constantes.js';
-
+import { pdf } from "@react-pdf/renderer";
+import { saveAs } from "file-saver";
+import ContratoPDF from "./ContratoPDF"; // Asegurate que apunte al PDF correcto
 
 const Contratos = () => {
     const [listaContratos, setListaContratos] = useState([]);
@@ -56,7 +58,18 @@ const Contratos = () => {
 
     const totalPages = Math.ceil(allContratos.length / pageSize);
 
-    const gestionDoc = () => {navigate("/documentos");};
+    const gestionDoc = () => {navigate("/gestion-documentos");};
+
+    const handleReimprimir = async (contrato) => {
+        try {
+            const blob = await pdf(<ContratoPDF contrato={contrato} />).toBlob();
+            const nombreArchivo = `Contrato_${contrato.nroContrato}_${contrato.nroDocumento}.pdf`;
+            saveAs(blob, nombreArchivo);
+        } catch (error) {
+            console.error("Error al generar contrato:", error);
+            alert("No se pudo generar el contrato.");
+        }
+    };
 
     return (
         <div className="contratos-container">
@@ -81,6 +94,7 @@ const Contratos = () => {
                         <th>Periodo</th>
                         <th>Estado</th>
                         <th>Observación</th>
+                        <th>Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -92,6 +106,12 @@ const Contratos = () => {
                             <td>{contrato.contrato.periodo.codPeriodo}</td>
                             <td>{estadosContratos[contrato.contrato.estado] || ""}</td>
                             <td>{contrato.contrato.observacion || "-"}</td>
+                            <td>
+                                <button className="btn-accion"
+                                        onClick={() => handleReimprimir(contrato.contrato)}>
+                                    <img src="/descargas.png" alt="Descargar" className="icono-accion"/>
+                                </button>
+                            </td>
                         </tr>
                     ))}
                     </tbody>
