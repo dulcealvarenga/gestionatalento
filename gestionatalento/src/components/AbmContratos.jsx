@@ -97,12 +97,9 @@ const AbmContratos = () => {
                 body
             );
             toast.success("Contrato guardado exitosamente", { autoClose: 2000 });
-            // ✅ Generar PDF automáticamente
             console.log("Response:", response.data.objeto);
             const blob = await pdf(<ContratoPDF contrato={response.data.objeto} />).toBlob();
             saveAs(blob, `Contrato_${form.nroDocumento}.pdf`);
-
-            // ⏳ Pequeña espera y redirección
             setTimeout(() => navigate("/contratos"), 2000);
         } catch (error) {
             console.error("Error al guardar contrato:", error);

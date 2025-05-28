@@ -5,7 +5,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import "./AbmJustificativos.css";
 import { API_BASE_URL } from '../config/constantes.js';
 
-
 const AbmVacaciones = () => {
     const [tiposJustificativos, setTiposJustificativos] = useState([]);
     const [formData, setFormData] = useState({

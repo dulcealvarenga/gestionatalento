@@ -5,6 +5,9 @@ import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import "./AbmJustificativos.css";
 import { API_BASE_URL } from '../config/constantes.js';
+import {pdf} from "@react-pdf/renderer";
+import JustificativosPDF from "./JustificativosPDF.jsx";
+import { saveAs } from 'file-saver';
 
 const AbmJustificativos = () => {
     const [tiposJustificativos, setTiposJustificativos] = useState([]);
@@ -117,11 +120,34 @@ const AbmJustificativos = () => {
                 },
                 fechaJustificativo: fechas
             };
-            console.log(justificativo);
+
+            const tipoSeleccionado = tiposJustificativos.find(
+                tipo => tipo.codTipJustificativo == formData.codTipJustificativo
+            );
+
+            const permiso = {
+                tipoJustificativo: {
+                    codTipJustificativo: formData.codTipJustificativo,
+                    descripcion: tipoSeleccionado?.descripcion
+                },
+                persona: {
+                    nombres: formData.nombres,
+                    apellidos: formData.apellidos,
+                    nroDocumento: formData.nroDocumento,
+
+                },
+                fechaDesde: formData.fecDesde,
+                fechaHasta: formData.fecHasta,
+            };
+
+            console.log("para permiso:", permiso);
             const response = await axios.post(`${API_BASE_URL}justificativos/crear`, justificativo);
             const genericResponse = response.data;
             if (genericResponse.codigoMensaje == "200") {
                 toast.success(genericResponse.mensaje, { autoClose: 2000 });
+                console.log("Response:", response.data.objeto);
+                const blob = await pdf(<JustificativosPDF data={permiso} />).toBlob();
+                saveAs(blob, `Permiso_${permiso.persona.nroDocumento}.pdf`);
                 setTimeout(() => {
                     navigate("/justificativos");
                 }, 2000);
