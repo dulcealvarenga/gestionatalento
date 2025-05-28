@@ -77,6 +77,8 @@ const BajaEmpleados = () => {
             const empleadoBaja = new Object();
             empleadoBaja.codEmpleado = form.codEmpleado;
             empleadoBaja.fecEgreso = form.fecEgreso;
+            empleadoBaja.comentario = form.observacion;
+            console.log("baja", empleadoBaja);
             const existeEmpleado = await buscarEmpleadoPorDocumento();
             if (existeEmpleado == true) {
                 const response = await axios.put(

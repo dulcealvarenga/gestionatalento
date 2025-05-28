@@ -3,6 +3,9 @@ import "./Vacaciones.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_BASE_URL } from '../config/constantes.js';
+import {pdf} from "@react-pdf/renderer";
+import InventarioVacacionesPDF from "./InventarioVacacionesPDF.jsx";
+import { saveAs } from "file-saver";
 
 const Vacaciones = () => {
     const navigate = useNavigate();
@@ -76,6 +79,38 @@ const Vacaciones = () => {
 
     const totalPages = Math.ceil(allJustificativos.length / pageSize);
 
+    const [modalVisible, setModalVisible] = useState(false);
+    const [fechaDesdeModal, setFechaDesdeModal] = useState("");
+    const [fechaHastaModal, setFechaHastaModal] = useState("");
+
+    const handleGenerarInventario = async (desde = "", hasta = "") => {
+        try {
+            let vacaciones = [];
+
+            if (!desde && !hasta) {
+                const resVac = await axios.get(`${API_BASE_URL}justificativos/obtenerListaVacaciones`);
+                vacaciones = resVac.data.objeto;
+            } else {
+                const resFull = await axios.get(`${API_BASE_URL}justificativos/obtenerListaVacaciones`);
+                vacaciones = resFull.data.objeto;
+
+                const d = new Date(desde);
+                const h = new Date(hasta);
+                vacaciones = vacaciones.filter(j => {
+                    const fecha = new Date(j.fecha);
+                    return fecha >= d && fecha <= h;
+                });
+            }
+
+            const blob = await pdf(<InventarioVacacionesPDF vacaciones={vacaciones} />).toBlob();
+            saveAs(blob, `Inventario_Vacaciones.pdf`);
+            setModalVisible(false);
+        } catch (error) {
+            console.error("Error al generar inventario:", error);
+            alert("No se pudo generar el inventario.");
+        }
+    };
+
     return (
         <div className="justificativos-container">
             <h2 style={{fontSize: "50px"}}>Vacaciones</h2>
@@ -113,10 +148,44 @@ const Vacaciones = () => {
                 <button className="boton-accion-vacas" onClick={gestionDoc}>
                     GESTION
                 </button>
+
+                <button className="boton-accion-vacas" onClick={() => setModalVisible(true)}>
+                    EXP. INVENTARIO
+                </button>
             </div>
+            {modalVisible && (
+                <div className="modal-fondo-vacas">
+                    <div className="modal-contenido-vacas">
+                        <h3>Rango de fechas para el Inventario</h3>
+                        <label>
+                            Desde:
+                            <input
+                                type="date"
+                                value={fechaDesdeModal}
+                                onChange={(e) => setFechaDesdeModal(e.target.value)}
+                            />
+                        </label>
+                        <label>
+                            Hasta:
+                            <input
+                                type="date"
+                                value={fechaHastaModal}
+                                onChange={(e) => setFechaHastaModal(e.target.value)}
+                            />
+                        </label>
+
+                        <div style={{ marginTop: "1rem" }}>
+                            <button onClick={() => handleGenerarInventario(fechaDesdeModal, fechaHastaModal)}>
+                                Generar
+                            </button>
+                            <button onClick={() => setModalVisible(false)}>Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
             <div className="tabla-scroll">
                 <table className="tabla-vacaciones">
-                <thead>
+                    <thead>
                     <tr>
                         <th>ID</th>
                         <th>Fecha</th>
