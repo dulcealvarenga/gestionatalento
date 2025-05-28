@@ -109,6 +109,13 @@ h1 {
     color: #d6d6d6;
 }
 
-
-
-/* === Filtros, modal, dropdown etc pueden ser reutilizados si tenés estilos ya existentes === */
+.filtros-contratos {
+    margin-bottom: 1rem;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+.filtros-contratos input {
+    padding: 6px;
+    font-size: 15px;
+}

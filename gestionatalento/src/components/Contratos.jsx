@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from '../config/constantes.js';
 import { pdf } from "@react-pdf/renderer";
 import { saveAs } from "file-saver";
-import ContratoPDF from "./ContratoPDF"; // Asegurate que apunte al PDF correcto
+import ContratoPDF from "./ContratoPDF";
+import InventarioContratosPDF from "./InventarioContratosPDF";
 
 const Contratos = () => {
     const [listaContratos, setListaContratos] = useState([]);
@@ -19,17 +20,9 @@ const Contratos = () => {
         2: "Confirmado"
     };
 
-    // 👉 Al cargar, trae todos
     useEffect(() => {
         fetchAllContratos();
     }, []);
-
-    // 👉 Cada vez que cambia page, actualiza la porción visible
-    useEffect(() => {
-        setContratos(
-            allContratos.slice(page * pageSize, (page + 1) * pageSize)
-        );
-    }, [page, allContratos]);
 
     const fetchAllContratos = async () => {
         try {
@@ -71,6 +64,34 @@ const Contratos = () => {
         }
     };
 
+    const [filtroDocumento, setFiltroDocumento] = useState("");
+    const [filtroPeriodo, setFiltroPeriodo] = useState("");
+
+    useEffect(() => {
+        const filtrados = allContratos.filter((item) => {
+            const docOK = filtroDocumento === "" || item.contrato.nroDocumento.includes(filtroDocumento);
+            const periodoOK = filtroPeriodo === "" || item.contrato.periodo.codPeriodo.includes(filtroPeriodo);
+            return docOK && periodoOK;
+        });
+
+        setContratos(
+            filtrados.slice(page * pageSize, (page + 1) * pageSize)
+        );
+    }, [page, allContratos, filtroDocumento, filtroPeriodo]);
+
+    const handleGenerarInventario = async () => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}contratos/obtenerLista`);
+            const contratos = response.data.objeto.map(c => c.contrato);
+
+            const blob = await pdf(<InventarioContratosPDF contratos={contratos} />).toBlob();
+            saveAs(blob, `Inventario_Contratos.pdf`);
+        } catch (error) {
+            console.error("Error al generar inventario:", error);
+            alert("No se pudo generar el inventario.");
+        }
+    };
+
     return (
         <div className="contratos-container">
             <h1>Contratos</h1>
@@ -84,6 +105,36 @@ const Contratos = () => {
             <button className="boton-accion-contratos" onClick={gestionDoc}>
                 GESTION
             </button>
+            <button className="boton-accion-contratos" onClick={handleGenerarInventario}>
+                EXP. INVENTARIO
+            </button>
+            <div className="filtros-contratos">
+                <label>
+                    Nro. Documento:&nbsp;
+                    <input
+                        type="text"
+                        value={filtroDocumento}
+                        onChange={(e) => {
+                            setFiltroDocumento(e.target.value);
+                            setPage(0);
+                        }}
+                        placeholder="Ej: 5198963"
+                    />
+                </label>
+                &nbsp;&nbsp;
+                <label>
+                    Período:&nbsp;
+                    <input
+                        type="text"
+                        value={filtroPeriodo}
+                        onChange={(e) => {
+                            setFiltroPeriodo(e.target.value);
+                            setPage(0);
+                        }}
+                        placeholder="Ej: 2025/05"
+                    />
+                </label>
+            </div>
             <div className="tabla-scroll">
                 <table className="tabla-empleados">
                     <thead>
