@@ -8,6 +8,7 @@ import {pdf} from "@react-pdf/renderer";
 import InventarioVacacionesDispPDF from "./InventarioVacacionesDispPDF.jsx";
 import { saveAs } from "file-saver";
 import DescuentosSuperioresPDF from "./DescuentosSuperioresPDF.jsx";
+import ReporteDescuentosDireccionPDF from "./ReporteDescuentosDireccionPDF.jsx";
 
 const DescuentosSalariales = () => {
     const [descuentos, setDescuentos] = useState([]);
@@ -123,6 +124,18 @@ const DescuentosSalariales = () => {
         }
     };
 
+    const handleGenerarDescuentosPDF = async () => {
+        try {
+            const res = await axios.get(`${API_BASE_URL}descuentos-salariales/informes/obtenerPorDireccion`);
+            const data = res.data.objeto || [];
+
+            const blob = await pdf(<ReporteDescuentosDireccionPDF data={data} />).toBlob();
+            saveAs(blob, "Planilla_Descuentos_Direcciones.pdf");
+        } catch (err) {
+            console.error("Error al generar PDF de descuentos:", err);
+        }
+    };
+
     return (
         <div className="descuentos-container">
             <h1>Descuentos Salariales</h1>
@@ -154,7 +167,7 @@ const DescuentosSalariales = () => {
             <div className="acciones-buttons">
                 <button onClick={exportarMarcaciones}>EXPORTAR MARCACIONES</button>
                 <button>EXONERADOS</button>
-                <button>EXPORTAR BORRADOR</button>
+                <button onClick={handleGenerarDescuentosPDF}>EXPORTAR BORRADOR</button>
                 <button onClick={exportarRecibidos}>EXPORTAR RECIBIDOS</button>
                 <button onClick={handleGenerarInventario}>DESCUENTOS SUPERIORES</button>
                 <button onClick={() => setShowConfirmModalDS(true)}>CIERRE</button>
