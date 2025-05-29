@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend } from 'chart.js';
 import axios from "axios";
+import { API_BASE_URL } from '../config/constantes.js';
 import { FaUsers, FaArrowDown, FaArrowUp, FaUserEdit } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
 import "./dashboardemp.css";
@@ -11,6 +12,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip,
 const Dashboard = () => {
     const [altas, setAltas] = useState([]);
     const [bajas, setBajas] = useState([]);
+    const [meses, setMeses] = useState([]);
     const [modificaciones, setModificaciones] = useState([]);
     const [ultimosMovimientos, setUltimosMovimientos] = useState([]);
     const [topModificadores, setTopModificadores] = useState([]);
@@ -18,13 +20,28 @@ const Dashboard = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get("/datos.json")
-            .then(res => {
+        async function cargarDatos() {
+            try {
+                // Llamada al JSON local
+                const res = await axios.get("/datos.json");
                 const data = res.data;
-                setAltas(data.altas || []);
-                setBajas(data.bajas || []);
+
+                // Llamada a tu API
+                const response = await axios.get(`${API_BASE_URL}empleados/dashboard/obtenerNovedades`);
+                const datas = response.data;
+
+                // Parsear datos para el gráfico
+                const labels = datas.map(item => item.mes);
+                const altas = datas.map(item => item.cantidadAltas);
+                const bajas = datas.map(item => item.cantidadBajas);
+
+                // Guardar los datos
+                setAltas(altas || []);
+                setBajas(bajas || []);
+                setMeses(labels || []);
                 setModificaciones(data.modificaciones || []);
 
+                // Últimos movimientos
                 const ultimos = [
                     ...(data.altas || []),
                     ...(data.bajas || []),
@@ -35,7 +52,7 @@ const Dashboard = () => {
 
                 setUltimosMovimientos(ultimos);
 
-                // Calcular top modificadores
+                // Top modificadores
                 const usuariosMod = {};
                 (data.modificaciones || []).forEach(mod => {
                     usuariosMod[mod.nombre] = (usuariosMod[mod.nombre] || 0) + 1;
@@ -47,21 +64,26 @@ const Dashboard = () => {
                     .slice(0, 5);
 
                 setTopModificadores(topUsuarios);
-            });
+            } catch (error) {
+                console.error("Error cargando datos:", error);
+            }
+        }
+
+        cargarDatos(); // Ejecutar la función
     }, []);
 
     const chartData = {
-        labels: ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'],
+        labels: meses,
         datasets: [
             {
                 label: 'Altas',
-                data: [10, 15, 20, 25, 12, 30, 18],
+                data: altas,
                 borderColor: '#4f83ff',
                 tension: 0.3,
             },
             {
                 label: 'Bajas',
-                data: [5, 10, 8, 12, 6, 9, 7],
+                data: bajas,
                 borderColor: '#4caf50',
                 tension: 0.3,
             }

@@ -1,68 +1,40 @@
 {
-  "altas": [
-    {
-      "nroDocumento": "5198965",
-      "nombre": "Bruno Azuaga",
-      "tipo": "Alta",
-      "fecha": "15/03/2025"
-    },
-    {
-      "nroDocumento": "5198964",
-      "nombre": "Juanita Jara",
-      "tipo": "Alta",
-      "fecha": "15/03/2025"
-    }
-  ],
-  "bajas": [
-    {
-      "nroDocumento": "5198965",
-      "nombre": "Carla Jara",
-      "tipo": "Baja",
-      "fecha": "05/03/2025"
-    },
-    {
-      "nroDocumento": "5198965",
-      "nombre": "Manuel Baez",
-      "tipo": "Baja",
-      "fecha": "05/03/2025"
-    }
-  ],
   "modificaciones": [
     {
       "nroDocumento": "1234567",
       "nombre": "Manuel Baez",
       "tipo": "Modificación",
-      "fecha": "03/03/2025"
+      "fecha": "03/05/2025"
     },
     {
       "nroDocumento": "1234567",
       "nombre": "Manuel Baez",
       "tipo": "Modificación",
-      "fecha": "03/02/2025"
+      "fecha": "03/05/2025"
     },
     {
       "nroDocumento": "1234567",
       "nombre": "Manuel Baez",
       "tipo": "Modificación",
-      "fecha": "03/03/2025"
+      "fecha": "03/05/2025"
     },
     {
       "nroDocumento": "1234567",
       "nombre": "Manuel Baez",
       "tipo": "Modificación",
-      "fecha": "03/03/2025"
+      "fecha": "03/05/2025"
     },
     {
       "nroDocumento": "1234567",
       "nombre": "Bruno Azuaga",
       "tipo": "Modificación",
-      "fecha": "03/03/2025"
+      "fecha": "03/05/2025"
     },
     {
       "nroDocumento": "1234567",
       "nombre": "Bruno Azuaga",
       "tipo": "Modificación",
-      "fecha": "03/03/2025"
+      "fecha": "03/05/2025"
     }
   ]
 }
