@@ -236,14 +236,14 @@ const Menu = () => {
                 </label>
                 <div className="button-row">
                     <button  onClick={() => navigate("/intranet")} style={{ fontSize: "20px" }}>Intranet</button>
-                    <button style={{ fontSize: "20px" }}>Datos Laborales</button>
+                    <button onClick={() => navigate("/documentos")} style={{ fontSize: "20px" }}>Documentos</button>
                 </div>
                 <label style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "50px" }}>
                     Accesos Rápidos
                 </label>
                 <div className="button-row">
-                    <button style={{ fontSize: "20px" }}>Justificativos</button>
-                    <button style={{ fontSize: "20px" }}>Vacaciones</button>
+                    <button onClick={() => navigate("/justificativos")} style={{ fontSize: "20px" }}>Justificativos</button>
+                    <button onClick={() => navigate("/vacaciones")} style={{ fontSize: "20px" }}>Vacaciones</button>
                 </div>
             </div>
 

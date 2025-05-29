@@ -15,14 +15,13 @@ const KPI = () => {
     const dataKPI = {
         rotacion: 12.5,
         puntualidad: 85,
-        cumplimiento: 78,
         ausencias: 5
     };
 
-    const kpiTotal = ((dataKPI.puntualidad + dataKPI.cumplimiento + (100 - dataKPI.rotacion)) / 3).toFixed(2);
+    const kpiTotal = ((dataKPI.puntualidad + (100 - dataKPI.rotacion) + (dataKPI.ausencias/100)) / 3).toFixed(2);
 
     const barData = {
-        labels: ['Rotación', 'Puntualidad', 'Cumplimiento'],
+        labels: ['Rotación', 'Puntualidad', 'Ausencias'],
         datasets: [{
             label: 'Indicadores (%)',
             data: [dataKPI.rotacion, dataKPI.puntualidad, dataKPI.cumplimiento],
@@ -64,10 +63,6 @@ const KPI = () => {
                 <div className="indicador">
                     <h3>Puntualidad</h3>
                     <p>{dataKPI.puntualidad}%</p>
-                </div>
-                <div className="indicador">
-                    <h3>Cumplimiento</h3>
-                    <p>{dataKPI.cumplimiento}%</p>
                 </div>
                 <div className="indicador">
                     <h3>Ausencias No Planificadas</h3>
