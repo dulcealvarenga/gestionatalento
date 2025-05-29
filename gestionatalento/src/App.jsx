@@ -44,6 +44,7 @@ import InformeDescuentoSalarial from "./components/InformeDescuentoSalarial.jsx"
 import Documentos from "./components/Documentos.jsx";
 import DocsGenerales from "./components/DocsGenerales.jsx";
 import VacacionesDet from "./components/VacacionesDet.jsx";
+import InventarioSalariales from "./components/InventarioSalariales.jsx";
 
 function App() {
     return (
@@ -373,6 +374,15 @@ function App() {
                         <div className="app-container">
                             <Sidebar />
                             <VacacionesDet/>
+                        </div>
+                    }
+                />
+                <Route
+                    path="/salarios/confirmar-documentos"
+                    element={
+                        <div className="app-container">
+                            <Sidebar/>
+                            <InventarioSalariales/>
                         </div>
                     }
                 />

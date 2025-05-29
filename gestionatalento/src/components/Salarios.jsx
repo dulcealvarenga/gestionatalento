@@ -485,8 +485,8 @@ const Salarios = () => {
       <p className="acciones-title-salario">Acciones</p>
       <div className="actions-section">
         <button
-          className="primary-btn"
-          onClick={() => navigate("/salarios/abm")}
+            className="primary-btn"
+            onClick={() => navigate("/salarios/abm")}
         >
           AGREGAR SALARIOS
         </button>
@@ -494,43 +494,49 @@ const Salarios = () => {
                 <button className="primary-btn" onClick={() => navigate("/salarios/aguinaldo")}>INCLUIR AGUINALDO
                 </button>*/}
         <input
-          type="text"
-          placeholder="Periodo (Ej: 2025/05)"
-          value={periodoBuscar}
-          onChange={(e) => setPeriodoBuscar(e.target.value)}
-          className="periodo-input"
+            type="text"
+            placeholder="Periodo (Ej: 2025/05)"
+            value={periodoBuscar}
+            onChange={(e) => setPeriodoBuscar(e.target.value)}
+            className="periodo-input"
         />
         <button className="primary-btn" onClick={filtrarPorPeriodo}>
           Buscar
         </button>
+        <button
+            className="primary-btn"
+            onClick={() => navigate("/salarios/confirmar-documentos")}
+        >
+          CONFIRMAR
+        </button>
         <div className="dropdown-wrapper">
           <button
-            className="primary-btn"
-            onClick={() => setMostrarMenuInformes(!mostrarMenuInformes)}
+              className="primary-btn"
+              onClick={() => setMostrarMenuInformes(!mostrarMenuInformes)}
           >
             INFORMES
           </button>
           {mostrarMenuInformes && (
-            <div className="dropdown-content">
-              <button onClick={() => setModalInformeTipo("altas")}>
-                Altas
-              </button>
-              <button onClick={() => setModalInformeTipo("bajas")}>
-                Bajas
-              </button>
-              <button onClick={() => setModalInformeTipo("modificaciones")}>
-                Modificaciones
-              </button>
-            </div>
+              <div className="dropdown-content">
+                <button onClick={() => setModalInformeTipo("altas")}>
+                  Altas
+                </button>
+                <button onClick={() => setModalInformeTipo("bajas")}>
+                  Bajas
+                </button>
+                <button onClick={() => setModalInformeTipo("modificaciones")}>
+                  Modificaciones
+                </button>
+              </div>
           )}
         </div>
       </div>
 
       {modalInformeTipo && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>
-              Generar Informe de{" "}
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h2>
+                Generar Informe de{" "}
               {modalInformeTipo.charAt(0).toUpperCase() +
                 modalInformeTipo.slice(1)}
             </h2>
