@@ -14,7 +14,7 @@ const Documentos = () => {
 
     return (
         <div className="docu-container">
-            <h1>Gestión de Documentos</h1>
+            <h1>Documentos</h1>
             <div className="docu-grid">
                 {documentos.map((item, index) => (
                     <div

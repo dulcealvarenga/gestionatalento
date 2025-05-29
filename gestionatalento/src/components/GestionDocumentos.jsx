@@ -2,6 +2,11 @@ import React, { useState, useEffect } from "react";
 import "./GestionDocumentos.css";
 import axios from "axios";
 import { API_BASE_URL } from '../config/constantes.js';
+import {pdf, PDFDownloadLink} from '@react-pdf/renderer';
+import ReportesVencidosPDF from './ReportesVencidosPDF';
+import { saveAs } from 'file-saver';
+import {toast} from "react-toastify"; // Asegurate de tenerlo instalado
+
 
 const GestionDocumentos = () => {
     const [allDocumentos, setAllDocumentos] = useState([]);
@@ -147,6 +152,42 @@ const GestionDocumentos = () => {
         setModalAbierto(false);
     };
 
+    const generarReporteVencidos = async () => {
+        try {
+            const res = await axios.get(`${API_BASE_URL}personas/documentos/obtenerListaVencidos`);
+
+            if (res.data.codigoMensaje !== "200") {
+                toast.error("No se pudo obtener la lista de documentos vencidos");
+                return;
+            }
+
+            const vencidos = res.data.objeto?.map(item => {
+                const doc = item.documento;
+                return {
+                    tipo: doc.tipoDocumento.codTipoDocumento,
+                    persona: doc.persona,
+                    fechaInicio: doc.fecDocumento,
+                    fechaFin: doc.fecVencimiento,
+                    estado: doc.estado,
+                    descripcion: doc.tipoDocumento.descripcion,
+                    observacion: doc.observacion,
+                    nombreArchivo: doc.nomArchivo
+                };
+            }) || [];
+
+            if (vencidos.length === 0) {
+                toast.info("No hay documentos vencidos para generar reporte");
+                return;
+            }
+
+            const blob = await pdf(<ReportesVencidosPDF data={vencidos} />).toBlob();
+            saveAs(blob, "reporte_documentos_vencidos.pdf");
+        } catch (error) {
+            console.error("Error al generar el reporte PDF:", error);
+            toast.error("Error inesperado al generar el reporte");
+        }
+    };
+
     return (
         <div className="documentos-container">
             <h2 style={{fontSize: "50px"}}>Gestión de Documentos</h2>
@@ -167,6 +208,8 @@ const GestionDocumentos = () => {
                     <option value="Justificativo">Justificativo</option>
                     <option value="Contrato">Contrato</option>
                 </select>
+
+                <button onClick={generarReporteVencidos}>Generar PDF de Vencidos</button>
 
             </div>
             <div className="tabla-scroll">

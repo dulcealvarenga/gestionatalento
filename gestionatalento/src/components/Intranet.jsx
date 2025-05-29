@@ -43,7 +43,7 @@ const Intranet = () => {
             persona: { codPersona },
             tipoDocumento: { codTipoDocumento },
             estado: "C",
-            fecDocumento: new Date().toISOString().split("T")[0],
+            fecVencimiento: fecVencimiento,
             observacion: "Documento escaneado y cargado correctamente"
         };
 
@@ -211,7 +211,6 @@ const Intranet = () => {
         }
     };
 
-
     return (
         <div className="intranet-container">
             {/* Sidebar */}
@@ -325,7 +324,8 @@ const Intranet = () => {
 
                             <label>
                                 Fecha Vencimiento:
-                                <textarea
+                                <input
+                                    type="date"
                                     value={fecVencimiento}
                                     onChange={(e) => setVencimientoDocumento(e.target.value)}
                                 />
@@ -360,9 +360,9 @@ const Intranet = () => {
                                         tipoDocumento: {codTipoDocumento},
                                         estado: "C",
                                         fecDocumento: new Date().toISOString().split("T")[0],
+                                        fecVencimiento: fecVencimiento,
                                         observacion: comentarioDocumento || "Documento sin comentario"
                                     };
-                                    console.log("datos a enviar", metadata.persona.codPersona, "modo generales: ", modoGenerales);
                                     formData.append("data", JSON.stringify(metadata));
 
                                     try {
