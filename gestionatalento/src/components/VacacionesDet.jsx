@@ -13,8 +13,6 @@ const Vacaciones = () => {
     const [allInventarios, setAllInventarios] = useState([]);
     const [Inventarios, setInventarios] = useState([]);
     const [page, setPage] = useState(0);
-    const [fechaDesde, setFechaDesde] = useState("");
-    const [fechaHasta, setFechaHasta] = useState("");
     const pageSize = 100;
 
     const volver = () => {

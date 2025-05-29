@@ -4,6 +4,10 @@ import "./DescSalariales.css";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import { API_BASE_URL } from '../config/constantes.js';
+import {pdf} from "@react-pdf/renderer";
+import InventarioVacacionesDispPDF from "./InventarioVacacionesDispPDF.jsx";
+import { saveAs } from "file-saver";
+import DescuentosSuperioresPDF from "./DescuentosSuperioresPDF.jsx";
 
 const DescuentosSalariales = () => {
     const [descuentos, setDescuentos] = useState([]);
@@ -106,6 +110,19 @@ const DescuentosSalariales = () => {
         }
     };
 
+    const handleGenerarInventario = async () => {
+        try {
+            const res = await axios.get(`${API_BASE_URL}descuentos-salariales/obtenerMontoSuperiores`);
+            const descuentos = res.data.objeto?.map(v => v.descuentoSalarial) || [];
+
+            const blob = await pdf(<DescuentosSuperioresPDF descuentos={descuentos} />).toBlob();
+            saveAs(blob, `Descuentos_Superiores.pdf`);
+        } catch (error) {
+            console.error("Error al generar inventario:", error);
+            alert("No se pudo generar el inventario.");
+        }
+    };
+
     return (
         <div className="descuentos-container">
             <h1>Descuentos Salariales</h1>
@@ -139,6 +156,7 @@ const DescuentosSalariales = () => {
                 <button>EXONERADOS</button>
                 <button>EXPORTAR BORRADOR</button>
                 <button onClick={exportarRecibidos}>EXPORTAR RECIBIDOS</button>
+                <button onClick={handleGenerarInventario}>DESCUENTOS SUPERIORES</button>
                 <button onClick={() => setShowConfirmModalDS(true)}>CIERRE</button>
             </div>
 
