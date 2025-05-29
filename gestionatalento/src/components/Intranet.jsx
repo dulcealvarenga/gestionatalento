@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { FaDownload, FaFolder } from 'react-icons/fa';
 import axios from "axios";
 import {toast} from "react-toastify";
+import { API_BASE_URL } from '../config/constantes.js';
 
 const Intranet = () => {
     const navigate = useNavigate();
@@ -28,8 +29,12 @@ const Intranet = () => {
             return;
         }
 
-        // Acá podés tener un mapping más elaborado si tenés más tipos
-        const codTipoDocumento = selectedFolder === "personales" ? 2 : 1;
+        const codTipoDocumento = modoGenerales
+            ? 4
+            : selectedFolder === "personales"
+                ? 2
+                : 1;
+
 
         const formData = new FormData();
         formData.append("archivo", archivo);
@@ -45,7 +50,7 @@ const Intranet = () => {
         formData.append("data", JSON.stringify(metadata));
 
         try {
-            const response = await axios.post("http://localhost:8080/personas/documentos/crear", formData, {
+            const response = await axios.post(`${API_BASE_URL}personas/documentos/crear`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }
@@ -69,7 +74,7 @@ const Intranet = () => {
 
     const obtenerDocumentosFuncionario = async (codPersona) => {
         try {
-            const response = await axios.get("http://localhost:8080/personas/documentos/obtenerLista");
+            const response = await axios.get(`${API_BASE_URL}personas/documentos/obtenerLista`);
             const todos = response.data.objeto || [];
             const filtrados = todos.filter(item => item.documento.persona.codPersona === codPersona);
             setDocumentosEmpleado(filtrados);
@@ -82,7 +87,7 @@ const Intranet = () => {
         if (!documento) return;
         setIsLoading(true);
         try {
-            const response = await axios.get(`http://localhost:8080/empleados/obtener/documento/${documento}`);
+            const response = await axios.get(`${API_BASE_URL}empleados/obtener/documento/${documento}`);
             if (response.data.codigoMensaje === "200") {
                 const empleado = response.data.objeto[0];
                 const persona = empleado.persona;
@@ -125,11 +130,12 @@ const Intranet = () => {
     };
 
     const [documentosRecientes, setDocumentosRecientes] = useState([]);
+    const COD_PERSONA_GENERALES = 99;
 
     useEffect(() => {
         const obtenerRecientes = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/personas/documentos/obtenerLista");
+                const response = await axios.get(`${API_BASE_URL}personas/documentos/obtenerLista`);
                 const todos = response.data.objeto || [];
 
                 const ordenados = todos
@@ -150,11 +156,12 @@ const Intranet = () => {
 
     const handleVerTodosLosDocumentos = async () => {
         try {
-            const response = await axios.get("http://localhost:8080/personas/documentos/obtenerLista");
+            const response = await axios.get(`${API_BASE_URL}personas/documentos/obtenerLista`);
             setDocumentosGlobales(response.data.objeto || []);
             setMostrarGlobales(true);
             setSelectedFolder(null);
-            setHasDocuments(false); // Oculta vistas anteriores
+            setHasDocuments(false);
+            setModoGenerales(false);
         } catch (error) {
             console.error("Error al obtener documentos globales", error);
             toast.error("No se pudieron cargar los documentos");
@@ -182,6 +189,27 @@ const Intranet = () => {
     const [modalUploadVisible, setModalUploadVisible] = useState(false);
     const [archivoSeleccionado, setArchivoSeleccionado] = useState(null);
     const [comentarioDocumento, setComentarioDocumento] = useState("");
+    const [fecVencimiento, setVencimientoDocumento] = useState("");
+    const [modoGenerales, setModoGenerales] = useState(false);
+
+    const handleVerGenerales = async () => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}personas/documentos/obtenerLista`);
+            const todos = response.data.objeto || [];
+
+            const generales = todos.filter(doc => doc.documento?.tipoDocumento?.codTipoDocumento === 4);
+
+            setDocumentosGlobales(generales);
+            setMostrarGlobales(true);
+            setSelectedFolder(null);
+            setHasDocuments(false);
+            setModoGenerales(true);
+            setCodPersona(COD_PERSONA_GENERALES);
+        } catch (error) {
+            console.error("Error al obtener documentos generales", error);
+            toast.error("No se pudieron cargar los documentos generales");
+        }
+    };
 
 
     return (
@@ -198,15 +226,12 @@ const Intranet = () => {
                 <h1>Intranet</h1>
                     <nav>
                         <a onClick={() => {
-                               setMostrarGlobales(false);
-                               navigate("/intranet");
-                           }}>Home</a>
-                        <a onClick={handleVerTodosLosDocumentos}>Mis Documentos</a>
-                        {/* Sidebar
-                        <a onClick={() => {
                             setMostrarGlobales(false);
-                            handleUploadClick();
-                        }}>Subir</a>*/}
+                            setModoGenerales(false);
+                            navigate("/intranet");
+                           }}>Home</a>
+                        <a onClick={handleVerTodosLosDocumentos}>Documentos Subidos</a>
+                        <a onClick={handleVerGenerales}>Generales</a>
                     </nav>
             </div>
 
@@ -229,8 +254,6 @@ const Intranet = () => {
                         required
                     />
                 </div>
-                {isLoading && <p>Buscando documentos...</p>}
-
                 {!isLoading && hasDocuments && !selectedFolder && (
                     <>
                         <h3>Nombre del Funcionario</h3>
@@ -301,9 +324,17 @@ const Intranet = () => {
                             </label>
 
                             <label>
+                                Fecha Vencimiento:
+                                <textarea
+                                    value={fecVencimiento}
+                                    onChange={(e) => setVencimientoDocumento(e.target.value)}
+                                />
+                            </label>
+
+                            <label>
                                 Comentario:
                                 <textarea
-                                    rows="3"
+                                    rows="2"
                                     value={comentarioDocumento}
                                     onChange={(e) => setComentarioDocumento(e.target.value)}
                                 />
@@ -311,29 +342,32 @@ const Intranet = () => {
 
                             <div className="modal-buttons-intra">
                                 <button onClick={async () => {
-                                    if (!archivoSeleccionado || !codPersona || !selectedFolder) {
+                                    if (!archivoSeleccionado || (!modoGenerales && (!codPersona || !selectedFolder))) {
                                         toast.warning("Faltan campos por completar.");
                                         return;
                                     }
 
-                                    const codTipoDocumento = selectedFolder === "personales" ? 2 : 1;
-
+                                    const codTipoDocumento = modoGenerales
+                                        ? 4
+                                        : selectedFolder === "personales"
+                                            ? 2
+                                            : 1;
                                     const formData = new FormData();
                                     formData.append("archivo", archivoSeleccionado);
 
                                     const metadata = {
-                                        persona: { codPersona },
-                                        tipoDocumento: { codTipoDocumento },
+                                        persona: {codPersona: modoGenerales ? 1 : codPersona},
+                                        tipoDocumento: {codTipoDocumento},
                                         estado: "C",
                                         fecDocumento: new Date().toISOString().split("T")[0],
                                         observacion: comentarioDocumento || "Documento sin comentario"
                                     };
-
+                                    console.log("datos a enviar", metadata.persona.codPersona, "modo generales: ", modoGenerales);
                                     formData.append("data", JSON.stringify(metadata));
 
                                     try {
-                                        const res = await axios.post("http://localhost:8080/personas/documentos/crear", formData, {
-                                            headers: { "Content-Type": "multipart/form-data" }
+                                        const res = await axios.post(`${API_BASE_URL}personas/documentos/crear`, formData, {
+                                            headers: {"Content-Type": "multipart/form-data"}
                                         });
 
                                         if (res.data.codigoMensaje === "200") {
@@ -364,7 +398,7 @@ const Intranet = () => {
 
                 {mostrarGlobales && (
                     <>
-                        <h3>Todos los Documentos</h3>
+                        <h3>{modoGenerales ? "Documentos Generales" : "Todos los Documentos"}</h3>
                         <div className="documentos-grid">
                             {documentosGlobales.map((item, i) => (
                                 <div key={i} className="document-card">
@@ -373,12 +407,19 @@ const Intranet = () => {
                                         <p>{item.documento.nomArchivo}</p>
                                     </div>
                                     <div className="botones-doc">
+                                        <button onClick={() => visualizarArchivo(item)}>Ver</button>
                                         <button onClick={() => descargarArchivo(item)}>Descargar</button>
                                         <button>Anular</button>
                                     </div>
                                 </div>
                             ))}
                         </div>
+
+                        {modoGenerales && (
+                            <div className="botones-acciones-intra">
+                                <button className="subir-btn" onClick={() => setModalUploadVisible(true)}>Subir Documento</button>
+                            </div>
+                        )}
                     </>
                 )}
 
