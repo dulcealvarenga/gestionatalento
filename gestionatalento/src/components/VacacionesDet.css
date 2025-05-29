@@ -1,5 +1,5 @@
 /* Contenedor principal */
-.justificativos-container {
+.vacaciones-det-container {
     padding: 20px;
     background-color: #1e1f2f;
     color: white;
@@ -18,19 +18,19 @@
 }
 
 /* Barra de acciones */
-.acciones-barra-vacas {
+.acciones-barra-vacas-det {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     margin-bottom: 30px;
     min-height: 50px;
     align-items: center;
-    width: 100%;
+    width: 60%;
 }
 
 /* Botones */
-.boton-accion-vacas,
-.boton-buscar-vacas {
+.boton-accion-vacas-det,
+.boton-buscar-vacas-det {
     padding: 10px 30px;
     background: #44465f;
     border: none;
@@ -41,26 +41,9 @@
     transition: background 0.3s;
 }
 
-.boton-accion-vacas,
-.boton-buscar-vacas:hover {
+.boton-accion-vacas-det,
+.boton-buscar-vacas-det:hover {
     background: #707088;
-}
-
-/* Inputs fechas */
-.input-fecha {
-    background-color: #2b2e4a;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 10px;
-    font-size: 14px;
-    min-width: 130px;
-    text-align: center;
-}
-
-.input-fecha:focus {
-    outline: none;
-    border: 2px solid #8f9eff;
 }
 
 /* Tabla */

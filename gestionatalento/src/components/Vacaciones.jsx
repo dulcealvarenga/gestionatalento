@@ -22,6 +22,10 @@ const Vacaciones = () => {
         navigate("/gestion-documentos");
     };
 
+    const detalleVacaciones = () => {
+        navigate("/detalle-vacaciones");
+    };
+
     // 👉 Al cargar, trae todos los justificativos sin filtrar
     useEffect(() => {
         fetchAllJustificativos();
@@ -147,6 +151,10 @@ const Vacaciones = () => {
 
                 <button className="boton-accion-vacas" onClick={gestionDoc}>
                     GESTION
+                </button>
+
+                <button className="boton-accion-vacas" onClick={detalleVacaciones}>
+                    DETALLE POR FUNC.
                 </button>
 
                 <button className="boton-accion-vacas" onClick={() => setModalVisible(true)}>

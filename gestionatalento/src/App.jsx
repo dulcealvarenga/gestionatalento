@@ -43,6 +43,7 @@ import InformeRecibos from "./components/InformeRecibos.jsx";
 import InformeDescuentoSalarial from "./components/InformeDescuentoSalarial.jsx";
 import Documentos from "./components/Documentos.jsx";
 import DocsGenerales from "./components/DocsGenerales.jsx";
+import VacacionesDet from "./components/VacacionesDet.jsx";
 
 function App() {
     return (
@@ -363,6 +364,15 @@ function App() {
                         <div className="app-container">
                             <Sidebar />
                             <DocsGenerales/>
+                        </div>
+                    }
+                />
+                <Route
+                    path="/detalle-vacaciones"
+                    element={
+                        <div className="app-container">
+                            <Sidebar />
+                            <VacacionesDet/>
                         </div>
                     }
                 />
