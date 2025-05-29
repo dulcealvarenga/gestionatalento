@@ -9,16 +9,17 @@ const Login = () => {
     const navigate = useNavigate(); // Hook para navegación
 
     // Estados para usuario, contraseña y mensaje de error
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [nombreUsuario, setNombreUsuario] = useState('');
+    const [credencial, setCredencial] = useState('');
     const [error, setError] = useState('');
 
     const handleLogin = async (event) => {
         event.preventDefault();
         try {
+            console.log("usuario:", nombreUsuario, "contraseña", credencial);
             const response = await axios.post(`${API_BASE_URL}auth/login`, {
-                username,
-                password
+                nombreUsuario,
+                credencial
             });
 
             // Guardar el token en localStorage
@@ -47,8 +48,8 @@ const Login = () => {
                         <label>USUARIO</label>
                         <input
                             type="text"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            value={nombreUsuario}
+                            onChange={(e) => setNombreUsuario(e.target.value)}
                             placeholder=""
                         />
                     </div>
@@ -57,8 +58,8 @@ const Login = () => {
                         <label>CONTRASEÑA</label>
                         <input
                             type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            value={credencial}
+                            onChange={(e) => setCredencial(e.target.value)}
                             placeholder=""
                         />
                     </div>
